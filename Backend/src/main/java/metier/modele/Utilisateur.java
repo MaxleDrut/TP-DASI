@@ -31,6 +31,17 @@ public abstract class Utilisateur implements Serializable
     
     protected String motDePasse;
 
+    public Utilisateur() {
+    }
+    
+   
+    public Utilisateur(String mail, String motDePasse) {
+        this.mail = mail;
+        this.motDePasse = motDePasse;
+    }
+    
+    
+
     public Long getId() {
         return id;
     }

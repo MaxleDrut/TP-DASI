@@ -6,12 +6,13 @@
 package metier.service;
 
 import dao.ClientDao;
+import dao.EmployeDao;
 import dao.JpaUtil;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import metier.modele.Client;
+import metier.modele.Employe;
 import metier.modele.ProfilAstral;
 import metier.service.util.AstroTest;
 import metier.service.util.Message;
@@ -54,6 +55,29 @@ public class Services {
         }
         
         return client;
+    }
+    
+    public Employe recrutement(Employe employe) {
+        EmployeDao employeDao = new EmployeDao();        
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            employeDao.creer(employe);
+            JpaUtil.validerTransaction();
+            Logger.getLogger("ServicesClient").log(Level.INFO, "Recrutement de l'employé réussie !");
+            
+        }
+        catch(Exception e)
+        {
+            Logger.getLogger("ServicesClient").log(Level.SEVERE, "Erreur lors de l'inscription d'un Client !! \nMessage : {0}", e.getLocalizedMessage());
+            JpaUtil.annulerTransaction();
+            employe=null;
+        } 
+        finally 
+        {
+            JpaUtil.fermerContextePersistance();
+        }
+        return employe;
     }
     
     public Client rechercherClient(Long id) {

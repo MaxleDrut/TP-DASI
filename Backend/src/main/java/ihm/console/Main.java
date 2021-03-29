@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import metier.modele.Client;
 import metier.service.Services;
+import metier.service.util.PeuplementBD;
 
 /**
  *
@@ -24,10 +25,11 @@ public class Main {
         // TODO code application logic here
         
         JpaUtil.init();
+        PeuplementBD peuplementBD = new PeuplementBD();
+        peuplementBD.peuplementEmploye();
         System.out.println("Bonjour !");
         String stop =Saisie.lireChaine("Voulez-vous vous inscrire (oui ou non) ?");
         while(!stop.equals("non")){
-            System.out.println(stop);
             if(stop.equals("oui")){
                 String nom = Saisie.lireChaine("Veuillez entrer votre nom : ");
                 String prenom = Saisie.lireChaine("Veuillez entrer votre prenom : ");
@@ -73,6 +75,9 @@ public class Main {
             System.out.println(client.toString());
         }
     }
+    
+   
+    
     
          
     

@@ -30,13 +30,13 @@ public class Client extends Utilisateur implements Serializable
     protected Client() {}
     
     public Client(String nom, String prenom, String adresse, String numTelephone, Date dateNaissance, String mail, String motDePasse) {
+        super(mail,motDePasse);
         this.nom = nom;
         this.prenom = prenom;
         this.adresse = adresse;
         this.numTelephone = numTelephone;
         this.dateNaissance = dateNaissance;
-        this.mail = mail;
-        this.motDePasse = motDePasse;
+        
     }
 
     public String getNom() {
