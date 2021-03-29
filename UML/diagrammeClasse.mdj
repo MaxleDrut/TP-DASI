@@ -4078,7 +4078,7 @@
 											"top": 403,
 											"width": 119.9453125,
 											"height": 13,
-											"text": "+animalTotem",
+											"text": "-animalTotem: String",
 											"horizontalAlignment": 0
 										}
 									],
@@ -4178,9 +4178,9 @@
 										"$ref": "AAAAAAF4WmH9m5+RQR8="
 									},
 									"font": "Arial;13;0",
-									"left": 494,
+									"left": 493,
 									"top": 312,
-									"width": 35.76904296875,
+									"width": 36.21337890625,
 									"height": 13,
 									"alpha": 1.0899087487151158,
 									"distance": 25.942243542145693,
@@ -5516,7 +5516,8 @@
 								"$ref": "AAAAAAF4WlxCL5jb2IY="
 							},
 							"name": "animalTotem",
-							"type": ""
+							"visibility": "private",
+							"type": "String"
 						}
 					]
 				}
