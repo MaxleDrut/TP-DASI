@@ -6,7 +6,9 @@
 package metier.service;
 
 import dao.ClientDao;
+import dao.EmployeDao;
 import dao.JpaUtil;
+
 import dao.UtilisateurDao;
 import java.text.MessageFormat;
 import java.util.Date;
@@ -16,6 +18,7 @@ import java.util.logging.Logger;
 import javax.naming.AuthenticationException;
 import javax.persistence.NoResultException;
 import metier.modele.Client;
+import metier.modele.Employe;
 import metier.modele.ProfilAstral;
 import metier.modele.Utilisateur;
 import metier.service.util.AstroTest;
@@ -59,6 +62,29 @@ public class Services {
         }
         
         return client;
+    }
+    
+    public Employe recrutement(Employe employe) {
+        EmployeDao employeDao = new EmployeDao();        
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            employeDao.creer(employe);
+            JpaUtil.validerTransaction();
+            Logger.getLogger("ServicesClient").log(Level.INFO, "Recrutement de l'employé réussie !");
+            
+        }
+        catch(Exception e)
+        {
+            Logger.getLogger("ServicesClient").log(Level.SEVERE, "Erreur lors de l'inscription d'un Client !! \nMessage : {0}", e.getLocalizedMessage());
+            JpaUtil.annulerTransaction();
+            employe=null;
+        } 
+        finally 
+        {
+            JpaUtil.fermerContextePersistance();
+        }
+        return employe;
     }
     
     public Client rechercherClient(Long id) {

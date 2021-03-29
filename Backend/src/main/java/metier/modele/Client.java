@@ -31,12 +31,12 @@ public class Client extends Utilisateur implements Serializable
     
     public Client(String nom, String prenom, String adresse, String numTelephone, Date dateNaissance, String mail, String motDePasse) {
         super(mail, motDePasse);
-        
         this.nom = nom;
         this.prenom = prenom;
         this.adresse = adresse;
         this.numTelephone = numTelephone;
         this.dateNaissance = dateNaissance;
+
     }
 
     public String getNom() {
