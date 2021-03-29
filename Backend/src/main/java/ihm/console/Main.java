@@ -9,7 +9,7 @@ import dao.JpaUtil;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import metier.modele.Client;
-import metier.service.ServiceClient;
+import metier.service.Services;
 
 /**
  *
@@ -64,7 +64,7 @@ public class Main {
     
     
     public static void testerInscriptionClient(String nom, String prenom, String adresse,String numTelephone,Date dateNaissance, String mail, String mdp){
-        ServiceClient serviceInscription = new ServiceClient();
+        Services serviceInscription = new Services();
         Client client = new Client(nom,prenom,adresse,numTelephone,dateNaissance,mail,mdp);
         serviceInscription.inscrireClient(client);
         if(client==null){

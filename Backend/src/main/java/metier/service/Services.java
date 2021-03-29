@@ -14,12 +14,13 @@ import java.util.logging.Logger;
 import metier.modele.Client;
 import metier.modele.ProfilAstral;
 import metier.service.util.AstroTest;
+import metier.service.util.Message;
 
 /**
  *
  * @author onyr
  */
-public class ServiceClient {
+public class Services {
     
     public Client inscrireClient(Client client) {
         ClientDao clientDao = new ClientDao();
@@ -39,6 +40,7 @@ public class ServiceClient {
             
             JpaUtil.validerTransaction();
             Logger.getLogger("ServicesClient").log(Level.INFO, "Inscription client réussie !");
+            Message.envoyerMail("noreply@predictif.fr", client.getMail(), "Confirmation d'inscription", "Bonjour, vous êtes bien inscrit !"); 
         }
         catch(Exception e)
         {
