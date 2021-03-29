@@ -7,12 +7,17 @@ package metier.service;
 
 import dao.ClientDao;
 import dao.JpaUtil;
+import dao.UtilisateurDao;
+import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.AuthenticationException;
+import javax.persistence.NoResultException;
 import metier.modele.Client;
 import metier.modele.ProfilAstral;
+import metier.modele.Utilisateur;
 import metier.service.util.AstroTest;
 import metier.service.util.Message;
 
@@ -44,7 +49,7 @@ public class Services {
         }
         catch(Exception e)
         {
-            Logger.getLogger("ServicesClient").log(Level.SEVERE, "Erreur lors de l'inscription d'un Client !! \nMessage : {0}", e.getLocalizedMessage());
+            Logger.getLogger("ServicesClient").log(Level.SEVERE, "Erreur lors de l''inscription d'un Client !! \nMessage : {0}", e.getLocalizedMessage());
             JpaUtil.annulerTransaction();
             client = null;
         } 
@@ -97,26 +102,41 @@ public class Services {
        return listeClients;
     }
     
-    public Client authentifierClient(String mail, String motDePasse) {
-        ClientDao clientDao = new ClientDao();
-        Client client = null;
+    public Utilisateur authentification(String mail, String motDePasse) {
+        UtilisateurDao utilisateurDao = new UtilisateurDao();
+        Utilisateur utilisateur = null;
         
         try {
             JpaUtil.creerContextePersistance();
             JpaUtil.ouvrirTransaction();
-            client = clientDao.chercherClientPourAuthentification(mail, motDePasse);
+            
+            try {
+                utilisateur = utilisateurDao.chercherUtilisateurParEmail(mail);
+            }
+            catch(NoResultException e)
+            {
+                throw new AuthenticationException("Impossible de trouver l'adresse mail !");
+            }
+            
+            if(!utilisateur.getMotDePasse().equals(motDePasse))
+            {
+                throw new AuthenticationException("Mot de passe incorrect !");
+            }
+            
             JpaUtil.validerTransaction();
-        } catch(Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
+        } catch(AuthenticationException e) {
+            Logger.getLogger("ServicesClient").log(Level.INFO, "Erreur à l''authentification : {0}", e.getExplanation());
             JpaUtil.annulerTransaction();
-            client = null;
+            utilisateur = null;
+        } catch(Exception e) {
+            Logger.getLogger("ServicesClient").log(Level.SEVERE, "Erreur non gérée lors de l''authentification : {0}", e.getLocalizedMessage());
+            JpaUtil.annulerTransaction();
+            utilisateur = null;
         } finally {
             JpaUtil.fermerContextePersistance();
         }
         
-        
-        return client;
-        
+        return utilisateur;
     }
     
 }

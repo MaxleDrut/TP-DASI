@@ -9,6 +9,7 @@ import dao.JpaUtil;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import metier.modele.Client;
+import metier.modele.Utilisateur;
 import metier.service.Services;
 
 /**
@@ -21,9 +22,8 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        
         JpaUtil.init();
+        
         System.out.println("Bonjour !");
         String stop =Saisie.lireChaine("Voulez-vous vous inscrire (oui ou non) ?");
         while(!stop.equals("non")){
