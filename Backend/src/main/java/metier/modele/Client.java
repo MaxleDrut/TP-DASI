@@ -6,42 +6,35 @@
 package metier.modele;
 
 import java.io.Serializable;
-import javax.persistence.Column;
+import java.util.Date;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 /**
  *
  * @author onyr
  */
 @Entity
-public class Client implements Serializable {
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long id; 
+public class Client extends Utilisateur implements Serializable 
+{    
     private String nom;
     private String prenom;
     
-    @Column(unique=true)
-    private String mail;
-    private String motDePasse;
+    private Date dateNaissance;
+    private String adresse;
     
-    protected Client() {
-        
-    }
+    @Embedded
+    private ProfilAstral profilAstral;
     
-    public Client(String nom, String prenom, String mail, String motDePasse) {
+    protected Client() {}
+    
+    public Client(String nom, String prenom, String adresse, Date dateNaissance, String mail, String motDePasse) {
         this.nom = nom;
         this.prenom = prenom;
+        this.adresse = adresse;
+        this.dateNaissance = dateNaissance;
         this.mail = mail;
         this.motDePasse = motDePasse;
-        
-    }
-    
-    public Long getId() {
-        return id;
     }
 
     public String getNom() {
@@ -76,15 +69,32 @@ public class Client implements Serializable {
         this.motDePasse = motDePasse;
     }
 
+    public Date getDateNaissance() {
+        return dateNaissance;
+    }
+
+    public void setDateNaissance(Date dateNaissance) {
+        this.dateNaissance = dateNaissance;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
+    public ProfilAstral getProfilAstral() {
+        return profilAstral;
+    }
+
+    public void setProfilAstral(ProfilAstral profilAstral) {
+        this.profilAstral = profilAstral;
+    }
+
     @Override
     public String toString() {
-        return "Client{" + "id=" + id + ", nom=" + nom + 
-            ", prenom=" + prenom + ", mail=" + mail + 
-            ", motDePasse=" + motDePasse + '}';
+        return "Client{" + "nom=" + nom + ", prenom=" + prenom + ", dateNaissance=" + dateNaissance + ", adresse=" + adresse + ", profilAstral=" + profilAstral + '}';
     }
-    
-    
-    
-    
-    
 }

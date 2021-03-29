@@ -24,7 +24,7 @@ public class JpaUtil {
      * <br><strong>Vérifier le nom de l'unité de persistance
      * (cf.&nbsp;persistence.xml)</strong>
      */
-    public static final String PERSISTENCE_UNIT_NAME = "com.mycompany_dasi_tp_1_jar_1.0-SNAPSHOTPU";
+    public static final String PERSISTENCE_UNIT_NAME = "persistence";
     /**
      * Factory de Entity Manager liée à l'unité de persistance.
      * <br/><strong>Vérifier le nom de l'unité de persistance indiquée dans
