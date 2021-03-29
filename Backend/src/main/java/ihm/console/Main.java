@@ -33,12 +33,13 @@ public class Main {
                 String prenom = Saisie.lireChaine("Veuillez entrer votre prenom : ");
                 String adresse = Saisie.lireChaine("Veuillez entrer votre adresse : ");
                 String mail = Saisie.lireChaine("Veuillez entrer votre mail : ");
+                String numTelephone = Saisie.lireChaine("Veuillez entrer votre numero de telephone : ");
                 String mdp = Saisie.lireChaine("Veuillez entrer votre mot de passe : ");
                 try{
                     String dateNaissance = Saisie.lireChaine("Veuillez entrer votre dateNaissance (yyyy-MM-dd) : ");
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     Date birthday = sdf.parse(dateNaissance);
-                    testerInscriptionClient(nom,prenom,adresse,birthday,mail,mdp);
+                    testerInscriptionClient(nom,prenom,adresse,numTelephone, birthday,mail,mdp);
                 } catch(Exception e) {
                     System.out.println("Erreur lors de la date");
                 }
@@ -62,9 +63,9 @@ public class Main {
     }
     
     
-    public static void testerInscriptionClient(String nom, String prenom, String adresse,Date dateNaissance, String mail, String mdp){
+    public static void testerInscriptionClient(String nom, String prenom, String adresse,String numTelephone,Date dateNaissance, String mail, String mdp){
         ServiceClient serviceInscription = new ServiceClient();
-        Client client = new Client(nom,prenom,adresse,dateNaissance,mail,mdp);
+        Client client = new Client(nom,prenom,adresse,numTelephone,dateNaissance,mail,mdp);
         serviceInscription.inscrireClient(client);
         if(client==null){
             System.out.println("Une erreur est survenue sur le serveur");

@@ -22,16 +22,18 @@ public class Client extends Utilisateur implements Serializable
     
     private Date dateNaissance;
     private String adresse;
+    private String numTelephone;
     
     @Embedded
     private ProfilAstral profilAstral;
     
     protected Client() {}
     
-    public Client(String nom, String prenom, String adresse, Date dateNaissance, String mail, String motDePasse) {
+    public Client(String nom, String prenom, String adresse, String numTelephone, Date dateNaissance, String mail, String motDePasse) {
         this.nom = nom;
         this.prenom = prenom;
         this.adresse = adresse;
+        this.numTelephone = numTelephone;
         this.dateNaissance = dateNaissance;
         this.mail = mail;
         this.motDePasse = motDePasse;
