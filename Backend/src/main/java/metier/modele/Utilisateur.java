@@ -19,8 +19,8 @@ import javax.persistence.MappedSuperclass;
  *
  * @author romain
  */
-@MappedSuperclass
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Utilisateur implements Serializable 
 {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,6 +30,14 @@ public abstract class Utilisateur implements Serializable
     protected String mail;
     
     protected String motDePasse;
+    
+    protected Utilisateur() {}
+    
+    protected Utilisateur(String mail, String motDePasse) 
+    {
+        this.mail = mail;
+        this.motDePasse = motDePasse;
+    }
 
     public Long getId() {
         return id;
