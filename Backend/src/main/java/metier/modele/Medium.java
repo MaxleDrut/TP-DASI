@@ -68,9 +68,4 @@ public class Medium {
     public Long getId() {
         return id;
     }
-
-    @Override
-    public String toString() {
-        return "Medium{" + "id=" + id + ", genre=" + genre + ", denomination=" + denomination + ", presentation=" + presentation + '}';
-    }
 }
