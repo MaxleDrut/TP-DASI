@@ -8,8 +8,10 @@ package ihm.console;
 import dao.JpaUtil;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import metier.modele.Client;
-import metier.modele.Utilisateur;
 import metier.service.Services;
 import metier.service.util.PeuplementBD;
 
@@ -27,6 +29,49 @@ public class Main {
         PeuplementBD peuplementBD = new PeuplementBD();
         peuplementBD.peuplementEmploye();
         peuplementBD.peuplementMedium();
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        try { //Nécessaire pour les dates
+            testerInscriptionClient("Scuturici","Vasile-Marian","7 Avenue Jean Capelle, Villeurbanne","0628146942",sdf.parse("03-02-1978"),"vasile-marian.scuturici@insa-lyon.fr","algo");
+            testerInscriptionClient("Guillevic","Marie","3 rue de la paix, Saint-Perreux","0614218795",sdf.parse("05-04-2000"),"marieguillevic@outlook.com","noisette");
+            testerInscriptionClient("Micron","Manuel","54 rue du Faubourg Saint-Honoré, Paris","0899112233",sdf.parse("21-12-1977"),"manuel@caramail.com","brigitte");
+            testerInscriptionClient("Maurincomme","Eric","168 cours Emile Zola, Villeurbanne","0472169589",sdf.parse("14-07-1969"),"emaurincomme@gmail","kfet");
+        
+        } catch (Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur d'inscription (checkez les dates)", e);
+        }      
+        testerAidePrediction(1,2,3);
+        authentificationIntervative();  
+        
+    }
+    
+    public static void testerAidePrediction(int amour, int sante, int travail) {
+        Services serv = new Services();
+        List<Client> lcl = serv.obtenirListeClients();
+        
+        if(lcl!=null) {
+             List<String> out = serv.demanderAideConsultation(lcl.get(0), amour,sante,travail);
+             for(String s : out) {
+                 System.out.println(s);
+             }
+        } else {
+            System.out.println("C'est null");
+        }
+    }
+    
+    public static void testerInscriptionClient(String nom, String prenom, String adresse,String numTelephone,Date dateNaissance, String mail, String mdp){
+        Services serviceInscription = new Services();
+        Client client = new Client(nom,prenom,adresse,numTelephone,dateNaissance,mail,mdp);
+        serviceInscription.inscrireClient(client);
+        if(client==null){
+            System.out.println("Une erreur est survenue sur le serveur");
+        }else{
+            System.out.println(client.toString());
+        }
+    }
+    
+    public static void testerInscriptionInterractive() {
+        
         System.out.println("Bonjour !");
         
         // inscription
@@ -52,9 +97,6 @@ public class Main {
             stop=Saisie.lireChaine("Voulez-vous vous inscrire (oui ou non) ?");
            
         }
-        
-        authentificationIntervative();    
-        
         
     }
     
@@ -93,13 +135,5 @@ public class Main {
             System.out.println(client.toString());
         }
     }
-    
-   
-    
-    
-         
-    
-    
-   
     
 }
