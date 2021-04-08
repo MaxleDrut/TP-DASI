@@ -45,6 +45,7 @@ public class Main {
         }      
         testerAidePrediction(1,2,3);
         authentificationIntervative();  
+        testerAjouterMediumAuxFavoris();
         
     }
     
@@ -154,6 +155,31 @@ public class Main {
             }
         }else{
             System.out.println("Aucun medium n'est repertorié");
+        }
+       
+    }
+    
+    public static void testerAjouterMediumAuxFavoris(){
+        Services serviceAjoutMediumAuxFavoris = new Services();
+        Medium medium = serviceAjoutMediumAuxFavoris.ajouterMediumAuxFavoris(11L, 17L);
+        if(medium!=null){
+            System.out.println(" Medium " + medium.getDenomination()+ " ajouté aux favoris");
+        }else{
+            System.out.println(" Erreur : le medium n'existe pas");
+        }
+        
+        Medium medium2 = serviceAjoutMediumAuxFavoris.ajouterMediumAuxFavoris(11L, 17L);
+        if(medium2!=null){
+            System.out.println(" Medium " + medium2.getDenomination()+ " ajouté aux favoris");
+        }else{
+            System.out.println(" Erreur : le medium n'existe pas");
+        }
+        
+        Medium medium3 = serviceAjoutMediumAuxFavoris.ajouterMediumAuxFavoris(1L, 17L);
+        if(medium3!=null){
+            System.out.println(" Medium " + medium3.getDenomination()+ " ajouté aux favoris");
+        }else{
+            System.out.println(" Erreur : le medium n'existe pas");
         }
         
         

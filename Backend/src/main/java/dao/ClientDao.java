@@ -8,6 +8,7 @@ package dao;
 import java.util.List;
 import javax.persistence.TypedQuery;
 import metier.modele.Client;
+import metier.modele.Medium;
 
 /**
  *
@@ -29,6 +30,11 @@ public class ClientDao {
     
     public Client chercherParId(Long id) {
         return JpaUtil.obtenirContextePersistance().find(Client.class, id);
+    }
+    
+    public Client ajouterFavoris(Medium medium, Client client){
+        client.ajouterMediumAuxFavoris(medium);
+        return JpaUtil.obtenirContextePersistance().merge(client);
     }
     
     public List<Client> chercherTous() {

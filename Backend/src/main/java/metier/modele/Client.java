@@ -6,9 +6,13 @@
 package metier.modele;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 /**
  *
@@ -27,6 +31,10 @@ public class Client extends Utilisateur implements Serializable
     @Embedded
     private ProfilAstral profilAstral;
     
+    @ManyToMany 
+    @JoinTable(name="FAVORIS_CLIENT")
+    private List<Medium> mediumsFavoris;
+    
     protected Client() {}
     
     public Client(String nom, String prenom, String adresse, String numTelephone, Date dateNaissance, String mail, String motDePasse) {
@@ -36,8 +44,21 @@ public class Client extends Utilisateur implements Serializable
         this.adresse = adresse;
         this.numTelephone = numTelephone;
         this.dateNaissance = dateNaissance;
+        this.mediumsFavoris =new ArrayList<>();;
 
     }
+    
+    public void ajouterMediumAuxFavoris(Medium medium){
+        if(mediumsFavoris!=null){
+            for(Medium mediums : mediumsFavoris){
+                if(!mediums.equals(medium)){
+                    mediumsFavoris.add(medium);
+                }
+            }
+        }
+    }
+    
+   
 
     public String getNom() {
         return nom;
