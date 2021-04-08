@@ -28,6 +28,8 @@ public class Main {
         peuplementBD.peuplementEmploye();
         peuplementBD.peuplementMedium();
         System.out.println("Bonjour !");
+        
+        // inscription
         String stop =Saisie.lireChaine("Voulez-vous vous inscrire (oui ou non) ?");
         while(!stop.equals("non")){
             if(stop.equals("oui")){
@@ -50,20 +52,36 @@ public class Main {
             stop=Saisie.lireChaine("Voulez-vous vous inscrire (oui ou non) ?");
            
         }
-        stop = Saisie.lireChaine("Voulez-vous rechercher un client (oui ou non)?");
-         while(!stop.equals("non")){
-            if(stop.equals("oui")){
-                String mail = Saisie.lireChaine("Veuillez entrer son email : ");
-                String mdp = Saisie.lireChaine("Veuillez entrer son mot de passe : ");
-                
-               // testerAuthentification(mail,mdp);
-            }
-            stop = Saisie.lireChaine("Voulez-vous rechercher un client (oui ou non)?");
-         }
-            
+        
+        authentificationIntervative();    
+        
         
     }
     
+    public static void authentificationIntervative() {
+        String stop;
+        
+        boolean doAuth = true;
+        while(doAuth) {
+            stop = Saisie.lireChaine("Voulez-vous vous authentifier (oui ou non)?");
+            if(stop.equals("oui")) {
+               String mail = Saisie.lireChaine("Veuillez entrer son email : ");
+               String mdp = Saisie.lireChaine("Veuillez entrer son mot de passe : ");
+
+                // testerAuthentification(mail,mdp);
+                Services services = new Services();
+                Utilisateur utilisateur = services.authentification(mail, mdp);
+                if(utilisateur == null) {
+                    System.out.println("Erreur d'authentification, veuillez reessayer");
+                } else {
+                    System.out.println("Authentification réussie [" + utilisateur.getMail() + "]");
+                    doAuth = false;
+                }
+            } else {
+                doAuth = false;
+            }
+        }
+    }
     
     public static void testerInscriptionClient(String nom, String prenom, String adresse,String numTelephone,Date dateNaissance, String mail, String mdp){
         Services serviceInscription = new Services();

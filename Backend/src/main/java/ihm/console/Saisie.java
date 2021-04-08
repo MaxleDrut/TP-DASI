@@ -14,7 +14,7 @@ public class Saisie {
 
     public static String lireChaine(String invite) {
         String chaineLue = null;
-        System.out.print(invite);
+        System.out.println(invite);
         try {
             InputStreamReader isr = new InputStreamReader(System.in);
             BufferedReader br = new BufferedReader(isr);
