@@ -159,4 +159,12 @@ public class Main {
         
         
     }
+    
+    
+    public static void testerAssignationConsultation()
+    {
+        // Client 17
+        // Employes : 
+        // Consultations :
+    }
 }
