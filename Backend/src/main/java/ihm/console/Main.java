@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import metier.modele.Client;
+import metier.modele.Utilisateur;
 import metier.service.Services;
 import metier.service.util.PeuplementBD;
 
@@ -124,16 +125,4 @@ public class Main {
             }
         }
     }
-    
-    public static void testerInscriptionClient(String nom, String prenom, String adresse,String numTelephone,Date dateNaissance, String mail, String mdp){
-        Services serviceInscription = new Services();
-        Client client = new Client(nom,prenom,adresse,numTelephone,dateNaissance,mail,mdp);
-        serviceInscription.inscrireClient(client);
-        if(client==null){
-            System.out.println("Une erreur est survenue sur le serveur");
-        }else{
-            System.out.println(client.toString());
-        }
-    }
-    
 }
