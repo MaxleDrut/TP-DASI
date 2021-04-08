@@ -71,7 +71,6 @@ public class Services {
             employeDao.creer(employe);
             JpaUtil.validerTransaction();
             Logger.getLogger("Services").log(Level.INFO, "Recrutement de l'employé réussie !");
-            
         }
         catch(Exception e)
         {
@@ -220,6 +219,35 @@ public class Services {
         } finally {
             return output;
         }
+    }
+    
+    public Medium ajouterMediumAuxFavoris(Long mediumId, Long clientId){
+        ClientDao clientDao = new ClientDao();
+        MediumDao mediumDao = new MediumDao();
+        Medium medium;
+        Client client;
+        
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            medium = mediumDao.chercherParId(mediumId);
+            client = clientDao.chercherParId(clientId);
+            clientDao.ajouterFavoris(medium, client);
+            JpaUtil.validerTransaction();
+            Logger.getLogger("Services").log(Level.INFO, "Ajout du medium aux favoris réussi !");
+            
+        }
+        catch(Exception e)
+        {
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de l'ajout du medium au favoris !! \nMessage : {0}", e.getLocalizedMessage());
+            JpaUtil.annulerTransaction();
+            medium = null;
+        } 
+        finally 
+        {
+            JpaUtil.fermerContextePersistance();
+        }
+        return medium;
     }
     
 }
