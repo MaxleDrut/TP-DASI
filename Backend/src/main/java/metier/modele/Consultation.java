@@ -5,39 +5,53 @@
  */
 package metier.modele;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
 
 /**
  *
  * @author onyr
  */
 @Entity
-public class Consultation {
+public class Consultation implements Serializable {
     
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
+    @ManyToOne
+    private Employe employe;
+    
+    @ManyToOne
+    private Medium medium;
+    
+    @ManyToOne
+    private Client client;
+    
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateAssignation;
+    
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateDebut;
+    
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateFin;
+    
     private String commentaire;
     
-    @OneToOne
-    private Employe employe;
-    @OneToOne
-    private Medium medium;
-    @OneToOne
-    private Client client;
     
     protected Consultation() {}
     
-    public Consultation(Date dateAssignation) {
+    public Consultation(Employe employe, Medium medium, Client client, Date dateAssignation) {
         this.dateAssignation = dateAssignation;
+        this.employe = employe;
+        this.client = client;
+        this.medium = medium;
     }
 
     public Date getDateAssignation() {

@@ -101,7 +101,6 @@ public class Main {
             stop=Saisie.lireChaine("Voulez-vous vous inscrire (oui ou non) ?");
            
         }
-        
     }
     
     public static void authentificationIntervative() {
@@ -160,5 +159,4 @@ public class Main {
         
         
     }
-
 }

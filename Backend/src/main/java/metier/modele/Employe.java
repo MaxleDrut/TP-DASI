@@ -21,12 +21,12 @@ public class Employe extends Utilisateur implements Serializable {
     private String prenom;
     private String numTelephone;
     private Character genre;
-    private String disponibilite;
+    private Boolean disponibilite;
 
     public Employe() {
     }
 
-    public Employe(String nom, String prenom, String numTelephone, String mail, Character genre, String disponibilite,String mdp) {
+    public Employe(String nom, String prenom, String numTelephone, String mail, Character genre, Boolean disponibilite,String mdp) {
         super(mail,mdp);
         this.nom = nom;
         this.prenom = prenom;
@@ -66,11 +66,11 @@ public class Employe extends Utilisateur implements Serializable {
         this.genre = genre;
     }
 
-    public String getDisponibilite() {
+    public Boolean getDisponibilite() {
         return disponibilite;
     }
 
-    public void setDisponibilite(String disponibilite) {
+    public void setDisponibilite(Boolean disponibilite) {
         this.disponibilite = disponibilite;
     }
     

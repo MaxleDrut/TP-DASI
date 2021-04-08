@@ -50,6 +50,4 @@ public class Astrologue extends Medium {
         this.promotion = promotion;
     }
     
-    
-    
 }
