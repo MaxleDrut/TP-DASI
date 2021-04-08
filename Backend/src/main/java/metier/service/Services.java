@@ -188,4 +188,17 @@ public class Services {
         return utilisateur;
     }
     
+    public List<String> demanderAideConsultation(Client cl, int amour, int sante, int travail) {
+        ProfilAstral pa = cl.getProfilAstral();
+        AstroTest astro = new AstroTest();
+        List<String> output = null;
+        try {
+            output = astro.getPredictions(pa.getCouleur(), pa.getAnimalTotem(),amour, sante,travail);
+        } catch(Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur de calcul de profil astral", e);
+        } finally {
+            return output;
+        }
+    }
+    
 }

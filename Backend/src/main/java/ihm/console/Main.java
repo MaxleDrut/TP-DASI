@@ -8,8 +8,8 @@ package ihm.console;
 import dao.JpaUtil;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import metier.modele.Client;
-import metier.modele.Utilisateur;
 import metier.service.Services;
 import metier.service.util.PeuplementBD;
 
@@ -26,7 +26,9 @@ public class Main {
         JpaUtil.init();
         PeuplementBD peuplementBD = new PeuplementBD();
         peuplementBD.peuplementEmploye();
+
         peuplementBD.peuplementMedium();
+
         System.out.println("Bonjour !");
         String stop =Saisie.lireChaine("Voulez-vous vous inscrire (oui ou non) ?");
         while(!stop.equals("non")){
@@ -59,11 +61,26 @@ public class Main {
                // testerAuthentification(mail,mdp);
             }
             stop = Saisie.lireChaine("Voulez-vous rechercher un client (oui ou non)?");
-         }
+        }
+         
+        testerAidePrediction(1,2,3);
             
         
     }
     
+    public static void testerAidePrediction(int amour, int sante, int travail) {
+        Services serv = new Services();
+        List<Client> lcl = serv.obtenirListeClients();
+        
+        if(lcl!=null) {
+             List<String> out = serv.demanderAideConsultation(lcl.get(0), amour,sante,travail);
+             for(String s : out) {
+                 System.out.println(s);
+             }
+        } else {
+            System.out.println("C'est null");
+        }
+    }
     
     public static void testerInscriptionClient(String nom, String prenom, String adresse,String numTelephone,Date dateNaissance, String mail, String mdp){
         Services serviceInscription = new Services();
