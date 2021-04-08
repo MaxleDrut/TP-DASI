@@ -26,7 +26,7 @@ public class Main {
         JpaUtil.init();
         PeuplementBD peuplementBD = new PeuplementBD();
         peuplementBD.peuplementEmploye();
-
+        peuplementBD.peuplementMedium();
         System.out.println("Bonjour !");
         String stop =Saisie.lireChaine("Voulez-vous vous inscrire (oui ou non) ?");
         while(!stop.equals("non")){

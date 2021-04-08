@@ -5,7 +5,10 @@
  */
 package metier.service.util;
 
+import metier.modele.Astrologue;
+import metier.modele.Cartomancien;
 import metier.modele.Employe;
+import metier.modele.Spirite;
 import metier.service.Services;
 
 /**
@@ -39,6 +42,23 @@ public class PeuplementBD {
             serviceRecrutement.recrutement(marie);
             Employe laura = new Employe("Kelche","Laura","0450692526","laura.kelche@predictif.com",'F',"busy","lauraKelche");
             serviceRecrutement.recrutement(laura);
+
+    }
+    
+    public void peuplementMedium(){
+            Services serviceCreationMedium = new Services();
+            Spirite gwenaelle = new Spirite("Boule de cristal",'F',"Gwenaëlle","Spécialiste des grandes conversations au-delà de TOUTES les frontières");
+            serviceCreationMedium.inventerMedium(gwenaelle);
+            Spirite tran = new Spirite("Marc de café, boule de cristal, oreilles de lapin",'H',"Professeur Tran","Votre avenir est devant vous : regardons-le ensemble !");
+            serviceCreationMedium.inventerMedium(tran);
+            Cartomancien irma = new Cartomancien('F',"Mme Irma","Comprenez votre entourage grâce à mes cartes ! Résultats rapides");
+            serviceCreationMedium.inventerMedium(irma);
+            Cartomancien endora = new Cartomancien('F',"Endora","Mes cartes répondront à toutes vos questions personnelles");
+            serviceCreationMedium.inventerMedium(endora);
+            Astrologue serena = new Astrologue("École Normale Supérieure d’Astrologie (ENS-Astro)",2006,'F',"Serena","Basée à Champigny-sur-Marne, Serena vous révèlera votre avenir pour éclairer votre passé");
+            serviceCreationMedium.inventerMedium(serena);
+            Astrologue m = new Astrologue("Institut des Nouveaux Savoirs Astrologiques",2010,'H',"Mr M","Avenir, avenir, que nous réserves-tu ? N'attendez plus, demandez à me consulter!");
+            serviceCreationMedium.inventerMedium(m);
 
     }
 }
