@@ -8,10 +8,9 @@ package metier.service;
 import dao.ClientDao;
 import dao.EmployeDao;
 import dao.JpaUtil;
+import dao.MediumDao;
 
 import dao.UtilisateurDao;
-import java.text.MessageFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +18,7 @@ import javax.naming.AuthenticationException;
 import javax.persistence.NoResultException;
 import metier.modele.Client;
 import metier.modele.Employe;
+import metier.modele.Medium;
 import metier.modele.ProfilAstral;
 import metier.modele.Utilisateur;
 import metier.service.util.AstroTest;
@@ -71,12 +71,12 @@ public class Services {
             JpaUtil.ouvrirTransaction();
             employeDao.creer(employe);
             JpaUtil.validerTransaction();
-            Logger.getLogger("ServicesClient").log(Level.INFO, "Recrutement de l'employé réussie !");
+            Logger.getLogger("Services").log(Level.INFO, "Recrutement de l'employé réussie !");
             
         }
         catch(Exception e)
         {
-            Logger.getLogger("ServicesClient").log(Level.SEVERE, "Erreur lors de l'inscription d'un Client !! \nMessage : {0}", e.getLocalizedMessage());
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors du recrutement de l'Employe !! \nMessage : {0}", e.getLocalizedMessage());
             JpaUtil.annulerTransaction();
             employe=null;
         } 
@@ -85,6 +85,29 @@ public class Services {
             JpaUtil.fermerContextePersistance();
         }
         return employe;
+    }
+    
+    public Medium inventerMedium(Medium medium){
+         MediumDao mediumDao = new MediumDao();        
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            mediumDao.creer(medium);
+            JpaUtil.validerTransaction();
+            Logger.getLogger("Services").log(Level.INFO, "Création du medium réussie !");
+            
+        }
+        catch(Exception e)
+        {
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la création du medium !! \nMessage : {0}", e.getLocalizedMessage());
+            JpaUtil.annulerTransaction();
+            medium=null;
+        } 
+        finally 
+        {
+            JpaUtil.fermerContextePersistance();
+        }
+        return medium;
     }
     
     public Client rechercherClient(Long id) {
