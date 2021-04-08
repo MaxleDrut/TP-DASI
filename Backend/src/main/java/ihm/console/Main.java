@@ -9,7 +9,6 @@ import dao.JpaUtil;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import metier.modele.Client;
-import metier.modele.Utilisateur;
 import metier.service.Services;
 import metier.service.util.PeuplementBD;
 
@@ -61,7 +60,6 @@ public class Main {
             stop = Saisie.lireChaine("Voulez-vous rechercher un client (oui ou non)?");
          }
             
-        
     }
     
     
@@ -76,12 +74,5 @@ public class Main {
         }
     }
     
-   
-    
-    
-         
-    
-    
-   
-    
+  
 }
