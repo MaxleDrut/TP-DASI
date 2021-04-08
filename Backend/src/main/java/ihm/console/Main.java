@@ -6,6 +6,7 @@
 package ihm.console;
 
 import dao.JpaUtil;
+import static ihm.console.Utils.assertEquals;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +43,8 @@ public class Main {
         
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur d'inscription (checkez les dates)", e);
-        }      
+        }
+        testerAuthentification();
         testerAidePrediction(1,2,3);
         authentificationIntervative();  
         
@@ -56,7 +58,7 @@ public class Main {
              List<String> out = serv.demanderAideConsultation(lcl.get(0), amour,sante,travail);
              for(String s : out) {
                  System.out.println(s);
-             }
+            }
         } else {
             System.out.println("C'est null");
         }
@@ -71,6 +73,22 @@ public class Main {
         }else{
             System.out.println(client.toString());
         }
+    }
+    
+    public static void testerAuthentification() {
+        // cas du succès
+        Utilisateur guillevic = authentifierUtilisateur("marieguillevic@outlook.com", "noisette");
+        if(guillevic == null) {
+            throw new AssertionError("Problème sur authentifierUtilisateur(\"marieguillevic@outlook.com\", \"noisette\")");
+        }
+        
+        // cas de l'erreur de mail
+        Utilisateur guillevicFalse = authentifierUtilisateur("marieguillevic@error.com", "noisette");
+        assertEquals(guillevicFalse, null);
+        
+        // cas de l'erreur de mdp
+        Utilisateur guillevicFalse2 = authentifierUtilisateur("marieguillevic@error.com", "false");
+        assertEquals(guillevicFalse2, null);
     }
     
     public static void testerInscriptionInterractive() {
@@ -114,19 +132,25 @@ public class Main {
                String mail = Saisie.lireChaine("Veuillez entrer son email : ");
                String mdp = Saisie.lireChaine("Veuillez entrer son mot de passe : ");
 
-                // testerAuthentification(mail,mdp);
-                Services services = new Services();
-                Utilisateur utilisateur = services.authentification(mail, mdp);
-                if(utilisateur == null) {
-                    System.out.println("Erreur d'authentification, veuillez reessayer");
-                } else {
-                    System.out.println("Authentification réussie [" + utilisateur.getMail() + "]");
+                Utilisateur utilisateur = authentifierUtilisateur(mail, mdp);
+                if(utilisateur != null) {
                     doAuth = false;
                 }
             } else {
                 doAuth = false;
             }
         }
+    }
+    
+    public static Utilisateur authentifierUtilisateur(String mail, String mdp) {
+        Services services = new Services();
+        Utilisateur utilisateur = services.authentification(mail, mdp);
+        if(utilisateur == null) {
+            System.out.println("Erreur d'authentification, veuillez reessayer");
+        } else {
+            System.out.println("Authentification réussie [" + utilisateur.getMail() + "]");
+        }
+        return utilisateur;
     }
     
     public static void testerObtenirMedium(){
@@ -153,7 +177,7 @@ public class Main {
             for(Medium medium : medium1 ){
                 System.out.println(medium.toString());
             }
-        }else{
+        } else {
             System.out.println("Aucun medium n'est repertorié");
         }
         
