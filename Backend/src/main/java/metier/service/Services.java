@@ -6,6 +6,7 @@
 package metier.service;
 
 import dao.ClientDao;
+import dao.ConsultationDao;
 import dao.EmployeDao;
 import dao.JpaUtil;
 import dao.MediumDao;
@@ -17,6 +18,7 @@ import java.util.logging.Logger;
 import javax.naming.AuthenticationException;
 import javax.persistence.NoResultException;
 import metier.modele.Client;
+import metier.modele.Consultation;
 import metier.modele.Employe;
 import metier.modele.Medium;
 import metier.modele.ProfilAstral;
@@ -208,6 +210,50 @@ public class Services {
        return listeMediums;
     }
   
+    public Consultation obtenirConsultation(Long consultationId) {
+        ConsultationDao dao = new ConsultationDao();
+        Consultation cons;        
+        try {
+            JpaUtil.creerContextePersistance();
+            cons = dao.chercherParId(consultationId);
+        } catch(Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
+            cons = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        
+        return cons;
+    }
+    
+    public Consultation obtenirConsultationAssignee(Long employeId) {
+        ConsultationDao cDao = new ConsultationDao();
+        EmployeDao eDao = new EmployeDao();
+           
+        Consultation cons = null;
+        try {
+            JpaUtil.creerContextePersistance();
+            Employe emp = eDao.chercherParId(employeId);
+            List<Consultation> lCons = cDao.chercherParEmploye(emp);
+            
+            for(Consultation c : lCons) {
+                if(c.getDateFin() == null) { //Consultation en cours : c'est ce qu'on cherche
+                    cons = c;
+                    break; //Il n'y a en principe qu'une cons. en cours par employé, on peut donc sortir du for each
+                    //(je sais que c'est censé être une structure while, mais puisqu'il n'y a pas de "while each" en java...)
+                }
+            }
+            
+        } catch(Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
+            
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        
+        return cons;
+    }
+    
     public List<String> demanderAideConsultation(Client cl, int amour, int sante, int travail) {
         ProfilAstral pa = cl.getProfilAstral();
         AstroTest astro = new AstroTest();
