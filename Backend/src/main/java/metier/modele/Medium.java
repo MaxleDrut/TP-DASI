@@ -58,6 +58,4 @@ public class Medium {
     public void setPresentation(String presentation) {
         this.presentation = presentation;
     }
-    
-    
 }

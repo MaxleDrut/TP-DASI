@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
  * @author romai
  */
 @Embeddable
-public class ProfilAstral 
+public class ProfilAstral
 {
     private String signeZodiac;
     private String signeChinois;
