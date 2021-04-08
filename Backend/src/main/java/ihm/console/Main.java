@@ -15,6 +15,7 @@ import metier.modele.Client;
 import metier.modele.Medium;
 import metier.modele.Utilisateur;
 import metier.service.Services;
+import metier.service.util.Message;
 import metier.service.util.PeuplementBD;
 
 /**
@@ -31,26 +32,19 @@ public class Main {
         PeuplementBD peuplementBD = new PeuplementBD();
         peuplementBD.peuplementEmploye();
         peuplementBD.peuplementMedium();
+        
+        testerInscriptionClient();  
         testerObtenirMedium();
         testerObtenirListMedium();        
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        try { //Nécessaire pour les dates
-            testerInscriptionClient("Scuturici","Vasile-Marian","7 Avenue Jean Capelle, Villeurbanne","0628146942",sdf.parse("03-02-1978"),"vasile-marian.scuturici@insa-lyon.fr","algo");
-            testerInscriptionClient("Guillevic","Marie","3 rue de la paix, Saint-Perreux","0614218795",sdf.parse("05-04-2000"),"marieguillevic@outlook.com","noisette");
-            testerInscriptionClient("Micron","Manuel","54 rue du Faubourg Saint-Honoré, Paris","0899112233",sdf.parse("21-12-1977"),"manuel@caramail.com","brigitte");
-            testerInscriptionClient("Maurincomme","Eric","168 cours Emile Zola, Villeurbanne","0472169589",sdf.parse("14-07-1969"),"emaurincomme@gmail","kfet");
-        
-        } catch (Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur d'inscription (checkez les dates)", e);
-        }      
-        testerAidePrediction(1,2,3);
+         
+        testerAidePrediction(4,2,3);
         authentificationIntervative();  
         
     }
     
     public static void testerAidePrediction(int amour, int sante, int travail) {
         Services serv = new Services();
-        List<Client> lcl = serv.obtenirListeClients();
+        List<Client> lcl = serv.obtenirListeClients(); //Récupère le 1er client de la liste
         
         if(lcl!=null) {
              List<String> out = serv.demanderAideConsultation(lcl.get(0), amour,sante,travail);
@@ -62,15 +56,28 @@ public class Main {
         }
     }
     
-    public static void testerInscriptionClient(String nom, String prenom, String adresse,String numTelephone,Date dateNaissance, String mail, String mdp){
+    public static void testerInscriptionClient(){
+        inscrire("Scuturici","Vasile-Marian","7 Avenue Jean Capelle, Villeurbanne","0628146942","03-02-1978","vasile-marian.scuturici@insa-lyon.fr","algo");
+        inscrire("Guillevic","Marie","3 rue de la paix, Saint-Perreux","0614218795","05-04-2000","marieguillevic@outlook.com","noisette");
+        inscrire("Micron","Manuel","54 rue du Faubourg Saint-Honoré, Paris","0899112233","21-12-1977","manuel@caramail.com","brigitte");
+        inscrire("Maurincomme","Eric","168 cours Emile Zola, Villeurbanne","0472169589","14-07-1969","emaurincomme@gmail.com","kfet");
+       
+        //Mauvais format de date
+        inscrire("Dupont","Jean","28 rue de la République, Lyon","0472218587","3104-1980","jean.dupont@free.fr","guignol");
+        
+    }
+    
+    //Nécessaire aux try catches pour les dates
+    public static void inscrire(String nom, String prenom, String adresse,String numTelephone,String dateNaissance, String mail, String mdp) {
         Services serviceInscription = new Services();
-        Client client = new Client(nom,prenom,adresse,numTelephone,dateNaissance,mail,mdp);
-        serviceInscription.inscrireClient(client);
-        if(client==null){
-            System.out.println("Une erreur est survenue sur le serveur");
-        }else{
-            System.out.println(client.toString());
-        }
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+           Client cli = new Client(nom,prenom,adresse,numTelephone,sdf.parse(dateNaissance),mail,mdp);
+           serviceInscription.inscrireClient(cli);
+        } catch (Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur de format de la date, client non inscrit");
+            Message.envoyerMail("noreply@predictif.fr", mail, "Echec d'inscription", "Une erreur d'inscription est survenue. Veuillez rééssayer");
+        }  
     }
     
     public static void testerInscriptionInterractive() {
@@ -88,15 +95,9 @@ public class Main {
                 String mail = Saisie.lireChaine("Veuillez entrer votre mail : ");
                 String numTelephone = Saisie.lireChaine("Veuillez entrer votre numero de telephone : ");
                 String mdp = Saisie.lireChaine("Veuillez entrer votre mot de passe : ");
-                try{
-                    String dateNaissance = Saisie.lireChaine("Veuillez entrer votre dateNaissance (yyyy-MM-dd) : ");
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    Date birthday = sdf.parse(dateNaissance);
-                    testerInscriptionClient(nom,prenom,adresse,numTelephone, birthday,mail,mdp);
-                } catch(Exception e) {
-                    System.out.println("Erreur lors de la date");
-                }
-               
+                String dateNaissance = Saisie.lireChaine("Veuillez entrer votre dateNaissance (yyyy-MM-dd) : ");
+                
+                inscrire(nom,prenom,adresse,numTelephone,dateNaissance,mail,mdp);
             }
             stop=Saisie.lireChaine("Voulez-vous vous inscrire (oui ou non) ?");
            
@@ -154,9 +155,7 @@ public class Main {
             }
         }else{
             System.out.println("Aucun medium n'est repertorié");
-        }
-        
-        
+        }    
         
     }
 }
