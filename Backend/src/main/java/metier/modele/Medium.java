@@ -35,6 +35,12 @@ public class Medium {
         this.presentation = presentation;
     }
 
+    @Override
+    public String toString() {
+        return "Medium{" + "id=" + id + ", genre=" + genre + ", denomination=" + denomination + ", presentation=" + presentation + '}';
+    }    
+    
+
     public Character getGenre() {
         return genre;
     }

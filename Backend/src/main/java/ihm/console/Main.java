@@ -8,7 +8,9 @@ package ihm.console;
 import dao.JpaUtil;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import metier.modele.Client;
+import metier.modele.Medium;
 import metier.modele.Utilisateur;
 import metier.service.Services;
 import metier.service.util.PeuplementBD;
@@ -27,7 +29,9 @@ public class Main {
         PeuplementBD peuplementBD = new PeuplementBD();
         peuplementBD.peuplementEmploye();
         peuplementBD.peuplementMedium();
-        System.out.println("Bonjour !");
+        testerObtenirMedium();
+        testerObtenirListMedium();
+       /* System.out.println("Bonjour !");
         String stop =Saisie.lireChaine("Voulez-vous vous inscrire (oui ou non) ?");
         while(!stop.equals("non")){
             if(stop.equals("oui")){
@@ -59,7 +63,7 @@ public class Main {
                // testerAuthentification(mail,mdp);
             }
             stop = Saisie.lireChaine("Voulez-vous rechercher un client (oui ou non)?");
-         }
+         }*/
             
         
     }
@@ -74,6 +78,38 @@ public class Main {
         }else{
             System.out.println(client.toString());
         }
+    }
+    
+    public static void testerObtenirMedium(){
+        Services serviceObtenirMedium = new Services();
+        
+        //Obtention réussie
+        Medium medium1 = serviceObtenirMedium.obtenirMedium(11L);
+        System.out.println(medium1.toString());
+        
+        //Obtention failed
+        Medium medium2 = serviceObtenirMedium.obtenirMedium(1L);
+        if(medium2==null){
+            System.out.println("Aucun medium n'a été trouvé");
+        }
+    }
+    
+    public static void testerObtenirListMedium(){
+        
+        Services serviceObtenirListMedium = new Services();
+        
+        //Obtention réussie
+        List<Medium> medium1 = serviceObtenirListMedium.obtenirListMedium();
+        if(medium1!=null){
+            for(Medium medium : medium1 ){
+                System.out.println(medium.toString());
+            }
+        }else{
+            System.out.println("Aucun medium n'est repertorié");
+        }
+        
+        
+        
     }
     
    

@@ -20,6 +20,11 @@ public class Cartomancien extends Medium{
     public Cartomancien(Character genre, String denomination, String presentation) {
         super(genre, denomination, presentation);
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "Cartomancien{" + '}';
+    }
     
     
 }
