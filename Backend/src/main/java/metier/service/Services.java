@@ -33,19 +33,19 @@ public class Services {
     public Client inscrireClient(Client client) {
         ClientDao clientDao = new ClientDao();
         AstroTest astroService = new AstroTest();
+       
+       
         
         try {
-            JpaUtil.creerContextePersistance();
-            JpaUtil.ouvrirTransaction();
-            
-            List<String> astroProfil = astroService.getProfil(client.getPrenom(), client.getDateNaissance());
+             List<String> astroProfil = astroService.getProfil(client.getPrenom(), client.getDateNaissance());
             ProfilAstral profilAstral = new ProfilAstral(
-                // zodiaque, chinois, couleur, animal
-                astroProfil.get(0), astroProfil.get(1), astroProfil.get(2), astroProfil.get(3)
+                   // zodiaque, chinois, couleur, animal
+                   astroProfil.get(0), astroProfil.get(1), astroProfil.get(2), astroProfil.get(3)
             );
             client.setProfilAstral(profilAstral);
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
             clientDao.creer(client);
-            
             JpaUtil.validerTransaction();
             Logger.getLogger("ServicesClient").log(Level.INFO, "Inscription client réussie !");
             Message.envoyerMail("noreply@predictif.fr", client.getMail(), "Confirmation d'inscription", "Bonjour, vous êtes bien inscrit !"); 
@@ -116,12 +116,9 @@ public class Services {
         
         try {
             JpaUtil.creerContextePersistance();
-            JpaUtil.ouvrirTransaction();
             client = clientDao.chercherParId(id);
-            JpaUtil.validerTransaction();
         } catch(Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
-            JpaUtil.annulerTransaction();
             client = null;
         } finally {
             JpaUtil.fermerContextePersistance();
@@ -137,12 +134,9 @@ public class Services {
         
         try {
             JpaUtil.creerContextePersistance();
-            JpaUtil.ouvrirTransaction();
             listeClients = clientDao.chercherTous();
-            JpaUtil.validerTransaction();
         } catch(Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
-            JpaUtil.annulerTransaction();
             listeClients = null;
         } finally {
             JpaUtil.fermerContextePersistance();
@@ -157,8 +151,6 @@ public class Services {
         
         try {
             JpaUtil.creerContextePersistance();
-            JpaUtil.ouvrirTransaction();
-            
             try {
                 utilisateur = utilisateurDao.chercherUtilisateurParEmail(mail);
             }
@@ -172,20 +164,63 @@ public class Services {
                 throw new AuthenticationException("Mot de passe incorrect !");
             }
             
-            JpaUtil.validerTransaction();
         } catch(AuthenticationException e) {
             Logger.getLogger("ServicesClient").log(Level.INFO, "Erreur à l''authentification : {0}", e.getExplanation());
-            JpaUtil.annulerTransaction();
             utilisateur = null;
         } catch(Exception e) {
             Logger.getLogger("ServicesClient").log(Level.SEVERE, "Erreur non gérée lors de l''authentification : {0}", e.getLocalizedMessage());
-            JpaUtil.annulerTransaction();
             utilisateur = null;
         } finally {
             JpaUtil.fermerContextePersistance();
         }
         
         return utilisateur;
+    }
+  
+    public Medium obtenirMedium(Long mediumId) {
+        MediumDao mediumDao = new MediumDao();
+        Medium medium;        
+        try {
+            JpaUtil.creerContextePersistance();
+            medium = mediumDao.chercherParId(mediumId);
+        } catch(Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
+            medium = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        
+        return medium;
+    }
+    
+    public List<Medium> obtenirListMedium() {
+        MediumDao mediumDao = new MediumDao();
+        List<Medium> listeMediums;
+        
+        try {
+            JpaUtil.creerContextePersistance();
+            listeMediums = mediumDao.fournirListMediums();
+        } catch(Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
+            listeMediums = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        
+       return listeMediums;
+    }
+  
+    public List<String> demanderAideConsultation(Client cl, int amour, int sante, int travail) {
+        ProfilAstral pa = cl.getProfilAstral();
+        AstroTest astro = new AstroTest();
+        List<String> output = null;
+        try {
+            output = astro.getPredictions(pa.getCouleur(), pa.getAnimalTotem(),amour, sante,travail);
+        } catch(Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur de calcul de profil astral", e);
+        } finally {
+            return output;
+        }
     }
     
 }
