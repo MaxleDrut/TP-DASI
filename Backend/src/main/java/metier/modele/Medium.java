@@ -29,7 +29,7 @@ public class Medium {
     public Medium() {
     }
 
-    public Medium(Character genre, String denomination, String presentation) {
+    protected Medium(Character genre, String denomination, String presentation) {
         this.genre = genre;
         this.denomination = denomination;
         this.presentation = presentation;
@@ -63,5 +63,9 @@ public class Medium {
 
     public void setPresentation(String presentation) {
         this.presentation = presentation;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

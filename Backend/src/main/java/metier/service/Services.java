@@ -33,8 +33,6 @@ public class Services {
     public Client inscrireClient(Client client) {
         ClientDao clientDao = new ClientDao();
         AstroTest astroService = new AstroTest();
-       
-       
         
         try {
              List<String> astroProfil = astroService.getProfil(client.getPrenom(), client.getDateNaissance());
@@ -54,6 +52,7 @@ public class Services {
         {
             Logger.getLogger("ServicesClient").log(Level.SEVERE, "Erreur lors de l''inscription d'un Client !! \nMessage : {0}", e.getLocalizedMessage());
             JpaUtil.annulerTransaction();
+            Message.envoyerMail("noreply@predictif.fr", client.getMail(), "Echec d'inscription", "Une erreur d'inscription est survenue. Veuillez rééssayer"); 
             client = null;
         } 
         finally 
