@@ -33,17 +33,8 @@ public abstract class Utilisateur implements Serializable
     
     protected Utilisateur() {}
     
-    protected Utilisateur(String mail, String motDePasse) 
+    public Utilisateur(String mail, String motDePasse) 
     {
-        this.mail = mail;
-        this.motDePasse = motDePasse;
-    }
-
-    public Utilisateur() {
-    }
-    
-   
-    public Utilisateur(String mail, String motDePasse) {
         this.mail = mail;
         this.motDePasse = motDePasse;
     }
