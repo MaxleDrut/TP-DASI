@@ -85,4 +85,32 @@ public class ConsultationDao
         
     }
 
+    /** This function returns mediums used in consultations and the number of consultations
+     * they are involved in. WARN : This only returns mediums that are used in 
+     * consultations, not all the possible mediums to use.
+     * A similar function is defined in Service
+     * @return 
+     */
+    public Map<Medium, Long> recupererNbConsultationsMediumsUtilises() 
+    {
+        List<Object[]> queryResults;
+        Map<Medium, Long> mediumsNbConsultations = new HashMap<Medium, Long>();
+        
+        // do query; get back a List<Object[Medium, Long]>
+        String s = "select c.medium as medium, count(c.id) as nbConsults from Consultation c group by c.medium";
+        Query query = JpaUtil.obtenirContextePersistance()
+            .createQuery(s);
+        queryResults = query.getResultList();
+        
+        // convert List<Object[Medium, Long]> to Map<Medium, Long>
+        for(Object[] o : queryResults)
+        {
+            mediumsNbConsultations.put(
+                (Medium) o[0], (Long) o[1]
+            );
+        }
+        
+        return mediumsNbConsultations;   
+    }
+    
 }
