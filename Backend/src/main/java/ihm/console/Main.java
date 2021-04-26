@@ -5,11 +5,13 @@
  */
 package ihm.console;
 
+import dao.ConsultationDao;
 import dao.JpaUtil;
 import static ihm.console.Utils.assertEquals;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import metier.modele.Client;
@@ -45,6 +47,9 @@ public class Main {
         // interface interactive
         authentificationIntervative();  
         testerAjouterMediumAuxFavoris();
+        
+        // test onyr
+        testerRecupererNbConsultationsMediums();
         
     }
     
@@ -211,5 +216,26 @@ public class Main {
             System.out.println(" Erreur : le medium n'existe pas");
         }
               
+    }
+    
+    public static void testerRecupererNbConsultationsMediums()
+    {   
+        Services services = new Services();
+        Map<Medium, Long> mediumsNbConsultations = services.recupererNbConsultationsMediums();
+        
+        if(mediumsNbConsultations.isEmpty())
+        {
+            System.out.println(" Erreur : pas de résultats dans mediumsNbConsultations.");
+        } else {
+            for(Map.Entry<Medium, Long> entry : mediumsNbConsultations.entrySet())
+            {
+                Medium medium = entry.getKey();
+                Long nbConsultations = entry.getValue();
+                System.out.println(
+                    "medium = " + medium.toString() +
+                    ", nbConsultations = " + nbConsultations
+                );
+            }
+        }
     }
 }
