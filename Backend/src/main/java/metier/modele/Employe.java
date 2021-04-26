@@ -19,13 +19,13 @@ import javax.persistence.OneToMany;
 @Entity
 public class Employe extends Utilisateur implements Serializable {
 
-    
+
     private String nom;
     private String prenom;
     private String numTelephone;
     private Character genre;
     private Boolean disponibilite;
-    
+
     @OneToMany(mappedBy = "employe")
     private List<Consultation> consultations;
 
