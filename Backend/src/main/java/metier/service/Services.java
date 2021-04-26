@@ -14,9 +14,12 @@ import dao.MediumDao;
 import dao.UtilisateurDao;
 import java.util.HashMap;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.AuthenticationException;
@@ -573,6 +576,54 @@ public class Services {
         }
         
         return allMediumsNbConsultations;
+    }
+    
+    /** A function that gets (a maximum of the) 5 top mediums and their number of consultations.
+     * @return A map of the 5 first mediums and their number of consultations. WARN : 
+     * Only returns mediums with non-zero consultations, hence can return 5 Entry
+     * or less.
+     */
+    public Map<Medium, Long> recupererTop5Mediums()
+    {   
+        Long[] topNbConsultations = {0L, 0L, 0L, 0L, 0L};
+        Map<Medium, Long> mediumsNbConsultations;
+        
+        // result
+        Map<Medium, Long> mediumsNbConsultationsTop5 = new HashMap<Medium, Long>();
+        
+        try {
+            
+            // get all mediums and mediums used with their number of consultations
+            mediumsNbConsultations = recupererNbConsultationsMediums();
+            
+            int size = mediumsNbConsultations.size();
+            if(size > 0) {
+                // sort the map as a List in descending order
+                List<Entry<Medium, Long>> list = new ArrayList<>(mediumsNbConsultations.entrySet());
+                list.sort(Entry.comparingByValue(Comparator.reverseOrder()));
+                
+                // get back at maximum the first 5 elements into a Map if not 0
+                for(int i = 0; i < 5 && i < size; i++) {
+                    if(list.get(i).getValue() != 0L) {
+                        mediumsNbConsultationsTop5.put(
+                            list.get(i).getKey(), list.get(i).getValue()
+                        );
+                    }   
+                }
+                
+                
+            } else {
+                throw new Exception("Error : [recupererTop5Mediums()] absence of data in database");
+            }
+            
+        } catch(Exception e) {
+            Logger.getAnonymousLogger()
+                .log(Level.SEVERE, "Erreur au niveau de recupererTop5Mediums()", e);
+            
+        }
+        
+        return mediumsNbConsultationsTop5;
+        
     }
 
     public List<Consultation> recupererConsultationsClient(Client client)
