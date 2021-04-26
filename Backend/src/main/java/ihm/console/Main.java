@@ -64,6 +64,7 @@ public class Main {
         testerTerminerConsultation();
 
         testerRecupererNbConsultationsMediums();
+        testerRecupererTop5Mediums();
         
         /*authentificationIntervative();
         testerAjouterMediumAuxFavoris();*/
@@ -470,11 +471,34 @@ public class Main {
         Services services = new Services();
         Map<Medium, Long> mediumsNbConsultations = services.recupererNbConsultationsMediums();
         
+        System.out.println("============= testerRecupererNbConsultationsMediums() ===========");
         if(mediumsNbConsultations.isEmpty())
         {
             System.out.println(" Erreur : pas de résultats dans mediumsNbConsultations.");
         } else {
             for(Map.Entry<Medium, Long> entry : mediumsNbConsultations.entrySet())
+            {
+                Medium medium = entry.getKey();
+                Long nbConsultations = entry.getValue();
+                System.out.println(
+                    "medium = " + medium.getDenomination() +
+                    ", nbConsultations = " + nbConsultations
+                );
+            }
+        }
+    }
+    
+    public static void testerRecupererTop5Mediums()
+    {
+        Services services = new Services();
+        Map<Medium, Long> mediumsNbConsultationsTop5 = services.recupererTop5Mediums();
+        
+        System.out.println("============= testerRecupererTop5Mediums() ===========");
+        if(mediumsNbConsultationsTop5.isEmpty())
+        {
+            System.out.println(" Erreur : pas de résultats dans mediumsNbConsultationsTop5.");
+        } else {
+            for(Map.Entry<Medium, Long> entry : mediumsNbConsultationsTop5.entrySet())
             {
                 Medium medium = entry.getKey();
                 Long nbConsultations = entry.getValue();
