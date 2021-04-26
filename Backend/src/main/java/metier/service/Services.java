@@ -13,6 +13,7 @@ import dao.MediumDao;
 
 import dao.UtilisateurDao;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.AuthenticationException;
@@ -281,7 +282,6 @@ public class Services {
             clientDao.ajouterFavoris(medium, client);
             JpaUtil.validerTransaction();
             Logger.getLogger("Services").log(Level.INFO, "Ajout du medium aux favoris réussi !");
-            
         }
         catch(Exception e)
         {
@@ -296,4 +296,24 @@ public class Services {
         return medium;
     }
     
+    public Map<Employe,Long> recupererNombreConsultationsEmploye(){
+        ConsultationDao consultationDao = new ConsultationDao();
+        Map<Employe,Long> consultationsEmployes;
+        
+        try {
+            JpaUtil.creerContextePersistance();
+            consultationsEmployes = consultationDao.recupererNbConsultationsEmploye();
+             
+        }
+        catch(Exception e)
+        {
+           Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de l'accès aux consultations de l'Employe !! \nMessage : {0}", e.getLocalizedMessage());
+           consultationsEmployes=null;
+        } 
+        finally 
+        {
+            JpaUtil.fermerContextePersistance();
+        }
+        return consultationsEmployes;
+    }
 }

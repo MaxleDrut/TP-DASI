@@ -8,11 +8,12 @@ package ihm.console;
 import dao.JpaUtil;
 import static ihm.console.Utils.assertEquals;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import metier.modele.Client;
+import metier.modele.Employe;
 import metier.modele.Medium;
 import metier.modele.Utilisateur;
 import metier.service.Services;
@@ -34,6 +35,7 @@ public class Main {
         peuplementBD.peuplementEmploye();
         peuplementBD.peuplementMedium();
         
+        
         // tests en hard
         testerInscriptionClient();  
         testerObtenirMedium();
@@ -41,10 +43,13 @@ public class Main {
         testerAuthentification();
         testerAidePrediction(1,2,3);
         testerAidePrediction(4,2,3);
+        testerAjouterMediumAuxFavoris();
+        testerRecupererNombreConsultationsEmploye();
+        
         
         // interface interactive
         authentificationIntervative();  
-        testerAjouterMediumAuxFavoris();
+        
         
     }
     
@@ -162,11 +167,17 @@ public class Main {
         
         //Obtention réussie
         Medium medium1 = serviceObtenirMedium.obtenirMedium(11L);
-        System.out.println(medium1.toString());
+        if(medium1!=null){
+            System.out.println(medium1.toString());
+        }else{
+            System.out.println("Aucun medium n'a été trouvé");
+        }
         
         //Obtention failed
         Medium medium2 = serviceObtenirMedium.obtenirMedium(1L);
-        if(medium2==null){
+        if(medium2!=null){
+            System.out.println(medium2.toString());
+        }else{
             System.out.println("Aucun medium n'a été trouvé");
         }
     }
@@ -190,6 +201,8 @@ public class Main {
     
     public static void testerAjouterMediumAuxFavoris(){
         Services serviceAjoutMediumAuxFavoris = new Services();
+        
+        //Ajout du medium 11 à la liste des favoris du client 17
         Medium medium = serviceAjoutMediumAuxFavoris.ajouterMediumAuxFavoris(11L, 17L);
         if(medium!=null){
             System.out.println(" Medium " + medium.getDenomination()+ " ajouté aux favoris");
@@ -197,6 +210,7 @@ public class Main {
             System.out.println(" Erreur : le medium n'existe pas");
         }
         
+        //Ajout du medium 11 à la liste des favoris du client 17 (déja dans sa liste : ne sera pas ajouté 2 fois)
         Medium medium2 = serviceAjoutMediumAuxFavoris.ajouterMediumAuxFavoris(11L, 17L);
         if(medium2!=null){
             System.out.println(" Medium " + medium2.getDenomination()+ " ajouté aux favoris");
@@ -204,6 +218,7 @@ public class Main {
             System.out.println(" Erreur : le medium n'existe pas");
         }
         
+        //Ajout du medium 1 à la liste des favoris du client 17 (il n'y a pas de medium 1)
         Medium medium3 = serviceAjoutMediumAuxFavoris.ajouterMediumAuxFavoris(1L, 17L);
         if(medium3!=null){
             System.out.println(" Medium " + medium3.getDenomination()+ " ajouté aux favoris");
@@ -211,5 +226,14 @@ public class Main {
             System.out.println(" Erreur : le medium n'existe pas");
         }
               
+    }
+    
+    public static void testerRecupererNombreConsultationsEmploye(){
+        Services serviceConsultation = new Services();
+        Map<Employe,Long> consultationsEmploye= serviceConsultation.recupererNombreConsultationsEmploye();
+        for(Map.Entry<Employe,Long> mapEntry : consultationsEmploye.entrySet()){
+             System.out.println(mapEntry.getKey()
+                              + " | nombre de consultations: " + mapEntry.getValue());
+        }
     }
 }

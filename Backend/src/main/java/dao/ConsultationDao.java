@@ -5,7 +5,10 @@
  */
 package dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import metier.modele.Client;
 import metier.modele.Consultation;
@@ -58,5 +61,27 @@ public class ConsultationDao
         ).setParameter("employe", employe);
         
         return query.getResultList();
+    }
+    
+    public Map<Employe,Long> recupererNbConsultationsEmploye(){
+        
+        String s = "select c.employe as employe, count(c.id) as nbConsultations from Consultation c group by c.employe";
+        Query query = JpaUtil.obtenirContextePersistance().createQuery(s);
+       
+        List<Object[]> results = query.getResultList();
+        Map<Employe,Long> consultationsEmployes = new HashMap<Employe,Long>();
+        for(Object[] obj : results){
+            consultationsEmployes.put((Employe) obj[0],(Long) obj[1]);
+        }    
+        
+        String s2 = "select e as employe from Employe e where e.id NOT IN (select c.employe from Consultation c)";
+        TypedQuery query2 = JpaUtil.obtenirContextePersistance().createQuery(s2, Employe.class);
+        List<Employe> resultsEmp = query2.getResultList();
+        for(Employe e : resultsEmp){
+            consultationsEmployes.put(e, 0L);
+        }  
+         
+        return consultationsEmployes;
+        
     }
 }
