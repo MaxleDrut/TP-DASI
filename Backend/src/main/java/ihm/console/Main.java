@@ -55,10 +55,14 @@ public class Main {
         testerObtenirEmploye();
         testerObtenirListeEmployes();
         ajoutManuelCons();
-        testerObtenirConsultation();
-
-        
+        testerObtenirConsultation();       
         testerRecupererNombreConsultationsEmploye();
+
+        testerRecupListeConsultations();
+        testerObtConsultationAss();
+        testerDemarrerConsultation();
+        testerTerminerConsultation();
+
         // interface interactive
         /*authentificationIntervative();
         testerAjouterMediumAuxFavoris();*/
@@ -293,6 +297,20 @@ public class Main {
         }
     }
 
+    public static void testerObtConsultationAss() {
+        Services serv = new Services();
+        
+        Employe emp = serv.obtenirListeEmployes().get(0);
+        Consultation cons = serv.obtenirConsultationAssignee(emp.getId());
+        
+        if(cons == null) {
+            System.out.println("Le premier employé n'a pas de consultation assignée");
+        } else {
+            System.out.println(cons);
+        }
+        
+    }
+    
     public static void ajoutManuelCons() {
         Services serv = new Services();
 
@@ -308,13 +326,21 @@ public class Main {
     //Demarre la consultation numéro 1 (et envoie le sms)
     public static void testerDemarrerConsultation() {
         Services serv = new Services();
-        serv.demarrerConsultation(1L);
+        
+        Employe emp = serv.obtenirListeEmployes().get(0);
+        Consultation cons = serv.obtenirConsultationAssignee(emp.getId());
+        
+        serv.demarrerConsultation(cons.getId());
+        
     }
 
     public static void testerTerminerConsultation() {
         Services serv = new Services();
-        Consultation cons = serv.terminerConsultation(1L,"L'interrogé semblait paniqué, mais les astres ont su le rassurer");
-        System.out.println(cons);
+        Employe emp = serv.obtenirListeEmployes().get(0);
+        Consultation cons = serv.obtenirConsultationAssignee(emp.getId());
+        
+        Consultation c = serv.terminerConsultation(cons.getId(),"L'interrogé semblait paniqué, mais les astres ont su le rassurer");
+        System.out.println(c);
 
     }
 
@@ -409,7 +435,7 @@ public class Main {
         }
 
     }
-    
+
     public static void testerRecupererNombreConsultationsEmploye(){
         Services serviceConsultation = new Services();
         Map<Employe,Long> consultationsEmploye= serviceConsultation.recupererNombreConsultationsEmploye();
@@ -417,5 +443,25 @@ public class Main {
              System.out.println(mapEntry.getKey()
                               + " | nombre de consultations: " + mapEntry.getValue());
         }
+    }
+
+    public static void testerRecupListeConsultations()
+    {
+        Services services = new Services();
+        
+        Client client = services.rechercherClient(21L);
+        
+        System.out.println("============================ Consultations du client n°21 :");
+        services.recupererConsultationsClient(client).forEach(cons -> {
+            System.out.println(cons);
+        });
+        
+        
+        Employe employe = services.rechercherEmploye(9L);
+        
+        System.out.println("============================ Consultations de l'employé n°9 :");
+        services.recupererConsultationsEmploye(employe).forEach(cons -> {
+            System.out.println(cons);
+        });
     }
 }

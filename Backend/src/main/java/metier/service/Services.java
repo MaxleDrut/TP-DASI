@@ -397,7 +397,7 @@ public class Services {
 
             String message = "Bonjour "
                              + cli.getPrenom()
-                             + "J'ai bien reçu votre demande de consultation du "
+                             + ". J'ai bien reçu votre demande de consultation du "
                              + jour.format(dateAss)
                              + " à "
                              + heure.format(dateAss)
@@ -519,4 +519,49 @@ public class Services {
         return consultationsEmployes;
     }
 
+    public List<Consultation> recupererConsultationsClient(Client client)
+    {
+        List<Consultation> result = null;
+        ConsultationDao consultationDao = new ConsultationDao();
+        
+        try
+        {
+            JpaUtil.creerContextePersistance();
+            result = consultationDao.chercherParClient(client);
+        }
+        catch(Exception e)
+        {
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la récupération des consultations !! \nMessage : {0}", e.getLocalizedMessage());
+            result = null;
+        }
+        finally
+        {
+            JpaUtil.fermerContextePersistance();
+        }
+        
+        return result;
+    }
+    
+    public List<Consultation> recupererConsultationsEmploye(Employe employe)
+    {
+        List<Consultation> result = null;
+        ConsultationDao consultationDao = new ConsultationDao();
+        
+        try
+        {
+            JpaUtil.creerContextePersistance();
+            result = consultationDao.chercherParEmploye(employe);
+        }
+        catch(Exception e)
+        {
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la récupération des consultations !! \nMessage : {0}", e.getLocalizedMessage());
+            result = null;
+        }
+        finally
+        {
+            JpaUtil.fermerContextePersistance();
+        }
+        
+        return result;
+    }
 }
