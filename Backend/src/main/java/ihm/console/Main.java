@@ -187,7 +187,7 @@ public class Main {
         Services serviceObtenirListeMedium = new Services();
 
         //Obtention réussie
-        List<Medium> medium1 = serviceObtenirListeMedium.obtenirListMedium();
+        List<Medium> medium1 = serviceObtenirListeMedium.obtenirListeMediums();
 
         if(medium1!=null){
             for(Medium medium : medium1 ){
@@ -258,23 +258,23 @@ public class Main {
 
     }
 
-    //Cherche la consultation numéro 12 et 21
+    //Cherche la consultation numéro 25 et 27
     public static void testerObtenirConsultation() {
         Services serv = new Services();
 
 
-        Consultation cons = serv.obtenirConsultation(21L);
+        Consultation cons = serv.obtenirConsultation(25L);
         if(cons != null) {
             System.out.println(cons);
         } else {
-            System.out.println("La consultation 21 n'a pas été trouvée");
+            System.out.println("La consultation 25 n'a pas été trouvée");
         }
 
-        cons = serv.obtenirConsultation(12L);
+        cons = serv.obtenirConsultation(27L);
         if(cons != null) {
             System.out.println(cons);
         } else {
-            System.out.println("La consultation 12 n'a pas été trouvée");
+            System.out.println("La consultation 27 n'a pas été trouvée");
         }
     }
 
@@ -283,7 +283,7 @@ public class Main {
 
         Client cli = serv.obtenirListeClients().get(0);
         Employe emp = serv.obtenirListeEmployes().get(0);
-        Medium med = serv.obtenirListMedium().get(0);
+        Medium med = serv.obtenirListeMediums().get(0);
 
         Consultation cons = new Consultation(emp,med,cli,new Date());
 
