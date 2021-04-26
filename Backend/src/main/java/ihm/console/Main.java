@@ -12,6 +12,7 @@ import static ihm.console.Utils.assertEquals;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import metier.modele.Client;
@@ -58,10 +59,10 @@ public class Main {
         testerDemarrerConsultation();
         testerTerminerConsultation();
 
-        // interface interactive
+        testerRecupererNbConsultationsMediums();
+        
         /*authentificationIntervative();
         testerAjouterMediumAuxFavoris();*/
-
     }
 
     public static void testerAidePrediction(int amour, int sante, int travail) {
@@ -439,5 +440,26 @@ public class Main {
         services.recupererConsultationsEmploye(employe).forEach(cons -> {
             System.out.println(cons);
         });
+    }
+    
+    public static void testerRecupererNbConsultationsMediums()
+    {   
+        Services services = new Services();
+        Map<Medium, Long> mediumsNbConsultations = services.recupererNbConsultationsMediums();
+        
+        if(mediumsNbConsultations.isEmpty())
+        {
+            System.out.println(" Erreur : pas de résultats dans mediumsNbConsultations.");
+        } else {
+            for(Map.Entry<Medium, Long> entry : mediumsNbConsultations.entrySet())
+            {
+                Medium medium = entry.getKey();
+                Long nbConsultations = entry.getValue();
+                System.out.println(
+                    "medium = " + medium.getDenomination() +
+                    ", nbConsultations = " + nbConsultations
+                );
+            }
+        }
     }
 }

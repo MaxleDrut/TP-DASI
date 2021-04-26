@@ -12,9 +12,11 @@ import dao.JpaUtil;
 import dao.MediumDao;
 
 import dao.UtilisateurDao;
+import java.util.HashMap;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.AuthenticationException;
@@ -497,6 +499,60 @@ public class Services {
         return medium;
     }
 
+    
+    public Map<Medium, Long> recupererNbConsultationsMediums() 
+    {
+        ConsultationDao cDao = new ConsultationDao();
+        MediumDao mDao = new MediumDao();
+        
+        // data
+        List<Medium> mediums;
+        Map<Medium, Long> mediumsNbConsultations;
+        
+        // result
+        Map<Medium, Long> allMediumsNbConsultations = new HashMap<Medium, Long>();
+        
+        try {
+            JpaUtil.creerContextePersistance();
+            
+            // get all mediums and mediums used with their number of consultations
+            mediums = mDao.fournirListMediums();
+            mediumsNbConsultations = cDao.recupererNbConsultationsMediumsUtilises();
+            
+            
+            int nbMediums = mediums.size();
+            if(nbMediums > 0) {
+                Medium currentMedium;
+                Long nbConsultations;
+                
+                // for each medium, check if it has a number of consultations
+                for(int i = 0; i < nbMediums; i++)
+                {
+                    currentMedium = mediums.get(i);
+                    // check that this medium is inside mediumsNbConsultations
+                    nbConsultations = mediumsNbConsultations.get(currentMedium);
+                    if(nbConsultations == null)
+                    {
+                        // if nothing found, this medium has 0 consultations
+                        nbConsultations = 0L;
+                    }
+                    
+                    // add a new row inside the result HashMap
+                    allMediumsNbConsultations.put(currentMedium, nbConsultations);
+                }  
+            } else {
+                throw new Exception("no mediums in database");
+            }
+            
+        } catch(Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau de recupererNbConsultationsMediums()", e);
+            
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        
+        return allMediumsNbConsultations;
+    }
     
     public List<Consultation> recupererConsultationsClient(Client client)
     {
