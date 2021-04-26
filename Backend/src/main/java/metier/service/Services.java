@@ -12,6 +12,7 @@ import dao.JpaUtil;
 import dao.MediumDao;
 
 import dao.UtilisateurDao;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -118,7 +119,7 @@ public class Services {
             JpaUtil.creerContextePersistance();
             client = clientDao.chercherParId(id);
         } catch(Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la récupération par id du client !\n Message : {0}", e.getLocalizedMessage());
             client = null;
         } finally {
             JpaUtil.fermerContextePersistance();
@@ -136,13 +137,75 @@ public class Services {
             JpaUtil.creerContextePersistance();
             listeClients = clientDao.chercherTous();
         } catch(Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la récupération de la liste des clients.\nMessage : {0}", e.getLocalizedMessage());
             listeClients = null;
         } finally {
             JpaUtil.fermerContextePersistance();
         }
         
        return listeClients;
+    }
+    
+    public List<Employe> obtenirListeEmployes()
+    {
+        EmployeDao employeDao = new EmployeDao();
+        List<Employe> listeEmployes;
+        
+        try {
+            JpaUtil.creerContextePersistance();
+            listeEmployes = employeDao.chercherTous();
+        } catch(Exception e) {
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la récupération de la liste des employés.\nMessage : {0}", e.getLocalizedMessage());
+            listeEmployes = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        
+        return listeEmployes;
+    }
+	
+    public Consultation demanderConsultation(Client client, Medium medium)
+    {
+        ConsultationDao consultationDao = new ConsultationDao();
+        EmployeDao employeDao = new EmployeDao();
+        Consultation consultation = null;
+        
+        try
+        {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            
+            // sélectionner employé
+            Employe employe = employeDao.employeAssignableAvecGenre(medium.getGenre());
+            if(employe == null)
+            {
+                throw new Exception("Aucun employé disponible");
+            }
+            
+            employe.setDisponibilite(Boolean.FALSE);
+            employeDao.modifier(employe);
+            
+            // créer consultation
+            consultation = new Consultation(employe, medium, client, new Date());
+            consultationDao.creer(consultation);
+            
+            // contacter employé
+            Message.envoyerMail("noreply@predictif.fr", employe.getMail(), "Assignation de client", "Bonjour, nous vous avons assigné un nouveau client. Rendez-vous sur votre espace personnel au plus vite pour le prendre en charge !");
+            
+            JpaUtil.validerTransaction();
+        }
+        catch(Exception e)
+        {
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la création d'une consultation !\n Message : " + e.getLocalizedMessage());
+            JpaUtil.annulerTransaction();
+            consultation = null;
+        }
+        finally
+        {
+            JpaUtil.fermerContextePersistance();
+        }
+        
+        return consultation;
     }
     
     public Utilisateur authentification(String mail, String motDePasse) {
@@ -193,7 +256,7 @@ public class Services {
         return medium;
     }
     
-    public List<Medium> obtenirListMedium() {
+    public List<Medium> obtenirListeMediums() {
         MediumDao mediumDao = new MediumDao();
         List<Medium> listeMediums;
         

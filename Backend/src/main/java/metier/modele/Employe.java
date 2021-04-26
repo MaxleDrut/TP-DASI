@@ -6,7 +6,10 @@
 package metier.modele;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 
 /**
@@ -22,6 +25,9 @@ public class Employe extends Utilisateur implements Serializable {
     private String numTelephone;
     private Character genre;
     private Boolean disponibilite;
+    
+    @OneToMany(mappedBy = "employe")
+    private List<Consultation> consultations;
 
     public Employe() {
     }
@@ -33,6 +39,7 @@ public class Employe extends Utilisateur implements Serializable {
         this.numTelephone = numTelephone;
         this.genre = genre;
         this.disponibilite = disponibilite;
+        this.consultations = new ArrayList<>();
     }
     public String getNom() {
         return nom;
@@ -73,5 +80,13 @@ public class Employe extends Utilisateur implements Serializable {
     public void setDisponibilite(Boolean disponibilite) {
         this.disponibilite = disponibilite;
     }
-    
+
+    public List<Consultation> getConsultations() {
+        return consultations;
+    }
+
+    @Override
+    public String toString() {
+        return "Employe{" + "id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", numTelephone=" + numTelephone + ", genre=" + genre + ", disponibilite=" + disponibilite + '}';
+    }
 }
