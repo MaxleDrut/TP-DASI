@@ -59,7 +59,6 @@ public class Main {
         testerDemarrerConsultation();
         testerTerminerConsultation();
 
-        // test onyr
         testerRecupererNbConsultationsMediums();
         
         /*authentificationIntervative();
@@ -457,7 +456,7 @@ public class Main {
                 Medium medium = entry.getKey();
                 Long nbConsultations = entry.getValue();
                 System.out.println(
-                    "medium = " + medium.toString() +
+                    "medium = " + medium.getDenomination() +
                     ", nbConsultations = " + nbConsultations
                 );
             }
