@@ -116,6 +116,13 @@ public class Client extends Utilisateur implements Serializable
         this.profilAstral = profilAstral;
     }
 
+    public String getNumTelephone() {
+        return numTelephone;
+    }
+
+    public void setNumTelephone(String numTelephone) {
+        this.numTelephone = numTelephone;
+    }
     @Override
     public String toString() {
         return "Client{" + "nom=" + nom + ", prenom=" + prenom + ", dateNaissance=" + dateNaissance + ", adresse=" + adresse + ", profilAstral=" + profilAstral + '}';
