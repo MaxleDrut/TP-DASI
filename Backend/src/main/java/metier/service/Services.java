@@ -147,10 +147,29 @@ public class Services {
         
        return listeClients;
     }
+    
+    public List<Employe> obtenirListeEmployes()
+    {
+        EmployeDao employeDao = new EmployeDao();
+        List<Employe> listeEmployes;
+        
+        try {
+            JpaUtil.creerContextePersistance();
+            listeEmployes = employeDao.chercherTous();
+        } catch(Exception e) {
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la récupération de la liste des employés.\nMessage : {0}", e.getLocalizedMessage());
+            listeEmployes = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        
+        return listeEmployes;
+    }
 	
     public Consultation demanderConsultation(Client client, Medium medium)
     {
         ConsultationDao consultationDao = new ConsultationDao();
+        EmployeDao employeDao = new EmployeDao();
         Consultation consultation = null;
         
         try
@@ -159,11 +178,18 @@ public class Services {
             JpaUtil.ouvrirTransaction();
             
             // sélectionner employé
-            Employe employe = null;
+            Employe employe = employeDao.employeAssignableAvecGenre(medium.getGenre());
+            if(employe == null)
+            {
+                throw new Exception("Aucun employé disponible");
+            }
             
+            employe.setDisponibilite(Boolean.FALSE);
+            employeDao.modifier(employe);
             
             // créer consultation
             consultation = new Consultation(employe, medium, client, new Date());
+            consultationDao.creer(consultation);
             
             // contacter employé
             Message.envoyerMail("noreply@predictif.fr", employe.getMail(), "Assignation de client", "Bonjour, nous vous avons assigné un nouveau client. Rendez-vous sur votre espace personnel au plus vite pour le prendre en charge !");
@@ -172,7 +198,7 @@ public class Services {
         }
         catch(Exception e)
         {
-            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la création d'une consultation !\n Message : {0}", e.getLocalizedMessage());
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la création d'une consultation !\n Message : " + e.getLocalizedMessage());
             JpaUtil.annulerTransaction();
             consultation = null;
         }
@@ -232,7 +258,7 @@ public class Services {
         return medium;
     }
     
-    public List<Medium> obtenirListMedium() {
+    public List<Medium> obtenirListeMediums() {
         MediumDao mediumDao = new MediumDao();
         List<Medium> listeMediums;
         
