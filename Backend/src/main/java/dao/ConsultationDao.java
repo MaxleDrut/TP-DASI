@@ -63,6 +63,28 @@ public class ConsultationDao
         return query.getResultList();
     }
     
+    public Map<Employe,Long> recupererNbConsultationsEmploye(){
+        
+        String s = "select c.employe as employe, count(c.id) as nbConsultations from Consultation c group by c.employe";
+        Query query = JpaUtil.obtenirContextePersistance().createQuery(s);
+       
+        List<Object[]> results = query.getResultList();
+        Map<Employe,Long> consultationsEmployes = new HashMap<Employe,Long>();
+        for(Object[] obj : results){
+            consultationsEmployes.put((Employe) obj[0],(Long) obj[1]);
+        }    
+        
+        String s2 = "select e from Employe e where e NOT IN (select c.employe from Consultation c)";
+        TypedQuery query2 = JpaUtil.obtenirContextePersistance().createQuery(s2, Employe.class);
+        List<Employe> resultsEmp = query2.getResultList();
+        for(Employe e : resultsEmp){
+            consultationsEmployes.put(e, 0L);
+        } 
+         
+        return consultationsEmployes;
+        
+    }
+
     /** This function returns mediums used in consultations and the number of consultations
      * they are involved in. WARN : This only returns mediums that are used in 
      * consultations, not all the possible mediums to use.
@@ -90,4 +112,5 @@ public class ConsultationDao
         
         return mediumsNbConsultations;   
     }
+    
 }

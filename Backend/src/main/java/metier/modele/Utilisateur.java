@@ -60,4 +60,10 @@ public abstract class Utilisateur implements Serializable
     public void setMotDePasse(String motDePasse) {
         this.motDePasse = motDePasse;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    
 }
