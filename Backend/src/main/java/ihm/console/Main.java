@@ -8,11 +8,11 @@ package ihm.console;
 import dao.JpaUtil;
 import static ihm.console.Utils.assertEquals;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import metier.modele.Client;
+import metier.modele.Consultation;
 import metier.modele.Medium;
 import metier.modele.Utilisateur;
 import metier.service.Services;
@@ -41,6 +41,8 @@ public class Main {
         testerAuthentification();
         testerAidePrediction(1,2,3);
         testerAidePrediction(4,2,3);
+        
+        
         
         // interface interactive
         authentificationIntervative();  
@@ -211,5 +213,32 @@ public class Main {
             System.out.println(" Erreur : le medium n'existe pas");
         }
               
+    }
+    
+    //Cherche la consultation numéro 12 et 1
+    public static void testerObtenirConsultation() {
+        Services serv = new Services();
+        
+        
+        Consultation cons = serv.obtenirConsultation(1L);
+        if(cons != null) {
+            System.out.println(cons);
+        } else {
+            System.out.println("La consultation 1 n'a pas été trouvée");
+        }
+        
+        cons = serv.obtenirConsultation(12L);
+        if(cons != null) {
+            System.out.println(cons);
+        } else {
+            System.out.println("La consultation 12 n'a pas été trouvée");
+        }
+    }
+    
+    //Demarre la consultation numéro 1 (et envoie le sms)
+    public static void testerDemarrerConsultation() {
+        Services serv = new Services();
+        serv.demarrerConsultation(1L);
+        
     }
 }

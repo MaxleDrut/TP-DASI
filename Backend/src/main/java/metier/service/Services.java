@@ -12,6 +12,8 @@ import dao.JpaUtil;
 import dao.MediumDao;
 
 import dao.UtilisateurDao;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -247,6 +249,103 @@ public class Services {
         } catch(Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
             
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        
+        return cons;
+    }
+    
+    /*Permet de démarrer la consultation :
+    - Récupère la consultation à partir de l'ID
+    - Set la date de début à maintenant
+    - Envoie un SMS au client de la consultation selon le modèle
+    - Renvoie le numéro de téléphone du client
+    */
+ 
+    public String demarrerConsultation(Long consultationId) {
+        ConsultationDao cDao = new ConsultationDao();
+        Consultation cons;
+        
+        try {
+            JpaUtil.creerContextePersistance();
+            cons = cDao.chercherParId(consultationId);
+            
+            if(cons == null) {
+                throw new Exception("Consultation introuvable !");
+            }
+            
+            Date dateAss = cons.getDateAssignation();
+            if(dateAss == null) {
+                throw new Exception("La consultation n'a pas de date d'assignation !");
+            }
+            
+            Client cli = cons.getClient();
+            Employe emp = cons.getEmploye();
+            Medium med = cons.getMedium();
+            JpaUtil.ouvrirTransaction();
+            //Par défaut, les dates ont pour valeur d'initialisation le temps actuel.
+            cons.setDateDebut(new Date());
+            JpaUtil.validerTransaction();
+            Logger.getAnonymousLogger().log(Level.INFO,"Consultation démarrée avec succès");
+            
+            SimpleDateFormat jour = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat heure = new SimpleDateFormat("hh:mm");
+            
+            String message = "Bonjour "
+                             + cli.getPrenom()
+                             + "J'ai bien reçu votre demande de consultation du "
+                             + jour.format(dateAss)
+                             + " à "
+                             + heure.format(dateAss)
+                             + ". Vous pouvez dès à présent me contacter au "
+                             + emp.getNumTelephone()
+                             + ". A tout de suite ! Médiumiquement vôtre, "
+                             + med.getDenomination();
+            
+            Message.envoyerNotification(cli.getNumTelephone(), message);
+            return cli.getNumTelephone();
+            
+        } catch(Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur de demarrerConsultation() :", e);
+            return null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+    }
+    
+    /*Permet de terminer la consultation :
+    - Récupère la consultation à partir de l'ID
+    - Set la date de fin à maintenant et ajoute un commentaire
+    - Renvoie la consultation terminée.
+    */
+    
+    public Consultation terminerConsultation(Long consultationId, String commentaire) {
+        ConsultationDao cDao = new ConsultationDao();
+        Consultation cons = null;
+        
+        try {
+            JpaUtil.creerContextePersistance();
+            cons = cDao.chercherParId(consultationId);
+            
+            if(cons == null) {
+                throw new Exception("Consultation introuvable !");
+            }
+            
+            Date dateDeb = cons.getDateDebut();
+            if(dateDeb == null) {
+                throw new Exception("La consultation n'a pas commencé !");
+            }
+            
+            JpaUtil.ouvrirTransaction();
+            cons.setDateFin(new Date());
+            cons.setCommentaire(commentaire);
+            JpaUtil.validerTransaction();
+            
+            Logger.getAnonymousLogger().log(Level.INFO,"Consultation terminée avec succès");
+            
+        } catch (Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur de demarrerConsultation() :", e);
         } finally {
             JpaUtil.fermerContextePersistance();
         }

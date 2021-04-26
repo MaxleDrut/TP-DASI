@@ -114,7 +114,6 @@ public class Consultation implements Serializable {
         this.client = client;
     }
     
-    
 
     @Override
     public String toString() {
