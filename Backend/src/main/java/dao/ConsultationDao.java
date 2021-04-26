@@ -74,12 +74,12 @@ public class ConsultationDao
             consultationsEmployes.put((Employe) obj[0],(Long) obj[1]);
         }    
         
-        String s2 = "select e as employe from Employe e where e.id NOT IN (select c.employe from Consultation c)";
+        String s2 = "select e from Employe e where e NOT IN (select c.employe from Consultation c)";
         TypedQuery query2 = JpaUtil.obtenirContextePersistance().createQuery(s2, Employe.class);
         List<Employe> resultsEmp = query2.getResultList();
         for(Employe e : resultsEmp){
             consultationsEmployes.put(e, 0L);
-        }  
+        } 
          
         return consultationsEmployes;
         

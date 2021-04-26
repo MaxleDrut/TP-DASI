@@ -48,7 +48,6 @@ public class Main {
         testerAidePrediction(1,2,3);
         testerAidePrediction(4,2,3);
         testerAjouterMediumAuxFavoris();
-        testerRecupererNombreConsultationsEmploye();
         
         
         // interface interactive
@@ -58,7 +57,8 @@ public class Main {
         ajoutManuelCons();
         testerObtenirConsultation();
 
-
+        
+        testerRecupererNombreConsultationsEmploye();
         // interface interactive
         /*authentificationIntervative();
         testerAjouterMediumAuxFavoris();*/
