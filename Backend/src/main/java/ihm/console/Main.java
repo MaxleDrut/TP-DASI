@@ -8,11 +8,13 @@ package ihm.console;
 import dao.JpaUtil;
 import static ihm.console.Utils.assertEquals;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import metier.modele.Client;
 import metier.modele.Consultation;
+import metier.modele.Employe;
 import metier.modele.Medium;
 import metier.modele.Utilisateur;
 import metier.service.Services;
@@ -37,16 +39,21 @@ public class Main {
         // tests en hard
         testerInscriptionClient();  
         testerObtenirMedium();
-        testerObtenirListMedium();        
+        testerObtenirListeMedium();        
         testerAuthentification();
         testerAidePrediction(1,2,3);
         testerAidePrediction(4,2,3);
         
+        testerObtenirEmploye();
+        testerObtenirListeEmployes();
+        
+        ajoutManuelCons();
+        testerObtenirConsultation();
         
         
         // interface interactive
-        authentificationIntervative();  
-        testerAjouterMediumAuxFavoris();
+        /*authentificationIntervative();  
+        testerAjouterMediumAuxFavoris();*/
         
     }
     
@@ -158,7 +165,7 @@ public class Main {
         }
         return utilisateur;
     }
-    
+   
     public static void testerObtenirMedium(){
         Services serviceObtenirMedium = new Services();
         
@@ -173,12 +180,12 @@ public class Main {
         }
     }
     
-    public static void testerObtenirListMedium(){
+    public static void testerObtenirListeMedium(){
         
-        Services serviceObtenirListMedium = new Services();
+        Services serviceObtenirListeMedium = new Services();
         
         //Obtention réussie
-        List<Medium> medium1 = serviceObtenirListMedium.obtenirListMedium();
+        List<Medium> medium1 = serviceObtenirListeMedium.obtenirListMedium();
         if(medium1!=null){
             for(Medium medium : medium1 ){
                 System.out.println(medium.toString());
@@ -187,7 +194,40 @@ public class Main {
             System.out.println("Aucun medium n'est repertorié");
 
         }
-       
+    }
+    
+    public static void testerObtenirEmploye(){
+        Services serv = new Services();
+        
+        //Obtention réussie
+        Employe emp = serv.rechercherEmploye(11L);
+        if(emp!=null){
+           System.out.println(emp.toString());
+        }
+
+        //Obtention failed
+        emp = serv.rechercherEmploye(1L);
+        if(emp==null){
+            System.out.println("Aucun employé n'a été trouvé");
+        } else {
+            System.out.println(emp.toString());
+        }
+    }
+    
+    public static void testerObtenirListeEmployes(){
+        
+        Services serv= new Services();
+        
+        //Obtention réussie
+        List<Employe> lEmp = serv.obtenirListeEmployes();
+        if(lEmp!=null){
+            for(Employe e : lEmp ){
+                System.out.println(e.toString());
+            }
+        } else {
+            System.out.println("Aucun employé n'est repertorié");
+
+        }
     }
     
     public static void testerAjouterMediumAuxFavoris(){
@@ -215,16 +255,16 @@ public class Main {
               
     }
     
-    //Cherche la consultation numéro 12 et 1
+    //Cherche la consultation numéro 12 et 21
     public static void testerObtenirConsultation() {
         Services serv = new Services();
         
         
-        Consultation cons = serv.obtenirConsultation(1L);
+        Consultation cons = serv.obtenirConsultation(21L);
         if(cons != null) {
             System.out.println(cons);
         } else {
-            System.out.println("La consultation 1 n'a pas été trouvée");
+            System.out.println("La consultation 21 n'a pas été trouvée");
         }
         
         cons = serv.obtenirConsultation(12L);
@@ -235,10 +275,27 @@ public class Main {
         }
     }
     
+    public static void ajoutManuelCons() {
+        Services serv = new Services();
+        
+        Client cli = serv.obtenirListeClients().get(0);
+        Employe emp = serv.obtenirListeEmployes().get(0);
+        Medium med = serv.obtenirListMedium().get(0);
+        
+        Consultation cons = new Consultation(emp,med,cli,new Date());
+        
+        serv.ajoutConsManu(cons);
+    }
+    
     //Demarre la consultation numéro 1 (et envoie le sms)
     public static void testerDemarrerConsultation() {
         Services serv = new Services();
         serv.demarrerConsultation(1L);
-        
+    }
+    
+    public static void testerTerminerConsultation() {
+        Services serv = new Services();
+        Consultation cons = serv.terminerConsultation(1L,"L'interrogé semblait paniqué, mais les astres ont su le rassurer");
+        System.out.println(cons);
     }
 }

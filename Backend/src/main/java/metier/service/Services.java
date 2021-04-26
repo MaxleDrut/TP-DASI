@@ -147,6 +147,41 @@ public class Services {
        return listeClients;
     }
     
+    public Employe rechercherEmploye(Long employeId) {
+        EmployeDao eDao = new EmployeDao();
+        Employe emp;
+        
+        try {
+            JpaUtil.creerContextePersistance();
+            emp = eDao.chercherParId(employeId);
+        } catch(Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
+            emp = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        
+        
+        return emp;
+    }
+    
+    public List<Employe> obtenirListeEmployes() {
+        EmployeDao eDao = new EmployeDao();
+        List<Employe> listeEmp;
+        
+        try {
+            JpaUtil.creerContextePersistance();
+            listeEmp = eDao.chercherTous();
+        } catch(Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
+            listeEmp = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        
+       return listeEmp;
+    }
+    
     public Utilisateur authentification(String mail, String motDePasse) {
         UtilisateurDao utilisateurDao = new UtilisateurDao();
         Utilisateur utilisateur = null;
@@ -210,6 +245,28 @@ public class Services {
         }
         
        return listeMediums;
+    }
+    
+    public Consultation ajoutConsManu(Consultation cons) {
+        ConsultationDao cDao = new ConsultationDao();        
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            cDao.creer(cons);
+            JpaUtil.validerTransaction();
+            Logger.getLogger("Services").log(Level.INFO, "Ajout de la consultation réussi !");
+        }
+        catch(Exception e)
+        {
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de l'ajout manuel de la consultation !! \nMessage : {0}", e.getLocalizedMessage());
+            JpaUtil.annulerTransaction();
+            cons=null;
+        } 
+        finally 
+        {
+            JpaUtil.fermerContextePersistance();
+        }
+        return cons;
     }
   
     public Consultation obtenirConsultation(Long consultationId) {

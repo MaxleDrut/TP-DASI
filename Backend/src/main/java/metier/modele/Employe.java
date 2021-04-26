@@ -73,5 +73,12 @@ public class Employe extends Utilisateur implements Serializable {
     public void setDisponibilite(Boolean disponibilite) {
         this.disponibilite = disponibilite;
     }
+
+    @Override
+    public String toString() {
+        return "Employe{" + "nom=" + nom + ", prenom=" + prenom + ", numTelephone=" + numTelephone + ", genre=" + genre + ", disponibilite=" + disponibilite + '}';
+    }
+    
+    
     
 }
