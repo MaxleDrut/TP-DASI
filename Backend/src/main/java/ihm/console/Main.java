@@ -52,8 +52,11 @@ public class Main {
 
         ajoutManuelCons();
         testerObtenirConsultation();
+
         testerRecupListeConsultations();
-                
+        testerObtConsultationAss();
+        testerDemarrerConsultation();
+        testerTerminerConsultation();
 
         // interface interactive
         /*authentificationIntervative();
@@ -279,6 +282,20 @@ public class Main {
         }
     }
 
+    public static void testerObtConsultationAss() {
+        Services serv = new Services();
+        
+        Employe emp = serv.obtenirListeEmployes().get(0);
+        Consultation cons = serv.obtenirConsultationAssignee(emp.getId());
+        
+        if(cons == null) {
+            System.out.println("Le premier employé n'a pas de consultation assignée");
+        } else {
+            System.out.println(cons);
+        }
+        
+    }
+    
     public static void ajoutManuelCons() {
         Services serv = new Services();
 
@@ -294,13 +311,21 @@ public class Main {
     //Demarre la consultation numéro 1 (et envoie le sms)
     public static void testerDemarrerConsultation() {
         Services serv = new Services();
-        serv.demarrerConsultation(1L);
+        
+        Employe emp = serv.obtenirListeEmployes().get(0);
+        Consultation cons = serv.obtenirConsultationAssignee(emp.getId());
+        
+        serv.demarrerConsultation(cons.getId());
+        
     }
 
     public static void testerTerminerConsultation() {
         Services serv = new Services();
-        Consultation cons = serv.terminerConsultation(1L,"L'interrogé semblait paniqué, mais les astres ont su le rassurer");
-        System.out.println(cons);
+        Employe emp = serv.obtenirListeEmployes().get(0);
+        Consultation cons = serv.obtenirConsultationAssignee(emp.getId());
+        
+        Consultation c = serv.terminerConsultation(cons.getId(),"L'interrogé semblait paniqué, mais les astres ont su le rassurer");
+        System.out.println(c);
 
     }
 
