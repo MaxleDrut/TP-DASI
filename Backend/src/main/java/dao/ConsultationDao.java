@@ -59,4 +59,6 @@ public class ConsultationDao
         
         return query.getResultList();
     }
+    
+    
 }
