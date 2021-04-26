@@ -36,8 +36,6 @@ public class Services {
     public Client inscrireClient(Client client) {
         ClientDao clientDao = new ClientDao();
         AstroTest astroService = new AstroTest();
-       
-       
         
         try {
              List<String> astroProfil = astroService.getProfil(client.getPrenom(), client.getDateNaissance());
@@ -57,6 +55,7 @@ public class Services {
         {
             Logger.getLogger("ServicesClient").log(Level.SEVERE, "Erreur lors de l''inscription d'un Client !! \nMessage : {0}", e.getLocalizedMessage());
             JpaUtil.annulerTransaction();
+            Message.envoyerMail("noreply@predictif.fr", client.getMail(), "Echec d'inscription", "Une erreur d'inscription est survenue. Veuillez rééssayer"); 
             client = null;
         } 
         finally 
@@ -75,7 +74,6 @@ public class Services {
             employeDao.creer(employe);
             JpaUtil.validerTransaction();
             Logger.getLogger("Services").log(Level.INFO, "Recrutement de l'employé réussie !");
-            
         }
         catch(Exception e)
         {
@@ -275,6 +273,50 @@ public class Services {
        return listeMediums;
     }
   
+    public Consultation obtenirConsultation(Long consultationId) {
+        ConsultationDao dao = new ConsultationDao();
+        Consultation cons;        
+        try {
+            JpaUtil.creerContextePersistance();
+            cons = dao.chercherParId(consultationId);
+        } catch(Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
+            cons = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        
+        return cons;
+    }
+    
+    public Consultation obtenirConsultationAssignee(Long employeId) {
+        ConsultationDao cDao = new ConsultationDao();
+        EmployeDao eDao = new EmployeDao();
+           
+        Consultation cons = null;
+        try {
+            JpaUtil.creerContextePersistance();
+            Employe emp = eDao.chercherParId(employeId);
+            List<Consultation> lCons = cDao.chercherParEmploye(emp);
+            
+            for(Consultation c : lCons) {
+                if(c.getDateFin() == null) { //Consultation en cours : c'est ce qu'on cherche
+                    cons = c;
+                    break; //Il n'y a en principe qu'une cons. en cours par employé, on peut donc sortir du for each
+                    //(je sais que c'est censé être une structure while, mais puisqu'il n'y a pas de "while each" en java...)
+                }
+            }
+            
+        } catch(Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
+            
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        
+        return cons;
+    }
+    
     public List<String> demanderAideConsultation(Client cl, int amour, int sante, int travail) {
         ProfilAstral pa = cl.getProfilAstral();
         AstroTest astro = new AstroTest();
@@ -286,6 +328,35 @@ public class Services {
         } finally {
             return output;
         }
+    }
+    
+    public Medium ajouterMediumAuxFavoris(Long mediumId, Long clientId){
+        ClientDao clientDao = new ClientDao();
+        MediumDao mediumDao = new MediumDao();
+        Medium medium;
+        Client client;
+        
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            medium = mediumDao.chercherParId(mediumId);
+            client = clientDao.chercherParId(clientId);
+            clientDao.ajouterFavoris(medium, client);
+            JpaUtil.validerTransaction();
+            Logger.getLogger("Services").log(Level.INFO, "Ajout du medium aux favoris réussi !");
+            
+        }
+        catch(Exception e)
+        {
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de l'ajout du medium au favoris !! \nMessage : {0}", e.getLocalizedMessage());
+            JpaUtil.annulerTransaction();
+            medium = null;
+        } 
+        finally 
+        {
+            JpaUtil.fermerContextePersistance();
+        }
+        return medium;
     }
     
 }
