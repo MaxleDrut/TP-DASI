@@ -52,6 +52,8 @@ public class Main {
 
         ajoutManuelCons();
         testerObtenirConsultation();
+
+        testerRecupListeConsultations();
         testerObtConsultationAss();
         testerDemarrerConsultation();
         testerTerminerConsultation();
@@ -417,5 +419,25 @@ public class Main {
             System.exit(1);
         }
 
+    }
+    
+    public static void testerRecupListeConsultations()
+    {
+        Services services = new Services();
+        
+        Client client = services.rechercherClient(21L);
+        
+        System.out.println("============================ Consultations du client n°21 :");
+        services.recupererConsultationsClient(client).forEach(cons -> {
+            System.out.println(cons);
+        });
+        
+        
+        Employe employe = services.rechercherEmploye(9L);
+        
+        System.out.println("============================ Consultations de l'employé n°9 :");
+        services.recupererConsultationsEmploye(employe).forEach(cons -> {
+            System.out.println(cons);
+        });
     }
 }
