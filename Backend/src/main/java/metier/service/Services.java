@@ -297,7 +297,7 @@ public class Services {
        return listeMediums;
     }
 
-    public Consultation ajoutConsManu(Consultation cons) {
+    public Consultation ajouterConsultationManuellement(Consultation cons) {
         ConsultationDao cDao = new ConsultationDao();
         try {
             JpaUtil.creerContextePersistance();
@@ -473,20 +473,25 @@ public class Services {
         }
     }
 
-    public Medium ajouterMediumAuxFavoris(Long mediumId, Long clientId){
+    public Medium ajouterMediumAuxFavoris(Medium medium, Client client){
         ClientDao clientDao = new ClientDao();
         MediumDao mediumDao = new MediumDao();
-        Medium medium;
-        Client client;
-
+        
         try {
             JpaUtil.creerContextePersistance();
             JpaUtil.ouvrirTransaction();
-            medium = mediumDao.chercherParId(mediumId);
-            client = clientDao.chercherParId(clientId);
-            clientDao.ajouterFavoris(medium, client);
-            JpaUtil.validerTransaction();
-            Logger.getLogger("Services").log(Level.INFO, "Ajout du medium aux favoris réussi !");
+            if(medium==null){
+                throw new Exception ("Le medium n'existe pas");
+            }
+            int success = client.ajouterMediumAuxFavoris(medium);
+            if(success==1){
+                clientDao.modifier(client);
+                JpaUtil.validerTransaction();
+                Logger.getLogger("Services").log(Level.INFO, "Ajout du medium aux favoris réussi !");
+            }else {
+                Logger.getLogger("Services").log(Level.SEVERE, "Le medium fait déja parti de la liste des favoris !");
+                medium = null;
+            }
         }
         catch(Exception e)
         {
@@ -501,6 +506,39 @@ public class Services {
         return medium;
     }
 
+    public Medium enleverMediumDesFavoris(Medium medium, Client client){
+        ClientDao clientDao = new ClientDao();
+        MediumDao mediumDao = new MediumDao();
+
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            if(medium==null){
+                throw new Exception ("Le medium n'existe pas");
+            }
+            int success = client.enleverMediumDesFavoris(medium);
+            if(success==1){
+                clientDao.modifier(client);
+                JpaUtil.validerTransaction();
+                Logger.getLogger("Services").log(Level.INFO, "Suppression du medium des favoris réussi !");
+            }else{
+                Logger.getLogger("Services").log(Level.SEVERE, "Le medium ne fait pas parti de la liste des favoris !");
+                medium = null;
+            }
+        }
+        catch(Exception e)
+        {
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la suppression du medium des favoris !! \nMessage : {0}", e.getLocalizedMessage());
+            JpaUtil.annulerTransaction();
+            medium = null;
+        }
+        finally
+        {
+            JpaUtil.fermerContextePersistance();
+        }
+        return medium;
+    }
+    
     
     public Map<Employe,Long> recupererNombreConsultationsEmploye(){
         ConsultationDao consultationDao = new ConsultationDao();

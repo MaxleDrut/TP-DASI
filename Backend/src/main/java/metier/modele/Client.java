@@ -48,16 +48,27 @@ public class Client extends Utilisateur implements Serializable
 
     }
     
-    public void ajouterMediumAuxFavoris(Medium medium){
+    public int ajouterMediumAuxFavoris(Medium medium){
+        for(Medium mediums : mediumsFavoris){
+                if(mediums.getId()==medium.getId()){
+                    return 0;
+                }
+        }
+        mediumsFavoris.add(medium);
+        return 1;
+    }
+    
+    public int enleverMediumDesFavoris(Medium medium){
         if(mediumsFavoris!=null){
             for(Medium mediums : mediumsFavoris){
-                if(!mediums.equals(medium)){
-                    mediumsFavoris.add(medium);
+                if(mediums.getId()==medium.getId()){
+                    mediumsFavoris.remove(medium);
+                    return 1;
                 }
             }
         }
+        return 0;
     }
-    
    
 
     public String getNom() {
