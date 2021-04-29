@@ -625,6 +625,14 @@ public class Services {
     }
 
 
+    /**
+     * Service permettant le retrait d'un medium des favoris d'un client
+     * Cas d'exception :
+     *  - Le médium ne fait pas partie des favoris
+     * @param medium : une instance du medium à retirer des favoris
+     * @param client : le client cible
+     * @return une instance du medium retiré des favoris, null en cas d'exception
+     */
     public Medium enleverMediumDesFavoris(Medium medium, Client client){
         ClientDao clientDao = new ClientDao();
         MediumDao mediumDao = new MediumDao();
@@ -658,14 +666,11 @@ public class Services {
         return medium;
     }
     
-    
-
     /**
      * Service permettant de récupérer les statistiques de consultation par employé
      * (nombre de consultations par employé)
      * @return une map (employé => nombre de consultations) représentant les statistiques
      */
-
     public Map<Employe,Long> recupererNombreConsultationsEmploye(){
         ConsultationDao consultationDao = new ConsultationDao();
         Map<Employe,Long> consultationsEmployes;
@@ -702,7 +707,7 @@ public class Services {
         Map<Medium, Long> mediumsNbConsultations;
         
         // result
-        Map<Medium, Long> allMediumsNbConsultations = new HashMap<Medium, Long>();
+        Map<Medium, Long> allMediumsNbConsultations = new HashMap<>();
         
         try {
             JpaUtil.creerContextePersistance();
@@ -756,7 +761,7 @@ public class Services {
         Map<Medium, Long> mediumsNbConsultations;
         
         // result
-        Map<Medium, Long> mediumsNbConsultationsTop5 = new HashMap<Medium, Long>();
+        Map<Medium, Long> mediumsNbConsultationsTop5 = new HashMap<>();
         
         try {
             
@@ -835,6 +840,40 @@ public class Services {
         {
             JpaUtil.creerContextePersistance();
             result = consultationDao.chercherParEmploye(employe);
+        }
+        catch(Exception e)
+        {
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la récupération des consultations !! \nMessage : {0}", e.getLocalizedMessage());
+            result = null;
+        }
+        finally
+        {
+            JpaUtil.fermerContextePersistance();
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Service permettant la récupération du top 3 des médiums consultés par client
+     * @return Une map (Client => Map(Medium => Nombre de consultations) ), 
+     *          avec au plus 3 entrées pour chaque sous-map (medium => nombre de consultations) 
+     */
+    public Map<Client, Map<Medium, Long>> recupererMediumsLesPlusConsultesParClient()
+    {
+        ClientDao clientDao = new ClientDao();
+        Map<Client, Map<Medium, Long>> result = null;
+        List<Client> listeClients = obtenirListeClients();
+        
+        try
+        {
+            JpaUtil.creerContextePersistance();
+            
+            for(Client client : listeClients)
+            {
+                Map<Medium, Long> statsClient = clientDao.consultationsParMediumTrieesTop3(client);
+                result.put(client, statsClient);
+            }
         }
         catch(Exception e)
         {
