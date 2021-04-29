@@ -117,9 +117,6 @@ public class Consultation implements Serializable {
 
     @Override
     public String toString() {
-        return "Consultation{" + "dateAssignation=" + dateAssignation + ", dateDebut=" + dateDebut + ", dateFin=" + dateFin + ", commentaire=" + commentaire + '}';
+        return "Consultation{" + "id=" + id + ", dateAssignation=" + dateAssignation + ", dateDebut=" + dateDebut + ", dateFin=" + dateFin + ", commentaire=" + commentaire + '}';
     }
-    
-    
-    
 }
