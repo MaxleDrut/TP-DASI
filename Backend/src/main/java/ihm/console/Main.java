@@ -49,6 +49,7 @@ public class Main {
         testerAidePrediction(1,2,3);
         testerAidePrediction(4,2,3);
         testerAjouterMediumAuxFavoris();
+        testerEnleverMediumDesFavoris();
         
         
         // interface interactive
@@ -252,33 +253,69 @@ public class Main {
     }
 
     public static void testerAjouterMediumAuxFavoris(){
+        System.out.println("============= testerAjouterMediumAuxFavoris() ===========");
         Services serviceAjoutMediumAuxFavoris = new Services();
         
         //Ajout du medium 11 à la liste des favoris du client 17
-        Medium medium = serviceAjoutMediumAuxFavoris.ajouterMediumAuxFavoris(11L, 17L);
+        System.out.println("============================ Ajout du medium n°11 à la liste des favoris du client n°17 :");
+        Medium medium = serviceAjoutMediumAuxFavoris.obtenirMedium(11L);
+        Client client = serviceAjoutMediumAuxFavoris.rechercherClient(17L);
+        medium = serviceAjoutMediumAuxFavoris.ajouterMediumAuxFavoris(medium, client);
         if(medium!=null){
             System.out.println(" Medium " + medium.getDenomination()+ " ajouté aux favoris");
-        }else{
-            System.out.println(" Erreur : le medium n'existe pas");
         }
         
         //Ajout du medium 11 à la liste des favoris du client 17 (déja dans sa liste : ne sera pas ajouté 2 fois)
-        Medium medium2 = serviceAjoutMediumAuxFavoris.ajouterMediumAuxFavoris(11L, 17L);
+       System.out.println("============================ Ajout du medium n°11 à la liste des favoris du client n°17 :");
+        Medium medium2 = serviceAjoutMediumAuxFavoris.obtenirMedium(11L);
+        medium2 = serviceAjoutMediumAuxFavoris.ajouterMediumAuxFavoris(medium2, client);
         if(medium2!=null){
             System.out.println(" Medium " + medium2.getDenomination()+ " ajouté aux favoris");
-        }else{
-            System.out.println(" Erreur : le medium n'existe pas");
         }
+        
         //Ajout du medium 1 à la liste des favoris du client 17 (il n'y a pas de medium 1)
-        Medium medium3 = serviceAjoutMediumAuxFavoris.ajouterMediumAuxFavoris(1L, 17L);
+        System.out.println("============================ Ajout du medium n°1 à la liste des favoris du client n°17 :");
+        Medium medium3 = serviceAjoutMediumAuxFavoris.obtenirMedium(1L);
+        medium3 = serviceAjoutMediumAuxFavoris.ajouterMediumAuxFavoris(medium3, client);
         if(medium3!=null){
             System.out.println(" Medium " + medium3.getDenomination()+ " ajouté aux favoris");
-        }else{
-            System.out.println(" Erreur : le medium n'existe pas");
         }
 
     }
 
+    public static void testerEnleverMediumDesFavoris(){
+        
+        System.out.println("============= testerEnleverMediumDesFavoris() ===========");
+        
+        Services serviceEnleverMediumDesFavoris = new Services();
+        
+        //Suppression du medium 11 de la liste des favoris du client 17
+        System.out.println("============================ Suppression du medium n°11 de la liste des favoris du client n°17 :");
+        Medium medium = serviceEnleverMediumDesFavoris.obtenirMedium(11L);
+        Client client = serviceEnleverMediumDesFavoris.rechercherClient(17L);
+        medium = serviceEnleverMediumDesFavoris.enleverMediumDesFavoris(medium, client);
+        if(medium!=null){
+            System.out.println(" Medium " + medium.getDenomination()+ " supprimé des favoris");
+        }
+        
+        //Suppression du medium 11 de la liste des favoris du client 17 (déja supprimé)
+        System.out.println("============================ Suppression du medium n°11 de la liste des favoris du client n°17 :");
+        Medium medium2 = serviceEnleverMediumDesFavoris.obtenirMedium(11L);
+        medium2 = serviceEnleverMediumDesFavoris.enleverMediumDesFavoris(medium2, client);
+        if(medium2!=null){
+            System.out.println(" Medium " + medium2.getDenomination()+ " supprimé des favoris");
+        }
+        //Suppression du medium 1 de la liste des favoris du client 17 (il n'y a pas de medium 1)
+        System.out.println("============================ Suppression du medium n°1 de la liste des favoris du client n°17 :");
+        Medium medium3 = serviceEnleverMediumDesFavoris.obtenirMedium(1L);
+        medium3 = serviceEnleverMediumDesFavoris.enleverMediumDesFavoris(medium3, client);
+        if(medium3!=null){
+            System.out.println(" Medium " + medium3.getDenomination()+ " supprimé des favoris");
+        }
+
+    }
+    
+    
     //Cherche la consultation numéro 25 et 27
     public static void testerObtenirConsultation() {
         Services serv = new Services();
@@ -322,7 +359,7 @@ public class Main {
 
         Consultation cons = new Consultation(emp,med,cli,new Date());
 
-        serv.ajoutConsManu(cons);
+        serv.ajouterConsultationManuellement(cons);
     }
 
     //Demarre la consultation numéro 1 (et envoie le sms)

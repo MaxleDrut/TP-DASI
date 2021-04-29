@@ -32,10 +32,7 @@ public class ClientDao {
         return JpaUtil.obtenirContextePersistance().find(Client.class, id);
     }
     
-    public Client ajouterFavoris(Medium medium, Client client){
-        client.ajouterMediumAuxFavoris(medium);
-        return JpaUtil.obtenirContextePersistance().merge(client);
-    }
+    
     
     public List<Client> chercherTous() {
         String s = "select e from Client e order by e.nom desc";

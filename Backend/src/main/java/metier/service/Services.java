@@ -361,12 +361,13 @@ public class Services {
        return listeMediums;
     }
 
+
     /**
      * Service permettant l'ajout manuel d'une consultation
      * @param cons : la consultation à enregistrer, pas encore persistée
      * @return une instance de la consultation nouvellement persistée
      */
-    public Consultation ajoutConsManu(Consultation cons) {
+    public Consultation ajouterConsultationManuellement(Consultation cons) {
         ConsultationDao cDao = new ConsultationDao();
         try {
             JpaUtil.creerContextePersistance();
@@ -582,26 +583,33 @@ public class Services {
         return output;
     }
 
+    
     /**
      * Service permettant l'ajout d'un medium aux favoris d'un client
-     * @param mediumId : l'identifiant du medium à ajouter
-     * @param clientId : le client mettant le medium en favoris
+     * @param medium : une instance du medium à ajouter
+     * @param client : le client mettant le medium en favoris
      * @return une instance du medium ajouté en favoris
      */
-    public Medium ajouterMediumAuxFavoris(Long mediumId, Long clientId){
+    public Medium ajouterMediumAuxFavoris(Medium medium, Client client){
+
         ClientDao clientDao = new ClientDao();
         MediumDao mediumDao = new MediumDao();
-        Medium medium;
-        Client client;
-
+        
         try {
             JpaUtil.creerContextePersistance();
             JpaUtil.ouvrirTransaction();
-            medium = mediumDao.chercherParId(mediumId);
-            client = clientDao.chercherParId(clientId);
-            clientDao.ajouterFavoris(medium, client);
-            JpaUtil.validerTransaction();
-            Logger.getLogger("Services").log(Level.INFO, "Ajout du medium aux favoris réussi !");
+            if(medium==null){
+                throw new Exception ("Le medium n'existe pas");
+            }
+            int success = client.ajouterMediumAuxFavoris(medium);
+            if(success==1){
+                clientDao.modifier(client);
+                JpaUtil.validerTransaction();
+                Logger.getLogger("Services").log(Level.INFO, "Ajout du medium aux favoris réussi !");
+            }else {
+                Logger.getLogger("Services").log(Level.SEVERE, "Le medium fait déja parti de la liste des favoris !");
+                medium = null;
+            }
         }
         catch(Exception e)
         {
@@ -616,11 +624,48 @@ public class Services {
         return medium;
     }
 
+
+    public Medium enleverMediumDesFavoris(Medium medium, Client client){
+        ClientDao clientDao = new ClientDao();
+        MediumDao mediumDao = new MediumDao();
+
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            if(medium==null){
+                throw new Exception ("Le medium n'existe pas");
+            }
+            int success = client.enleverMediumDesFavoris(medium);
+            if(success==1){
+                clientDao.modifier(client);
+                JpaUtil.validerTransaction();
+                Logger.getLogger("Services").log(Level.INFO, "Suppression du medium des favoris réussi !");
+            }else{
+                Logger.getLogger("Services").log(Level.SEVERE, "Le medium ne fait pas parti de la liste des favoris !");
+                medium = null;
+            }
+        }
+        catch(Exception e)
+        {
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la suppression du medium des favoris !! \nMessage : {0}", e.getLocalizedMessage());
+            JpaUtil.annulerTransaction();
+            medium = null;
+        }
+        finally
+        {
+            JpaUtil.fermerContextePersistance();
+        }
+        return medium;
+    }
+    
+    
+
     /**
      * Service permettant de récupérer les statistiques de consultation par employé
      * (nombre de consultations par employé)
      * @return une map (employé => nombre de consultations) représentant les statistiques
      */
+
     public Map<Employe,Long> recupererNombreConsultationsEmploye(){
         ConsultationDao consultationDao = new ConsultationDao();
         Map<Employe,Long> consultationsEmployes;
