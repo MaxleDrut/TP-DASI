@@ -335,15 +335,13 @@ public class Services {
         return cons;
     }
 
-    public Consultation obtenirConsultationAssignee(Long employeId) {
+    public Consultation obtenirConsultationAssignee(Employe employe) {
         ConsultationDao cDao = new ConsultationDao();
-        EmployeDao eDao = new EmployeDao();
 
         Consultation cons = null;
         try {
             JpaUtil.creerContextePersistance();
-            Employe emp = eDao.chercherParId(employeId);
-            List<Consultation> lCons = cDao.chercherParEmploye(emp);
+            List<Consultation> lCons = cDao.chercherParEmploye(employe);
 
             for(Consultation c : lCons) {
                 if(c.getDateFin() == null) { //Consultation en cours : c'est ce qu'on cherche
@@ -355,7 +353,6 @@ public class Services {
 
         } catch(Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
-
         } finally {
             JpaUtil.fermerContextePersistance();
         }
