@@ -15,10 +15,6 @@ import javax.persistence.RollbackException;
 
 
 public class JpaUtil {
-
-    // *************************************************************************************
-    // * TODO: IMPORTANT -- Adapter le nom de l'Unité de Persistance (cf. persistence.xml) *
-    // *************************************************************************************
     /**
      * Nom de l'unité de persistance utilisée par la Factory de Entity Manager.
      * <br><strong>Vérifier le nom de l'unité de persistance
@@ -46,7 +42,7 @@ public class JpaUtil {
     };
 
     private static void log(String message) {
-        Logger.getAnonymousLogger().log(Level.INFO, "[JpaUtil:Log] " + message);
+        Logger.getLogger("JpaUtil").log(Level.INFO, "[JpaUtil:Log] " + message);
     }
 
     /**
@@ -61,6 +57,7 @@ public class JpaUtil {
             entityManagerFactory.close();
         }
         entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+        Logger.getLogger("JpaUtil").setLevel(Level.OFF);
     }
 
     /**

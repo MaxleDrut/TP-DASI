@@ -47,4 +47,6 @@ public class ClientDao {
         query.setParameter("motDePasse", motDePasse);
         return query.getSingleResult();
     }
+    
+    
 }

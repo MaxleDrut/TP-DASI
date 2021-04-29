@@ -39,6 +39,11 @@ import metier.service.util.Message;
  */
 public class Services {
 
+    /**
+     * Service permettant l'inscription d'un client sur la plateforme
+     * @param client : un objet client à inscrire, pas encore persisté
+     * @return l'instance du client nouvellement créé, null en cas d'exception
+     */
     public Client inscrireClient(Client client) {
         ClientDao clientDao = new ClientDao();
         AstroTest astroService = new AstroTest();
@@ -72,6 +77,11 @@ public class Services {
         return client;
     }
 
+    /**
+     * Service permettant l'enregistrement d'un employé sur la plateforme
+     * @param employe : un objet employé à inscrire, pas encore persisté
+     * @return l'instance de l'employé passé en paramètre, ou null en cas d'exception
+     */
     public Employe recrutement(Employe employe) {
         EmployeDao employeDao = new EmployeDao();
         try {
@@ -94,6 +104,11 @@ public class Services {
         return employe;
     }
 
+    /**
+     * Service permettant l'enregistrement d'un medium sur la plateforme
+     * @param medium : un objet medium à inscrire, pas encore persisté
+     * @return l'instancee du medium nouvellement persisté, ou null en cas d'exception
+     */
     public Medium inventerMedium(Medium medium){
          MediumDao mediumDao = new MediumDao();
         try {
@@ -117,6 +132,11 @@ public class Services {
         return medium;
     }
 
+    /**
+     * Service permettant la récupération d'un client par son id
+     * @param id : l'identifiant du client recherché
+     * @return une instance du client si trouvé, null sinon
+     */
     public Client rechercherClient(Long id) {
         ClientDao clientDao = new ClientDao();
         Client client;
@@ -135,6 +155,10 @@ public class Services {
         return client;
     }
 
+    /**
+     * Service permettant la récupération de la liste des clients
+     * @return une liste de clients, ou null en cas d'exception
+     */
     public List<Client> obtenirListeClients() {
         ClientDao clientDao = new ClientDao();
         List<Client> listeClients;
@@ -152,7 +176,11 @@ public class Services {
        return listeClients;
     }
 
-
+    /**
+     * Service permettant la récupération d'un employé par son id
+     * @param employeId : l'identifiant de l'employé recherché
+     * @return une instance de l'employé recherché, ou null en cas d'exception
+     */
     public Employe rechercherEmploye(Long employeId) {
         EmployeDao eDao = new EmployeDao();
         Employe emp;
@@ -161,7 +189,7 @@ public class Services {
             JpaUtil.creerContextePersistance();
             emp = eDao.chercherParId(employeId);
         } catch(Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la récupération par id de l'employé !\n Message : {0}", e.getLocalizedMessage());
             emp = null;
         } finally {
             JpaUtil.fermerContextePersistance();
@@ -169,8 +197,10 @@ public class Services {
         return emp;
     }
 
-
-
+    /**
+     * Service permettant la récupération de la liste des employés
+     * @return une liste d'employé, ou null en cas d'exception
+     */
     public List<Employe> obtenirListeEmployes()
     {
         EmployeDao employeDao = new EmployeDao();
@@ -188,17 +218,32 @@ public class Services {
         return listeEmployes;
     }
 
+    /**
+     * Service permettant la demande d'une consultation par un client pour un médium
+     * Cas d'exception :
+     *  - le client a déjà une consultation en cours
+     *  - aucun employé n'est assignable
+     * @param client : le client réalisant la demande
+     * @param medium : le medium demandé par le client
+     * @return la consultation nouvellement créée, null en cas d'exception
+     */
     public Consultation demanderConsultation(Client client, Medium medium)
     {
         ConsultationDao consultationDao = new ConsultationDao();
         EmployeDao employeDao = new EmployeDao();
         Consultation consultation = null;
 
-        try
+        if(obtenirConsultationEnCoursClient(client) != null)
         {
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la création d'une consultation !\n Message : Le client a déjà une consultation en cours !");
+            return null;
+        }
+        
+        try
+        { 
             JpaUtil.creerContextePersistance();
             JpaUtil.ouvrirTransaction();
-
+            
             // sélectionner employé
             Employe employe = employeDao.employeAssignableAvecGenre(medium.getGenre());
             if(employe == null)
@@ -214,8 +259,8 @@ public class Services {
             consultationDao.creer(consultation);
 
             // contacter employé
-            Message.envoyerMail("noreply@predictif.fr", employe.getMail(), "Assignation de client", "Bonjour, nous vous avons assigné un nouveau client. Rendez-vous sur votre espace personnel au plus vite pour le prendre en charge !");
-
+            Message.envoyerNotification(employe.getNumTelephone(), "Bonjour, nous vous avons assigné un nouveau client. Rendez-vous sur votre espace personnel au plus vite pour le prendre en charge !");
+            
             JpaUtil.validerTransaction();
         }
         catch(Exception e)
@@ -232,6 +277,16 @@ public class Services {
         return consultation;
     }
 
+    /**
+     * Service permettant l'authentification et la récupération d'un utilisateur
+     * Cas d'exception :
+     *  - Adresse email inconnue
+     *  - Mot de passe incorrect
+     * @param mail : l'adresse email de l'utilisateur
+     * @param motDePasse : le mot de passe de l'utilisateur
+     * @return une instance de l'utilisateur correspondant au couple (email, mot de passe) si tout s'est bien passé,
+     *        ou null en cas d'exception
+     */
     public Utilisateur authentification(String mail, String motDePasse) {
         UtilisateurDao utilisateurDao = new UtilisateurDao();
         Utilisateur utilisateur = null;
@@ -264,6 +319,11 @@ public class Services {
         return utilisateur;
     }
 
+    /**
+     * Service permettant de récupérer un medium par son id
+     * @param mediumId : l'identifiant du medium à récupérer
+     * @return une instance du medium recherché, ou null en cas d'exception
+     */
     public Medium obtenirMedium(Long mediumId) {
         MediumDao mediumDao = new MediumDao();
         Medium medium;
@@ -271,7 +331,7 @@ public class Services {
             JpaUtil.creerContextePersistance();
             medium = mediumDao.chercherParId(mediumId);
         } catch(Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la récupération d'un medium !\n Message : " + e.getLocalizedMessage());
             medium = null;
         } finally {
             JpaUtil.fermerContextePersistance();
@@ -280,6 +340,10 @@ public class Services {
         return medium;
     }
 
+    /**
+     * Service permettant de récupérer la liste des mediums
+     * @return la liste des médiums, ou null en cas d'exception
+     */
     public List<Medium> obtenirListeMediums() {
         MediumDao mediumDao = new MediumDao();
         List<Medium> listeMediums;
@@ -288,7 +352,7 @@ public class Services {
             JpaUtil.creerContextePersistance();
             listeMediums = mediumDao.fournirListMediums();
         } catch(Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la récupération de la liste des médiums !\n Message : " + e.getLocalizedMessage());
             listeMediums = null;
         } finally {
             JpaUtil.fermerContextePersistance();
@@ -297,6 +361,12 @@ public class Services {
        return listeMediums;
     }
 
+
+    /**
+     * Service permettant l'ajout manuel d'une consultation
+     * @param cons : la consultation à enregistrer, pas encore persistée
+     * @return une instance de la consultation nouvellement persistée
+     */
     public Consultation ajouterConsultationManuellement(Consultation cons) {
         ConsultationDao cDao = new ConsultationDao();
         try {
@@ -319,6 +389,11 @@ public class Services {
         return cons;
     }
 
+    /**
+     * Service permettant la récupération d'une consultation par son id
+     * @param consultationId : l'identifiant de la consultation recherchée
+     * @return une instance de la consultation recherchée, ou null en cas d'exception
+     */
     public Consultation obtenirConsultation(Long consultationId) {
         ConsultationDao dao = new ConsultationDao();
         Consultation cons;
@@ -326,7 +401,7 @@ public class Services {
             JpaUtil.creerContextePersistance();
             cons = dao.chercherParId(consultationId);
         } catch(Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la récupération d'une consultation !\n Message : " + e.getLocalizedMessage());
             cons = null;
         } finally {
             JpaUtil.fermerContextePersistance();
@@ -334,16 +409,19 @@ public class Services {
 
         return cons;
     }
-
-    public Consultation obtenirConsultationAssignee(Long employeId) {
+  
+    /**
+     * Services permettant la récupération de la consultation assignée actuellement à l'employé spécifié
+     * @param employeId : une instance de l'employé cible
+     * @return une instance de la consultation recherchée, ou null si elle n'existe pas ou en cas d'exception
+     */
+    public Consultation obtenirConsultationAssignee(Employe employe) {
         ConsultationDao cDao = new ConsultationDao();
-        EmployeDao eDao = new EmployeDao();
 
         Consultation cons = null;
         try {
             JpaUtil.creerContextePersistance();
-            Employe emp = eDao.chercherParId(employeId);
-            List<Consultation> lCons = cDao.chercherParEmploye(emp);
+            List<Consultation> lCons = cDao.chercherParEmploye(employe);
 
             for(Consultation c : lCons) {
                 if(c.getDateFin() == null) { //Consultation en cours : c'est ce qu'on cherche
@@ -354,8 +432,7 @@ public class Services {
             }
 
         } catch(Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau du Dao", e);
-
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la récupération d'une consultation assignée !\n Message : " + e.getLocalizedMessage());
         } finally {
             JpaUtil.fermerContextePersistance();
         }
@@ -363,36 +440,59 @@ public class Services {
         return cons;
     }
 
-    /*Permet de démarrer la consultation :
-    - Récupère la consultation à partir de l'ID
-    - Set la date de début à maintenant
-    - Envoie un SMS au client de la consultation selon le modèle
-    - Renvoie le numéro de téléphone du client
-    */
+    /**
+     * Service permettant la récupération de la consultation en cours pour un client
+     * @param client : le client cible
+     * @return une instance de la consultation recherchée, ou null si non trouvée ou en cas d'exception
+     */
+    public Consultation obtenirConsultationEnCoursClient(Client client) {
+        ConsultationDao consDao = new ConsultationDao();
+        ClientDao clientDao = new ClientDao();
 
-    public String demarrerConsultation(Long consultationId) {
+        Consultation cons = null;
+        try {
+            JpaUtil.creerContextePersistance();
+            try
+            {
+                cons = consDao.recupererConsultationEncoursClient(client);
+            }
+            catch(NoResultException e)
+            {
+                cons = null;
+            }
+        } catch(Exception e) {
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la récupération d'une consultation client en cours !! \nMessage : " + e.getLocalizedMessage());
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+
+        return cons;
+    }
+    
+    /**
+     * Service permettant le démarrage d'une consultation. Envoie un SMS au client.
+     * Cas d'exception :
+     *  - la consultation n'a pas été assignée (pas de date d'assignation)
+     * @param consultation : une instance de la consultation à démarrer
+     * @return une instance de la consultation démarrée
+     */
+    public Consultation demarrerConsultation(Consultation consultation) {
         ConsultationDao cDao = new ConsultationDao();
-        Consultation cons;
 
         try {
             JpaUtil.creerContextePersistance();
-            cons = cDao.chercherParId(consultationId);
 
-            if(cons == null) {
-                throw new Exception("Consultation introuvable !");
-            }
-
-            Date dateAss = cons.getDateAssignation();
+            Date dateAss = consultation.getDateAssignation();
             if(dateAss == null) {
                 throw new Exception("La consultation n'a pas de date d'assignation !");
             }
 
-            Client cli = cons.getClient();
-            Employe emp = cons.getEmploye();
-            Medium med = cons.getMedium();
+            Client cli = consultation.getClient();
+            Employe emp = consultation.getEmploye();
+            Medium med = consultation.getMedium();
             JpaUtil.ouvrirTransaction();
             //Par défaut, les dates ont pour valeur d'initialisation le temps actuel.
-            cons.setDateDebut(new Date());
+            consultation.setDateDebut(new Date());
             JpaUtil.validerTransaction();
             Logger.getAnonymousLogger().log(Level.INFO,"Consultation démarrée avec succès");
 
@@ -411,69 +511,87 @@ public class Services {
                              + med.getDenomination();
 
             Message.envoyerNotification(cli.getNumTelephone(), message);
-            return cli.getNumTelephone();
-
         } catch(Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur de demarrerConsultation() :", e);
-            return null;
+            JpaUtil.annulerTransaction();
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur de demarrerConsultation() :", e);
+            consultation = null;
         } finally {
             JpaUtil.fermerContextePersistance();
         }
+        
+        return consultation;
     }
 
-    /*Permet de terminer la consultation :
-    - Récupère la consultation à partir de l'ID
-    - Set la date de fin à maintenant et ajoute un commentaire
-    - Renvoie la consultation terminée.
-    */
-
-    public Consultation terminerConsultation(Long consultationId, String commentaire) {
+    /**
+     * Service permettant de terminer une consultation. Met à jour la date de fin
+     * de la consultation et son commentaire.
+     * Cas d'exception :
+     *  - La consultation n'a pas commencé
+     * @param consultation : une instance de la consultation à terminer
+     * @param commentaire : le commentaire de fin de consultation
+     * @return une instance de la consultation terminée, null en cas d'exception
+     */
+    public Consultation terminerConsultation(Consultation consultation, String commentaire) {
         ConsultationDao cDao = new ConsultationDao();
-        Consultation cons = null;
 
         try {
             JpaUtil.creerContextePersistance();
-            cons = cDao.chercherParId(consultationId);
 
-            if(cons == null) {
-                throw new Exception("Consultation introuvable !");
-            }
-
-            Date dateDeb = cons.getDateDebut();
+            Date dateDeb = consultation.getDateDebut();
             if(dateDeb == null) {
                 throw new Exception("La consultation n'a pas commencé !");
             }
 
             JpaUtil.ouvrirTransaction();
-            cons.setDateFin(new Date());
-            cons.setCommentaire(commentaire);
+            consultation.setDateFin(new Date());
+            consultation.setCommentaire(commentaire);
+            consultation.getEmploye().setDisponibilite(Boolean.TRUE);
+            cDao.modifier(consultation);
+            
             JpaUtil.validerTransaction();
 
-            Logger.getAnonymousLogger().log(Level.INFO,"Consultation terminée avec succès");
+            Logger.getLogger("Services").log(Level.INFO,"Consultation terminée avec succès");
 
         } catch (Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur de demarrerConsultation() :", e);
+            JpaUtil.annulerTransaction();
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur de demarrerConsultation() :", e);
+            consultation = null;
         } finally {
             JpaUtil.fermerContextePersistance();
         }
 
-        return cons;
+        return consultation;
     }
 
-    public List<String> demanderAideConsultation(Client cl, int amour, int sante, int travail) {
-        ProfilAstral pa = cl.getProfilAstral();
+    /**
+     * Service permettant la demande d'une aide pendant une consultation
+     * @param client : le client concerné par la demande
+     * @param amour : le score d'amour
+     * @param sante : le score de santé
+     * @param travail : le score de travail
+     * @return une liste de chaînes de caractères représentant une aide
+     */
+    public List<String> demanderAideConsultation(Client client, int amour, int sante, int travail) {
+        ProfilAstral pa = client.getProfilAstral();
         AstroTest astro = new AstroTest();
         List<String> output = null;
         try {
             output = astro.getPredictions(pa.getCouleur(), pa.getAnimalTotem(),amour, sante,travail);
         } catch(Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur de calcul de profil astral", e);
-        } finally {
-            return output;
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur de calcul de profil astral", e);
         }
+        return output;
     }
 
+    
+    /**
+     * Service permettant l'ajout d'un medium aux favoris d'un client
+     * @param medium : une instance du medium à ajouter
+     * @param client : le client mettant le medium en favoris
+     * @return une instance du medium ajouté en favoris
+     */
     public Medium ajouterMediumAuxFavoris(Medium medium, Client client){
+
         ClientDao clientDao = new ClientDao();
         MediumDao mediumDao = new MediumDao();
         
@@ -505,6 +623,7 @@ public class Services {
         }
         return medium;
     }
+
 
     public Medium enleverMediumDesFavoris(Medium medium, Client client){
         ClientDao clientDao = new ClientDao();
@@ -540,6 +659,13 @@ public class Services {
     }
     
     
+
+    /**
+     * Service permettant de récupérer les statistiques de consultation par employé
+     * (nombre de consultations par employé)
+     * @return une map (employé => nombre de consultations) représentant les statistiques
+     */
+
     public Map<Employe,Long> recupererNombreConsultationsEmploye(){
         ConsultationDao consultationDao = new ConsultationDao();
         Map<Employe,Long> consultationsEmployes;
@@ -561,7 +687,11 @@ public class Services {
         return consultationsEmployes;
     }
 
-
+    /**
+     * Service permettant la récupération des statistiques de consultation par médium
+     * (nombre de consultations par medium)
+     * @return une map (medium => nombre de consultations) représentant les statistiques
+     */
     public Map<Medium, Long> recupererNbConsultationsMediums() 
     {
         ConsultationDao cDao = new ConsultationDao();
@@ -603,11 +733,11 @@ public class Services {
                     allMediumsNbConsultations.put(currentMedium, nbConsultations);
                 }  
             } else {
-                throw new Exception("no mediums in database");
+                throw new Exception("No mediums in database");
             }
             
         } catch(Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur au niveau de recupererNbConsultationsMediums()", e);
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur au niveau de recupererNbConsultationsMediums()", e);
             
         } finally {
             JpaUtil.fermerContextePersistance();
@@ -616,10 +746,9 @@ public class Services {
         return allMediumsNbConsultations;
     }
     
-    /** A function that gets (a maximum of the) 5 top mediums and their number of consultations.
-     * @return A map of the 5 first mediums and their number of consultations. WARN : 
-     * Only returns mediums with non-zero consultations, hence can return 5 Entry
-     * or less.
+    /**
+     * Service permettant de récupérer le top 5 des médiums par nombre de consultations
+     * @return une map(medium => nombre de consultatins) contenant le top 5 des médiums. Ignore les médiums avec 0 consultations.
      */
     public Map<Medium, Long> recupererTop5Mediums()
     {   
@@ -664,6 +793,11 @@ public class Services {
         
     }
 
+    /**
+     * Service permettant de récupérer la liste des consultations pour un client
+     * @param client : une instance du client dont on veut récupérer les consultations
+     * @return la liste des consultations du client, ou null en cas d'exception
+     */
     public List<Consultation> recupererConsultationsClient(Client client)
     {
         List<Consultation> result = null;
@@ -687,6 +821,11 @@ public class Services {
         return result;
     }
     
+    /**
+     * Service permettant la récupération des consultations d'un employé
+     * @param employe : une instance de l'employé dont on veut récupérer les consultationss
+     * @return 
+     */
     public List<Consultation> recupererConsultationsEmploye(Employe employe)
     {
         List<Consultation> result = null;

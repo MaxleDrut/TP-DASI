@@ -35,6 +35,7 @@ public class Main {
      */
     public static void main(String[] args) {
         JpaUtil.init();
+        
         PeuplementBD peuplementBD = new PeuplementBD();
         peuplementBD.peuplementEmploye();
         peuplementBD.peuplementMedium();
@@ -339,7 +340,7 @@ public class Main {
         Services serv = new Services();
         
         Employe emp = serv.obtenirListeEmployes().get(0);
-        Consultation cons = serv.obtenirConsultationAssignee(emp.getId());
+        Consultation cons = serv.obtenirConsultationAssignee(emp);
         
         if(cons == null) {
             System.out.println("Le premier employé n'a pas de consultation assignée");
@@ -366,18 +367,18 @@ public class Main {
         Services serv = new Services();
         
         Employe emp = serv.obtenirListeEmployes().get(0);
-        Consultation cons = serv.obtenirConsultationAssignee(emp.getId());
+        Consultation cons = serv.obtenirConsultationAssignee(emp);
         
-        serv.demarrerConsultation(cons.getId());
+        serv.demarrerConsultation(cons);
         
     }
 
     public static void testerTerminerConsultation() {
         Services serv = new Services();
         Employe emp = serv.obtenirListeEmployes().get(0);
-        Consultation cons = serv.obtenirConsultationAssignee(emp.getId());
+        Consultation cons = serv.obtenirConsultationAssignee(emp);
         
-        Consultation c = serv.terminerConsultation(cons.getId(),"L'interrogé semblait paniqué, mais les astres ont su le rassurer");
+        Consultation c = serv.terminerConsultation(cons, "L'interrogé semblait paniqué, mais les astres ont su le rassurer");
         System.out.println(c);
 
     }
@@ -389,6 +390,8 @@ public class Main {
         // Client 17
         Client client = new Client("BLABLABLAA", "Placeholder", "Somewhere", "0213456789", new Date(), "pigeon@perchoir.com", "azerty1234");
         client = services.inscrireClient(client);
+        Client client2 = services.rechercherClient(17L);
+        Client client3 = services.rechercherClient(18L);
 
         // Medium
         Medium medium = services.obtenirListeMediums().get(0);
@@ -430,8 +433,8 @@ public class Main {
         }
 
         Consultation cons1 = services.demanderConsultation(client, medium);
-        Consultation cons2 = services.demanderConsultation(client, medium);
-        Consultation cons3 = services.demanderConsultation(client, medium);
+        Consultation cons2 = services.demanderConsultation(client2, medium);
+        Consultation cons3 = services.demanderConsultation(client3, medium);
 
         System.out.println("-*-*-*--*---*--*-*-*-*-*-");
         System.out.println(cons1.getEmploye());
