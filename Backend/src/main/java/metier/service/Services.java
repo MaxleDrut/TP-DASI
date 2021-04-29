@@ -408,21 +408,19 @@ public class Services {
 
         return cons;
     }
-
+  
     /**
      * Services permettant la récupération de la consultation assignée actuellement à l'employé spécifié
-     * @param employeId : l'identifiant de l'employé cible
+     * @param employeId : une instance de l'employé cible
      * @return une instance de la consultation recherchée, ou null si elle n'existe pas ou en cas d'exception
      */
-    public Consultation obtenirConsultationAssignee(Long employeId) {
+    public Consultation obtenirConsultationAssignee(Employe employe) {
         ConsultationDao cDao = new ConsultationDao();
-        EmployeDao eDao = new EmployeDao();
 
         Consultation cons = null;
         try {
             JpaUtil.creerContextePersistance();
-            Employe emp = eDao.chercherParId(employeId);
-            List<Consultation> lCons = cDao.chercherParEmploye(emp);
+            List<Consultation> lCons = cDao.chercherParEmploye(employe);
 
             for(Consultation c : lCons) {
                 if(c.getDateFin() == null) { //Consultation en cours : c'est ce qu'on cherche
@@ -434,7 +432,6 @@ public class Services {
 
         } catch(Exception e) {
             Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la récupération d'une consultation assignée !\n Message : " + e.getLocalizedMessage());
-
         } finally {
             JpaUtil.fermerContextePersistance();
         }

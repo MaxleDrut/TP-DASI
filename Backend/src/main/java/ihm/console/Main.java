@@ -303,7 +303,7 @@ public class Main {
         Services serv = new Services();
         
         Employe emp = serv.obtenirListeEmployes().get(0);
-        Consultation cons = serv.obtenirConsultationAssignee(emp.getId());
+        Consultation cons = serv.obtenirConsultationAssignee(emp);
         
         if(cons == null) {
             System.out.println("Le premier employé n'a pas de consultation assignée");
@@ -330,7 +330,7 @@ public class Main {
         Services serv = new Services();
         
         Employe emp = serv.obtenirListeEmployes().get(0);
-        Consultation cons = serv.obtenirConsultationAssignee(emp.getId());
+        Consultation cons = serv.obtenirConsultationAssignee(emp);
         
         serv.demarrerConsultation(cons);
         
@@ -339,7 +339,7 @@ public class Main {
     public static void testerTerminerConsultation() {
         Services serv = new Services();
         Employe emp = serv.obtenirListeEmployes().get(0);
-        Consultation cons = serv.obtenirConsultationAssignee(emp.getId());
+        Consultation cons = serv.obtenirConsultationAssignee(emp);
         
         Consultation c = serv.terminerConsultation(cons, "L'interrogé semblait paniqué, mais les astres ont su le rassurer");
         System.out.println(c);
