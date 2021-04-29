@@ -113,4 +113,15 @@ public class ConsultationDao
         return mediumsNbConsultations;   
     }
     
+    public Consultation recupererConsultationEncoursClient(Client client)
+    {
+        TypedQuery<Consultation> query = JpaUtil.obtenirContextePersistance().createQuery(
+                "select c "
+                + "from Consultation c "
+                + "where c.dateFin is null and c.client = :client ",
+                Consultation.class
+        ).setParameter("client", client);
+        
+        return query.getSingleResult();
+    }
 }
