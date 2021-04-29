@@ -5,7 +5,10 @@
  */
 package dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import metier.modele.Client;
 import metier.modele.Medium;
@@ -48,5 +51,30 @@ public class ClientDao {
         return query.getSingleResult();
     }
     
+    public Map<Medium, Long> consultationsParMediumTrieesTop3(Client client)
+    {
+        Query query = JpaUtil.obtenirContextePersistance().createQuery(
+                "select cons.medium, count(cons.medium) "
+                + "from Consultation cons "
+                + "where cons.client = :client "
+                + "group by cons.medium "
+                + "order by count(cons.medium)"
+        ).setParameter("client", client);
+        
+        Map<Medium, Long> result = new HashMap<>();
+        int cpt = 0;
+        
+        for(Object[] obj : (List<Object[]>) query.getResultList())
+        {
+            if(cpt >= 3) break; // we only care about top 3            
+            cpt++;
+            
+            Medium medium = (Medium) obj[0];
+            Long nbCons = (Long) obj[1];
+            result.put(medium, nbCons);
+        }
+        
+        return result;
+    }
     
 }

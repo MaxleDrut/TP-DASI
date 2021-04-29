@@ -5,6 +5,7 @@
  */
 package ihm.console;
 
+import dao.ClientDao;
 import dao.ConsultationDao;
 import dao.EmployeDao;
 import dao.JpaUtil;
@@ -73,6 +74,7 @@ public class Main {
     }
 
     public static void testerAidePrediction(int amour, int sante, int travail) {
+        System.out.println("============= testerAidePrediction() ===========");
         Services serv = new Services();
         List<Client> lcl = serv.obtenirListeClients(); //Récupère le 1er client de la liste
 
@@ -87,6 +89,7 @@ public class Main {
     }
 
     public static void testerInscriptionClient(){
+        System.out.println("============= testerInscriptionClient() ===========");
         inscrire("Scuturici","Vasile-Marian","7 Avenue Jean Capelle, Villeurbanne","0628146942","03-02-1978","vasile-marian.scuturici@insa-lyon.fr","algo");
         inscrire("Guillevic","Marie","3 rue de la paix, Saint-Perreux","0614218795","05-04-2000","marieguillevic@outlook.com","noisette");
         inscrire("Micron","Manuel","54 rue du Faubourg Saint-Honoré, Paris","0899112233","21-12-1977","manuel@caramail.com","brigitte");
@@ -98,6 +101,7 @@ public class Main {
 
     //Nécessaire aux try catches pour les dates
     public static void inscrire(String nom, String prenom, String adresse,String numTelephone,String dateNaissance, String mail, String mdp) {
+        System.out.println("============= inscrire() ===========");
         Services serviceInscription = new Services();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         try {
@@ -110,6 +114,7 @@ public class Main {
     }
 
     public static void testerAuthentification() {
+        System.out.println("============= testerAuthentification() ===========");
         // cas du succès
         Utilisateur guillevic = authentifierUtilisateur("marieguillevic@outlook.com", "noisette");
         if(guillevic == null) {
@@ -126,7 +131,7 @@ public class Main {
     }
 
     public static void testerInscriptionInterractive() {
-
+        System.out.println("============= testerInscriptionInterractive() ===========");
         System.out.println("Bonjour !");
 
         // inscription
@@ -150,6 +155,7 @@ public class Main {
     }
 
     public static void authentificationIntervative() {
+        System.out.println("============= authentificationInteractive() ===========");
         String stop;
 
         boolean doAuth = true;
@@ -170,6 +176,7 @@ public class Main {
     }
 
     public static Utilisateur authentifierUtilisateur(String mail, String mdp) {
+        System.out.println("============= authentifierUtilisateur() ===========");
         Services services = new Services();
         Utilisateur utilisateur = services.authentification(mail, mdp);
         if(utilisateur == null) {
@@ -181,6 +188,7 @@ public class Main {
     }
 
     public static void testerObtenirMedium(){
+        System.out.println("============= testerObtenirMedium() ===========");
         Services serviceObtenirMedium = new Services();
 
         //Obtention réussie
@@ -202,7 +210,7 @@ public class Main {
     }
 
     public static void testerObtenirListeMedium(){
-
+        System.out.println("============= testerObtenirListeMedium() ===========");
         Services serviceObtenirListeMedium = new Services();
 
         //Obtention réussie
@@ -219,6 +227,7 @@ public class Main {
     }
 
     public static void testerObtenirEmploye(){
+        System.out.println("============= testerObtenirEmploye() ===========");
         Services serv = new Services();
 
         //Obtention réussie
@@ -237,7 +246,7 @@ public class Main {
     }
 
     public static void testerObtenirListeEmployes(){
-
+        System.out.println("============= testerObtenirListeEmployes() ===========");
         Services serv= new Services();
 
         //Obtention réussie
@@ -318,6 +327,7 @@ public class Main {
     
     //Cherche la consultation numéro 25 et 27
     public static void testerObtenirConsultation() {
+        System.out.println("============= testerObtenirConsultation() ===========");
         Services serv = new Services();
 
 
@@ -337,6 +347,7 @@ public class Main {
     }
 
     public static void testerObtConsultationAss() {
+        System.out.println("============= testerObtenirConsultationAssignée() ===========");
         Services serv = new Services();
         
         Employe emp = serv.obtenirListeEmployes().get(0);
@@ -351,6 +362,7 @@ public class Main {
     }
     
     public static void ajoutManuelCons() {
+        System.out.println("============= ajoutManuelConsultation() ===========");
         Services serv = new Services();
 
         Client cli = serv.obtenirListeClients().get(0);
@@ -364,6 +376,7 @@ public class Main {
 
     //Demarre la consultation numéro 1 (et envoie le sms)
     public static void testerDemarrerConsultation() {
+        System.out.println("============= testerDemarrerConsultation() ===========");
         Services serv = new Services();
         
         Employe emp = serv.obtenirListeEmployes().get(0);
@@ -374,6 +387,7 @@ public class Main {
     }
 
     public static void testerTerminerConsultation() {
+        System.out.println("============= testerTerminerConsultation() ===========");
         Services serv = new Services();
         Employe emp = serv.obtenirListeEmployes().get(0);
         Consultation cons = serv.obtenirConsultationAssignee(emp);
@@ -385,6 +399,7 @@ public class Main {
 
     public static void testerAssignationConsultation()
     {
+        System.out.println("============= testerAssignationConsultation() ===========");
         Services services = new Services();
 
         // Client 17
@@ -478,6 +493,7 @@ public class Main {
     }
 
     public static void testerRecupererNombreConsultationsEmploye(){
+        System.out.println("============= testerRecupererNombreConsultationsEmploye() ===========");
         Services serviceConsultation = new Services();
         Map<Employe,Long> consultationsEmploye= serviceConsultation.recupererNombreConsultationsEmploye();
         for(Map.Entry<Employe,Long> mapEntry : consultationsEmploye.entrySet()){
@@ -488,6 +504,7 @@ public class Main {
 
     public static void testerRecupListeConsultations()
     {
+        System.out.println("============= testerRecupListeConsultations() ===========");
         Services services = new Services();
         
         Client client = services.rechercherClient(21L);
