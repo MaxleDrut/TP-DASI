@@ -17,6 +17,12 @@ async function voirMediums() {
             method: 'GET',
             dataType: 'json'
         })
+        res.done((response) => {
+
+        });
+        res.fail((error) => {
+            
+        });
         console.log(res);
 
     } catch (err) {
