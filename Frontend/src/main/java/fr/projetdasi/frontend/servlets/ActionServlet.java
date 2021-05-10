@@ -7,6 +7,9 @@ package fr.projetdasi.frontend.servlets;
 
 import fr.projetdasi.frontend.actions.Action;
 import fr.projetdasi.frontend.actions.ActionConnexion;
+import fr.projetdasi.frontend.actions.ActionInscription;
+import fr.projetdasi.frontend.serialisations.Serialisation;
+import fr.projetdasi.frontend.serialisations.SerialisationInscription;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -28,13 +31,17 @@ public class ActionServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String action = request.getParameter("action");
+        String todo = request.getParameter("action");
         
-        switch(action)
+        Action action = null;
+        Serialisation serialisation = null;
+        
+        switch(todo)
         {
             case "inscription":
             {
-                
+                action = new ActionInscription();
+                serialisation = new SerialisationInscription();
                 break;
             }
             case "connexion":
@@ -47,6 +54,16 @@ public class ActionServlet extends HttpServlet {
             default:
                 // retourner page d'erreur
                 break;
+        }
+        
+        if(action != null && serialisation != null)
+        {
+            action.executer(request);
+            serialisation.serialiser(request, response);
+        }
+        else
+        {
+            response.sendError(400, "Bad request");
         }
     }
 
