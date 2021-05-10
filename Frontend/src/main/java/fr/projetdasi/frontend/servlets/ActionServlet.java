@@ -5,17 +5,19 @@
  */
 package fr.projetdasi.frontend.servlets;
 
+import dao.JpaUtil;
+import fr.projetdasi.frontend.actions.Action;
+import fr.projetdasi.frontend.actions.ActionInscription;
+import fr.projetdasi.frontend.actions.ActionListeMedium;
+import fr.projetdasi.frontend.serialisations.Serialisation;
+import fr.projetdasi.frontend.serialisations.SerialisationInscription;
+import fr.projetdasi.frontend.serialisations.SerialisationListeMedium;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author romai
- */
 public class ActionServlet extends HttpServlet {
 
     /**
@@ -30,17 +32,55 @@ public class ActionServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String action = request.getParameter("action");
+        String todo = request.getParameter("todo");
         
-        switch(action)
+        Action action = null;
+        Serialisation serialisation = null;
+        
+        switch(todo)
         {
-            
+            case "inscription":
+            {
+                action = new ActionInscription();
+                serialisation = new SerialisationInscription();
+                break;
+            }
+            case "lister-mediums":
+            {
+                System.out.println("Allo");
+                action = new ActionListeMedium();
+                serialisation = new SerialisationListeMedium();
+                break;
+            }
+                
             default:
                 // retourner page d'erreur
                 break;
         }
+        
+        if(action != null && serialisation != null)
+        {
+            action.executer(request);
+            serialisation.serialiser(request, response);
+        }
+        else
+        {
+            response.sendError(400, "Bad request");
+        }
     }
 
+    @Override
+    public void init() throws ServletException {
+      super.init();
+      JpaUtil.init();
+    }
+
+    @Override
+    public void destroy() {
+      JpaUtil.destroy();
+      super.destroy();
+    }
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
