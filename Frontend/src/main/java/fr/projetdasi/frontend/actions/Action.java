@@ -8,6 +8,6 @@ package fr.projetdasi.frontend.actions;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public interface Action {
-    public void executer(HttpServletRequest request);
+public abstract class Action {
+    public abstract void executer(HttpServletRequest request);
 }
