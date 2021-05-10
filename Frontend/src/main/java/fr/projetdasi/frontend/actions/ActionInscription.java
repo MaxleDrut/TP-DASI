@@ -8,10 +8,10 @@ package fr.projetdasi.frontend.actions;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ActionInscription implements Action 
+public class ActionInscription extends Action 
 {
     @Override
-    public void executer(HttpServletRequest request, HttpServletResponse response) 
+    public void executer(HttpServletRequest request) 
     {
         String firstname = request.getParameter("firstname");
         String lastname = request.getParameter("lastname");
