@@ -26,7 +26,7 @@ and open the template in the editor.
         <div>
             <h2>Contactez nos mediums dès maintenant</h2>
             
-            <table id="Liste-Medium">
+            <table id="lister-medium">
                 
             </table>
             
@@ -40,9 +40,9 @@ and open the template in the editor.
             function recupListeMediums() {
                 $.ajax({
                     url: './ActionServlet',
-                    method:'GET',
+                    method:'POST',
                     data: {
-                        action:'recupListeMediums'
+                        todo:'lister-mediums'
                     },
                     dataType:'json'
                 }).done(function (response) {
