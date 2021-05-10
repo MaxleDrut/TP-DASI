@@ -8,10 +8,11 @@ package fr.projetdasi.frontend.servlets;
 import dao.JpaUtil;
 import fr.projetdasi.frontend.actions.Action;
 import fr.projetdasi.frontend.actions.ActionInscription;
+import fr.projetdasi.frontend.actions.ActionListeMedium;
 import fr.projetdasi.frontend.serialisations.Serialisation;
 import fr.projetdasi.frontend.serialisations.SerialisationInscription;
+import fr.projetdasi.frontend.serialisations.SerialisationListeMedium;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +32,7 @@ public class ActionServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String todo = request.getParameter("action");
+        String todo = request.getParameter("todo");
         
         Action action = null;
         Serialisation serialisation = null;
@@ -42,6 +43,13 @@ public class ActionServlet extends HttpServlet {
             {
                 action = new ActionInscription();
                 serialisation = new SerialisationInscription();
+                break;
+            }
+            case "lister-mediums":
+            {
+                System.out.println("Allo");
+                action = new ActionListeMedium();
+                serialisation = new SerialisationListeMedium();
                 break;
             }
                 
