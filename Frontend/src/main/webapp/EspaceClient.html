@@ -13,14 +13,11 @@ and open the template in the editor.
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     </head>
     <body>
-        <h1>Bonjour NOM</h1>
+        <h1 id='nomClient'></h1>
         <h2>Laissez les astres vous guider aujourd'hui</h2>
         
-        <div>
-            <p>Votre signe astrologique : A</p>
-            <p>Votre signe chinois : Riz</p>
-            <p>Votre couleur porte-bonheur : rouge</p>
-            <p>Votre animal totem : marmotte </p>
+        <div id='profilAstral'>
+            
         </div>
         
         <div>
@@ -33,9 +30,36 @@ and open the template in the editor.
         </div>
         
         <script>
-            $(document).ready(function() {
+            $(document).ready(function() 
+            {
+                recupClient();
                 recupListeMediums();
             });
+            
+            function recupClient() {
+                $.ajax({
+                    url: './ActionServlet',
+                    method:'POST',
+                    data: {
+                        todo:'recuperer-client',
+                        id:'17'
+                    },
+                    dataType:'json'
+                }).done(function (response) {
+                    $('#profilAstral').append(
+                            '<div> Votre signe astrologique : '+response.astral.zodiac + '</div>' +
+                            '<div> Votre signe chinois : '+response.astral.chinois + '</div>' +
+                            '<div> Votre couleur porte-bonheur : '+response.astral.couleur + '</div>' +
+                            '<div> Votre animal totem : '+response.astral.animal + '</div>'
+                    );
+                    $('#nomClient').append(
+                            'Bonjour '+response.prenom + ' !'
+                    );
+                })
+                .fail(function(error) {
+                    console.log('erreur récup client',error);
+                });    
+            }
             
             function recupListeMediums() {
                 $.ajax({
