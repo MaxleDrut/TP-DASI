@@ -9,6 +9,7 @@ import fr.projetdasi.frontend.actions.Action;
 import fr.projetdasi.frontend.actions.ActionConnexion;
 import fr.projetdasi.frontend.actions.ActionInscription;
 import fr.projetdasi.frontend.serialisations.Serialisation;
+import fr.projetdasi.frontend.serialisations.SerialisationConnexion;
 import fr.projetdasi.frontend.serialisations.SerialisationInscription;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -31,7 +32,7 @@ public class ActionServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String todo = request.getParameter("action");
+        String todo = request.getParameter("todo");
         
         Action action = null;
         Serialisation serialisation = null;
@@ -47,7 +48,7 @@ public class ActionServlet extends HttpServlet {
             case "connexion":
             {   
                 action = new ActionConnexion();
-                
+                serialisation = new SerialisationConnexion();
                 break;
             }
                 

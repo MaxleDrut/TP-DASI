@@ -5,9 +5,9 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <header>
-    
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <div id="logo">
-        <img src="static/images/bouleCristal.png"/>
+        <img src="images/bouleCristal.png"/>
         <h1>Predict'IF</h1>
     </div>
     <section class="login">
@@ -26,13 +26,13 @@ and open the template in the editor.
                     // Récupération de la valeur des champs du formulaire
                     var champLogin = $('#champ_login').val();
                     var champPassword = $('#champ_password').val();
-
+                    
                     // Appel AJAX
                     $.ajax({
                         url: './ActionServlet',
                         method: 'POST',
                         data: {
-                            todo: 'connecter',
+                            todo: 'connexion',
                             login: champLogin,
                             password: champPassword
                         },

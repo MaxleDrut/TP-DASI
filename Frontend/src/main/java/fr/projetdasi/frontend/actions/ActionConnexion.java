@@ -14,11 +14,11 @@ import metier.service.Services;
  *
  * @author Marie Guillevic
  */
-public class ActionConnexion implements Action{
+public class ActionConnexion extends Action{
 
+    
     @Override
-    public void executer(HttpServletRequest request, HttpServletResponse response) {
-        
+    public void executer(HttpServletRequest request) {
         //Recupération des paramètres de la Requête
         String login = request.getParameter("login");
         String password = request.getParameter("password");
@@ -30,8 +30,9 @@ public class ActionConnexion implements Action{
         Services serviceConnexion = new Services();
         
         Utilisateur utilisateur = serviceConnexion.authentification(login, password);
-                
         
+        System.out.println(utilisateur);
+        request.setAttribute("utilisateur",utilisateur);
     }
     
 }
