@@ -17,6 +17,7 @@ public abstract class Serialisation
         response.setContentType("application/json;charset=UTF-8");
         return response.getWriter();
     }
-    
-    public abstract void serialiser(HttpServletRequest request, HttpServletResponse response)throws IOException;
+
+    public abstract void serialiser(HttpServletRequest request, HttpServletResponse response) throws IOException;
+
 }

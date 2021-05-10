@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Espace Client</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Librairie Javascript: jQuery (v3.4.1) -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    </head>
+    <body>
+        <h1>Bonjour NOM</h1>
+        <h2>Laissez les astres vous guider aujourd'hui</h2>
+        
+        <div>
+            <p>Votre signe astrologique : A</p>
+            <p>Votre signe chinois : Riz</p>
+            <p>Votre couleur porte-bonheur : rouge</p>
+            <p>Votre animal totem : marmotte </p>
+        </div>
+        
+        <div>
+            <h2>Contactez nos mediums dès maintenant</h2>
+            
+            <table id="lister-medium">
+                
+            </table>
+            
+        </div>
+        
+        <script>
+            $(document).ready(function() {
+                recupListeMediums();
+            });
+            
+            function recupListeMediums() {
+                $.ajax({
+                    url: './ActionServlet',
+                    method:'POST',
+                    data: {
+                        todo:'lister-mediums'
+                    },
+                    dataType:'json'
+                }).done(function (response) {
+                    
+                })
+                .fail(function(error) {
+                    console.log('erreur déso',error);
+                });                
+            }
+            
+        </script>
+            
+    </body>
+</html>

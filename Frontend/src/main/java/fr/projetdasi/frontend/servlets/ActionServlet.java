@@ -5,14 +5,16 @@
  */
 package fr.projetdasi.frontend.servlets;
 
+import dao.JpaUtil;
 import fr.projetdasi.frontend.actions.Action;
 import fr.projetdasi.frontend.actions.ActionConnexion;
 import fr.projetdasi.frontend.actions.ActionInscription;
+import fr.projetdasi.frontend.actions.ActionListeMedium;
 import fr.projetdasi.frontend.serialisations.Serialisation;
 import fr.projetdasi.frontend.serialisations.SerialisationConnexion;
 import fr.projetdasi.frontend.serialisations.SerialisationInscription;
+import fr.projetdasi.frontend.serialisations.SerialisationListeMedium;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -51,6 +53,15 @@ public class ActionServlet extends HttpServlet {
                 serialisation = new SerialisationConnexion();
                 break;
             }
+
+            case "lister-mediums":
+            {
+                System.out.println("Allo");
+                action = new ActionListeMedium();
+                serialisation = new SerialisationListeMedium();
+
+                break;
+            }
                 
             default:
                 // retourner page d'erreur
@@ -68,6 +79,18 @@ public class ActionServlet extends HttpServlet {
         }
     }
 
+    @Override
+    public void init() throws ServletException {
+      super.init();
+      JpaUtil.init();
+    }
+
+    @Override
+    public void destroy() {
+      JpaUtil.destroy();
+      super.destroy();
+    }
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
