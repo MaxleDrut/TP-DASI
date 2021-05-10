@@ -26,7 +26,7 @@ and open the template in the editor.
         <div>
             <h2>Contactez nos mediums dès maintenant</h2>
             
-            <table id="lister-medium">
+            <table id="liste-mediums">
                 
             </table>
             
@@ -46,7 +46,15 @@ and open the template in the editor.
                     },
                     dataType:'json'
                 }).done(function (response) {
-                    
+                    $('#liste-mediums').empty();
+                    $.each(response.mediums, function(index,medium) {
+                        $('#liste-mediums').append(
+                            '<tr>'+
+                            '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
+                            '<td> <div>'+ medium.presentation + '</div>' + medium.type + '</td>'+
+                            '</tr>'
+                        );
+                    });
                 })
                 .fail(function(error) {
                     console.log('erreur déso',error);

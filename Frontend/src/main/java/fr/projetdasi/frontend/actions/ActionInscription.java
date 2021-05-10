@@ -33,8 +33,8 @@ public class ActionInscription extends Action
             return;
         }
         
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Date birth = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date birth;
         try
         {
             birth = sdf.parse(birthdate);
@@ -45,9 +45,6 @@ public class ActionInscription extends Action
             request.setAttribute("message", "Format de date invalide !");
             return;
         }
-        
-        // demander pour le paramètre action
-        // demander pour la sanitization des inputs
         
         Services services = new Services();
         Client client = new Client(lastname, firstname, address, telephone, birth, email, password);
