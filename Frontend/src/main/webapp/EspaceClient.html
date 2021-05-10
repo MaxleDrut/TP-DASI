@@ -46,14 +46,13 @@ and open the template in the editor.
                     },
                     dataType:'json'
                 }).done(function (response) {
-                    console.log(response);
                     $('#liste-mediums').empty();
                     $.each(response.mediums, function(index,medium) {
-                        console.log(medium.denomination);
                         $('#liste-mediums').append(
-                          '<tr>'+'<td>'+
-                          "Denomination : "+medium.denomination+" | Presentation : "+medium.presentation +
-                          '</td>'+'</tr>'
+                            '<tr>'+
+                            '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
+                            '<td> <div>'+ medium.presentation + '</div>' + medium.type + '</td>'+
+                            '</tr>'
                         );
                     });
                 })
