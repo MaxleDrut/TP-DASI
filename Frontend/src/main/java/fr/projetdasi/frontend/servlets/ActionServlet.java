@@ -5,6 +5,8 @@
  */
 package fr.projetdasi.frontend.servlets;
 
+import fr.projetdasi.frontend.actions.Action;
+import fr.projetdasi.frontend.actions.ActionConnexion;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -32,6 +34,12 @@ public class ActionServlet extends HttpServlet {
         {
             case "inscription":
             {
+                
+                break;
+            }
+            case "connexion":
+            {   
+                action = new ActionConnexion();
                 
                 break;
             }
