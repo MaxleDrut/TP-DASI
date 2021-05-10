@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import metier.modele.Client;
@@ -36,6 +37,7 @@ public class SerialisationConnexion extends Serialisation {
                 Client client = (Client) utilisateur;
                 utilisateurProperty.addProperty("id", client.getId());
                 utilisateurProperty.addProperty("prenom", client.getPrenom());
+                
             }else{
                 Employe employe = (Employe) utilisateur;
                 utilisateurProperty.addProperty("id", employe.getId());
@@ -43,6 +45,8 @@ public class SerialisationConnexion extends Serialisation {
             }
             reponse.addProperty("connexion", true);
             reponse.add("client", utilisateurProperty);
+            Cookie cookie = new Cookie("id",String.valueOf(utilisateur.getId()));
+            response.addCookie(cookie);
             
         }else{
             reponse.addProperty("connexion", false);
@@ -53,6 +57,8 @@ public class SerialisationConnexion extends Serialisation {
         PrintWriter out = this.getWriter(response);
         gson.toJson(reponse,out);
         out.close();
+        
+        
     }
     
 }

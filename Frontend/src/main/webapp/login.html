@@ -7,14 +7,16 @@ and open the template in the editor.
 <header>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <div id="logo">
-        <img src="./bouleCristal.png"/>
+        <img src="bouleCristal.PNG" height="10"/>
         <h1>Predict'IF</h1>
     </div>
+    
     <section class="login">
     
         <input type="text" placeholder="Email" id="champ_login"/>
         <input type="password" placeholder="Mot de passe" id="champ_password"/>
         <button  id="bouton-connexion" >Connexion</button>
+        <p id="err">nom</p>
         
         <script>
             $(document).ready( function () {
@@ -27,6 +29,8 @@ and open the template in the editor.
                     var champLogin = $('#champ_login').val();
                     var champPassword = $('#champ_password').val();
                     
+                    var liste = document.cookie;
+                    console.log(liste);
                     // Appel AJAX
                     $.ajax({
                         url: './ActionServlet',
@@ -44,7 +48,7 @@ and open the template in the editor.
                             $('#notification').html("Connexion OK");  // Message pour le paragraphe de notification
                             // TODO: afficher les informations du client dans la notification
                             // Exemple: Connexion de Ada Lovelace (ID 1)
-                            $('#notification').html("Connexion de "+response.client.prenom+ " " +response.client.nom+" (ID " + response.client.id + ")");
+                            $('#err').html("Connexion de "+response.client.prenom);
                         }
                         else {
                             $('#notification').html("Erreur de Connexion"); // Message pour le paragraphe de notification
