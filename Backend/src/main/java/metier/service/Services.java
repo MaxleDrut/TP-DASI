@@ -64,7 +64,7 @@ public class Services {
         }
         catch(Exception e)
         {
-            Logger.getLogger("ServicesClient").log(Level.SEVERE, "Erreur lors de l''inscription d'un Client !! \nMessage : {0}", e.getLocalizedMessage());
+            Logger.getLogger("ServicesClient").log(Level.SEVERE, "Erreur lors de l''inscription d'un Client !! \nMessage : " + e.getLocalizedMessage());
             JpaUtil.annulerTransaction();
             Message.envoyerMail("noreply@predictif.fr", client.getMail(), "Echec d'inscription", "Une erreur d'inscription est survenue. Veuillez rééssayer");
             client = null;

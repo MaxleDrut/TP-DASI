@@ -26,8 +26,6 @@ public class ActionInscription extends Action
         String password = request.getParameter("password");
         String cgu_check = request.getParameter("cgu-check");
         
-        System.out.println(birthdate);
-        
         if(cgu_check == null || !cgu_check.equalsIgnoreCase("on"))
         {
             request.setAttribute("success", false);
