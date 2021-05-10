@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<header>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <div id="logo">
+        <img src="bouleCristal.PNG" height="10"/>
+        <h1>Predict'IF</h1>
+    </div>
+    
+    <section class="login">
+    
+        <input type="text" placeholder="Email" id="champ_login"/>
+        <input type="password" placeholder="Mot de passe" id="champ_password"/>
+        <button  id="bouton-connexion" >Connexion</button>
+        <p id="err">nom</p>
+        
+        <script>
+            $(document).ready( function () {
+                $('#bouton-connexion').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
+
+                    console.log("clic sur le bouton de connexion"); // LOG dans Console Javascript
+                    $('#notification').html("Connexion..."); // Message pour le paragraphe de notification
+
+                    // Récupération de la valeur des champs du formulaire
+                    var champLogin = $('#champ_login').val();
+                    var champPassword = $('#champ_password').val();
+                    
+                    var liste = document.cookie;
+                    console.log(liste);
+                    // Appel AJAX
+                    $.ajax({
+                        url: './ActionServlet',
+                        method: 'POST',
+                        data: {
+                            todo: 'connexion',
+                            login: champLogin,
+                            password: champPassword
+                        },
+                        dataType: 'json'
+                    })
+                    .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                        console.log('Response',response); // LOG dans Console Javascript
+                        if (response.connexion) {
+                            $('#notification').html("Connexion OK");  // Message pour le paragraphe de notification
+                            // TODO: afficher les informations du client dans la notification
+                            // Exemple: Connexion de Ada Lovelace (ID 1)
+                            $('#err').html("Connexion de "+response.client.prenom);
+                        }
+                        else {
+                            $('#notification').html("Erreur de Connexion"); // Message pour le paragraphe de notification
+                        }
+                    })
+                    .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                        console.log('Error',error); // LOG dans Console Javascript
+                        alert("Erreur lors de la connexion");
+                    })
+                    .always( function () { // Fonction toujours appelée
+                        
+                    });
+                });
+            });
+        </script>
+        
+    </section>
+    
+</header>
+
