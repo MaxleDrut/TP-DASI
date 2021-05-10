@@ -8,6 +8,7 @@ package fr.projetdasi.frontend.serialisations;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import metier.modele.Client;
 
 public class SerialisationInscription extends Serialisation {
 
@@ -18,6 +19,13 @@ public class SerialisationInscription extends Serialisation {
         if(success)
         {
             Client client = (Client) request.getAttribute("client");
+            System.out.println("====================================== \nsuccess");
+            System.out.println(client);
+        }
+        else
+        {
+            System.out.println("====================================== \nerror");
+            String message = (String) request.getAttribute("message");
         }
     }
 }
