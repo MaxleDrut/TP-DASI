@@ -46,7 +46,7 @@ public class ActionServlet extends HttpServlet {
             }
             case "lister-mediums":
             {
-                System.out.println("Allo");
+                
                 action = new ActionListeMedium();
                 serialisation = new SerialisationListeMedium();
                 break;
