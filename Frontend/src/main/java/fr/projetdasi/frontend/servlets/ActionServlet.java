@@ -12,10 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author romai
- */
 public class ActionServlet extends HttpServlet {
 
     /**
@@ -34,7 +30,12 @@ public class ActionServlet extends HttpServlet {
         
         switch(action)
         {
-            
+            case "inscription":
+            {
+                
+                break;
+            }
+                
             default:
                 // retourner page d'erreur
                 break;
