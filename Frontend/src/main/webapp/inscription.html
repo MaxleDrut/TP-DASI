@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="fr">
+    <head>
+        <title>Prédict'IF - Inscription</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Inscription</h1>
+        <article>
+            Aujourd'hui, Marie a découvert que Maxence sera son co-TP pour la vie. <br/>
+            <span>Rejoignez Prédict'IF pour connaître votre année en pleine sérénité</span>
+        </article>
+        
+        <form action="/ActionServlet?action=inscription" method="POST">
+            <div class="field-group">
+                <label for="inscription-firstname">Votre prénom</label>
+                <input type="text" placeholder="Votre prénom" id="inscription-firstname" name="firstname" />
+            </div>
+            
+            <div class="field-group">
+                <label for="inscription-lastname">Votre nom</label>
+                <input type="text" placeholder="Votre nom" id="inscription-lastname" name="lastname"/>
+            </div>
+            
+            <div class="field-group">
+                <label for="inscription-address">Votre adresse</label>
+                <input type="text" placeholder="Votre adresse" id="inscription-address" name="address">
+            </div>
+            
+            <div class="field-group">
+                <label for="inscription-birthdate">Votre date de naissance</label>
+                <input type="date" placeholder="01/01/1970" id="inscription-birthdate" name="birthdate"/>
+            </div>
+            
+            <div class="field-group">
+                <label for="inscription-email">Votre adresse email</label>
+                <input type="email" placeholder="exemple@hebergeur.fr" id="inscription-email" name="email"/>
+            </div>
+
+            <div class="field-group">
+                <label for="inscription-telephone">Votre numéro de téléphone</label>
+                <input type="tel" placeholder="+33123456789" id="inscription-telephone" name="phone"/>
+            </div>
+
+            <div class="field-group">
+                <label for="inscription-password">Votre mot de passe</label>
+                <input type="password" placeholder="..........." id="inscription-password" name="password"/>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="inscription-promote" name="promotions-check">
+                <label for="inscription-promote">Oui ! J'accepte de recevoir des offres promotionnelles par email !</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="inscription-cgu" name="cgu-check">
+                <label for="inscription-cgu">J'ai lu et j'accepte les conditions générales d'utilisation</label>
+            </div>
+
+            <button>S'inscrire maintenant !</button>
+        </form>
+    </body>
+</html>
