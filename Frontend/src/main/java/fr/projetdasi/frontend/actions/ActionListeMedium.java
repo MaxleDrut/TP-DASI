@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import metier.modele.Medium;
 import metier.service.Services;
 
-public class ActionListeMedium implements Action 
+public class ActionListeMedium extends Action 
 {
     @Override
-    public void executer(HttpServletRequest request, HttpServletResponse response) 
+    public void executer(HttpServletRequest request)
     {
         Services services = new Services();
         List<Medium> mediums = services.obtenirListeMediums();
