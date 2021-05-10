@@ -5,6 +5,9 @@
  */
 package fr.projetdasi.frontend.serialisations;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,16 +19,24 @@ public class SerialisationInscription extends Serialisation {
     public void serialiser(HttpServletRequest request, HttpServletResponse response) throws IOException 
     {
         boolean success = (boolean) request.getAttribute("success");
+        JsonObject result = new JsonObject();
+        
         if(success)
         {
             Client client = (Client) request.getAttribute("client");
-            System.out.println("====================================== \nsuccess");
-            System.out.println(client);
+            
+            result.addProperty("success", true);
+            result.addProperty("name", client.getPrenom());
         }
         else
         {
-            System.out.println("====================================== \nerror");
             String message = (String) request.getAttribute("message");
+            
+            result.addProperty("success", false);
+            result.addProperty("message", message);
         }
+        
+        Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
+        this.getWriter(response).println(gson.toJson(result));
     }
 }
