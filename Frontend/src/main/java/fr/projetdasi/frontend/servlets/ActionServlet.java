@@ -5,6 +5,7 @@
  */
 package fr.projetdasi.frontend.servlets;
 
+import dao.JpaUtil;
 import fr.projetdasi.frontend.actions.Action;
 import fr.projetdasi.frontend.actions.ActionInscription;
 import fr.projetdasi.frontend.actions.ActionListeMedium;
@@ -68,6 +69,18 @@ public class ActionServlet extends HttpServlet {
         }
     }
 
+    @Override
+    public void init() throws ServletException {
+      super.init();
+      JpaUtil.init();
+    }
+
+    @Override
+    public void destroy() {
+      JpaUtil.destroy();
+      super.destroy();
+    }
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
