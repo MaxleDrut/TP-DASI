@@ -26,6 +26,9 @@ async function voirMediums() {
 
     // inject elements inside listMediums section
     $("#list_mediums").show();
+
+    // hide button
+    $("#voir_mediums").hide();
 }
 
 
