@@ -23,6 +23,7 @@ public class ActionInscription extends Action
         String birthdate = request.getParameter("birthdate");
         String email = request.getParameter("email");
         String telephone = request.getParameter("phone");
+        String password = request.getParameter("password");
         String cgu_check = request.getParameter("cgu-check");
         
         if(cgu_check == null || !cgu_check.equalsIgnoreCase("on"))
