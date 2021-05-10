@@ -18,5 +18,5 @@ public abstract class Serialisation
         return response.getWriter();
     }
     
-    public abstract void serialiser(HttpServletRequest request, HttpServletResponse response);
+    public abstract void serialiser(HttpServletRequest request, HttpServletResponse response) throws IOException;
 }
