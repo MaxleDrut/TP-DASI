@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 public class ActionInscription implements Action 
 {
     @Override
-    public void executer(HttpServletRequest request, HttpServletResponse response) 
+    public void executer(HttpServletRequest request) 
     {
         String firstname = request.getParameter("firstname");
         String lastname = request.getParameter("lastname");
