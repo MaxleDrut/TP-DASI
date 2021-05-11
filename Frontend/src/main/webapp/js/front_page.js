@@ -8,6 +8,8 @@ function recupListeMediums() {
         dataType:'json'
     }).done(function (response) {
         console.log(response);
+
+        // put table header
         $('#table_list_medium').empty();
         $('#table_list_medium').append(
                 '<tr>'+
@@ -36,7 +38,27 @@ function recupListeMediums() {
                 '</tr>'
             );
         });
-        // populate 
+
+        // populate front_mediums
+        for(let i=0; i<2; i++) {
+            $('#front_mediums').append(
+                '<div>'+
+                    '<div>'+
+                        '<img src="img/icone_bonhomme.PNG" height="40"/>'+ 
+                    '<div>'+
+                    '<p>'+
+                        response.mediums[i].denomination+
+                    '<p>'+
+                    '<p>'+
+                        response.mediums[i].type+
+                    '<p>'+
+                '</div>'
+            );
+        }
+        $.each(response.mediums, function(index,medium) {
+            console.log(medium.denomination);
+            
+        });
     })
     .fail(function(error) {
         console.log('erreur déso',error);
