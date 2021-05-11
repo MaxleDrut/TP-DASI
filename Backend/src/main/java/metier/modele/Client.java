@@ -69,6 +69,10 @@ public class Client extends Utilisateur implements Serializable
         }
         return 0;
     }
+
+    public List<Medium> getMediumsFavoris() {
+        return mediumsFavoris;
+    }
    
 
     public String getNom() {

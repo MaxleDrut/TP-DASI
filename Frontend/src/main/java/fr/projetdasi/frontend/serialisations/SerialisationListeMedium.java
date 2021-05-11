@@ -21,16 +21,18 @@ import metier.modele.Spirite;
 public class SerialisationListeMedium extends Serialisation {
     
     @Override
+    
     public void serialiser(HttpServletRequest request, HttpServletResponse response) {
         JsonObject container = new JsonObject();
         
         List<Medium> mediums = (List<Medium>)request.getAttribute("mediums");
-        
-        //System.out.println(mediums.size());
+        /*Si la requête jquery contient un id de client, affiche pour tous les mediums
+        S'ils sont favoris de ce client.*/
+        List<Medium> favoris = (List<Medium>)request.getAttribute("favoris");
+
         JsonArray jsonMediums = new JsonArray();
         for(Medium med : mediums) {
             
-            //System.out.println(med);
             JsonObject jMed = new JsonObject();
             
             jMed.addProperty("denomination",med.getDenomination());
@@ -50,6 +52,15 @@ public class SerialisationListeMedium extends Serialisation {
                 jMed.addProperty("promotion",astro.getPromotion());
             }
             jMed.addProperty("type",type);
+            
+            if(favoris != null) {
+                
+                if(favoris.contains(med)) {
+                    jMed.addProperty("favori",true);
+                } else {
+                    jMed.addProperty("favori",false);
+                }
+            }
             
             jsonMediums.add(jMed);
         }

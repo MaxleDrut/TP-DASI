@@ -66,18 +66,31 @@ and open the template in the editor.
                     url: './ActionServlet',
                     method:'POST',
                     data: {
-                        todo:'lister-mediums'
+                        todo:'lister-mediums',
+                        idClient:'17'
                     },
                     dataType:'json'
                 }).done(function (response) {
+                    console.log(response);
                     $('#liste-mediums').empty();
                     $.each(response.mediums, function(index,medium) {
-                        $('#liste-mediums').append(
-                            '<tr>'+
-                            '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
-                            '<td> <div>'+ medium.presentation + '</div>' + medium.type + '</td>'+
-                            '</tr>'
-                        );
+                        if(medium.favori === true) {
+                            $('#liste-mediums').append(
+                                '<tr>'+
+                                '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
+                                '<td> <div>'+ medium.presentation + '<img src="Etoile_Favori.PNG" height="20"/> </div>' + 
+                                medium.type + '</td>' +
+                                '</tr>'
+                            );
+                        } else {
+                            $('#liste-mediums').append(
+                                '<tr>'+
+                                '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
+                                '<td> <div>'+ medium.presentation + '<img src="Etoile_Non_Fav.PNG" height="20"/> </div>' + 
+                                medium.type + '</td>' +
+                                '</tr>'
+                            );
+                        }
                     });
                 })
                 .fail(function(error) {
