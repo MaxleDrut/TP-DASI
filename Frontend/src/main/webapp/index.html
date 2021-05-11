@@ -13,14 +13,20 @@
         <!-- files -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <script src="./js/front_page.js" async defer></script>
-        <
 
     </head>
 
-    <body>
-        <nav>
-            <object>
-        </nav>
+
+    <body >
+        <section id="header"></section>
+        
+        <script>
+            $(document).ready(function() {
+                $('#header').load('login.html');
+            });
+        </script>
+
+        
 
         <section id="title">
             <h1>Predict'IF</h1>
@@ -54,6 +60,7 @@
         <footer>
             <p>© 2019 www.predict-if.com</p>
         </footer>
+        
 
     </body>
 </html>
