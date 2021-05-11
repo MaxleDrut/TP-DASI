@@ -18,11 +18,17 @@
 
     </head>
 
-    <body>
-        <object type="text/html" data="login.html" height="500" width="500" ></object>
+    <body >
+        <section id="header"></section>
+        
+        <script>
+            $(document).ready(function() {
+                $('#header').load('login.html');
+            });
+        </script>
 
         <nav>
-            <object>
+            
         </nav>
 
         <section id="title">
@@ -47,6 +53,7 @@
         <footer>
             <p>© 2019 www.predict-if.com</p>
         </footer>
+        
 
     </body>
 </html>
