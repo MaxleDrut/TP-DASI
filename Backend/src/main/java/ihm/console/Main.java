@@ -69,8 +69,8 @@ public class Main {
         testerRecupererNbConsultationsMediums();
         testerRecupererTop5Mediums();
         
-        /*authentificationIntervative();
-        testerAjouterMediumAuxFavoris();*/
+        /*authentificationIntervative();*/
+        testerAjouterMediumAuxFavoris();
     }
 
     public static void testerAidePrediction(int amour, int sante, int travail) {
