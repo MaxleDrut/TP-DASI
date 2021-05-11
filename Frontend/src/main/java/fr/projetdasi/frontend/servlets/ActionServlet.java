@@ -7,12 +7,15 @@ package fr.projetdasi.frontend.servlets;
 
 import dao.JpaUtil;
 import fr.projetdasi.frontend.actions.Action;
+import fr.projetdasi.frontend.actions.ActionAjoutFavoris;
 import fr.projetdasi.frontend.actions.ActionConnexion;
 import fr.projetdasi.frontend.actions.ActionInscription;
 import fr.projetdasi.frontend.actions.ActionListeMedium;
 import fr.projetdasi.frontend.actions.ActionRecupererClient;
+import fr.projetdasi.frontend.actions.ActionRetraitFavoris;
 import fr.projetdasi.frontend.serialisations.Serialisation;
 import fr.projetdasi.frontend.serialisations.SerialisationConnexion;
+import fr.projetdasi.frontend.serialisations.SerialisationFavoris;
 import fr.projetdasi.frontend.serialisations.SerialisationInscription;
 import fr.projetdasi.frontend.serialisations.SerialisationListeMedium;
 import fr.projetdasi.frontend.serialisations.SerialisationRecupererClient;
@@ -68,6 +71,20 @@ public class ActionServlet extends HttpServlet {
             {
                 action = new ActionRecupererClient();
                 serialisation = new SerialisationRecupererClient();
+                break;
+            }
+            
+            case "ajouter-favoris":
+            {
+                action = new ActionAjoutFavoris();
+                serialisation = new SerialisationFavoris();
+                break;
+            }
+            
+            case "retirer-favoris":
+            {
+                action = new ActionRetraitFavoris();
+                serialisation = new SerialisationFavoris();
                 break;
             }
                 
