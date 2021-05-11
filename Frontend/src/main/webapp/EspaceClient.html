@@ -37,12 +37,13 @@ and open the template in the editor.
             });
             
             function recupClient() {
+                
                 $.ajax({
                     url: './ActionServlet',
                     method:'POST',
                     data: {
                         todo:'recuperer-client',
-                        id:'17'
+                        id:17
                     },
                     dataType:'json'
                 }).done(function (response) {
@@ -71,31 +72,99 @@ and open the template in the editor.
                     },
                     dataType:'json'
                 }).done(function (response) {
-                    console.log(response);
                     $('#liste-mediums').empty();
                     $.each(response.mediums, function(index,medium) {
                         if(medium.favori === true) {
                             $('#liste-mediums').append(
                                 '<tr>'+
                                 '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
-                                '<td> <div>'+ medium.presentation + '<img src="Etoile_Favori.PNG" height="20"/> </div>' + 
+                                '<td> <div>'+ medium.presentation + '<img src="Etoile_Favori.PNG" height="20" id ='+medium.id+'> </div>' + 
                                 medium.type + '</td>' +
                                 '</tr>'
                             );
+                            listenerRetrait(medium.id);
                         } else {
                             $('#liste-mediums').append(
                                 '<tr>'+
                                 '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
-                                '<td> <div>'+ medium.presentation + '<img src="Etoile_Non_Fav.PNG" height="20"/> </div>' + 
+                                '<td> <div>'+ medium.presentation + '<img src="Etoile_Non_Fav.PNG" height="20" id ='+medium.id+'> </div>' + 
                                 medium.type + '</td>' +
                                 '</tr>'
                             );
+                            listenerAjout(medium.id);
                         }
+                        
                     });
                 })
                 .fail(function(error) {
                     console.log('erreur déso',error);
                 });                
+            }
+            
+            function listenerAjout(idMed) {
+                var image = window.document.getElementById(idMed);
+                image.addEventListener("click",function() {
+                    image.setAttribute("src","Etoile_Favori.PNG");
+                    
+                    //Ajout au favoris du medium dans la BD
+                    ajoutFavoris(idMed);
+                    //Retrait du listener
+                    imageClone = image.cloneNode(true);
+                    image.parentNode.replaceChild(imageClone, image);
+                    listenerRetrait(idMed);
+                });
+            }
+            
+            function listenerRetrait(idMed) {
+                var image = window.document.getElementById(idMed);
+                image.addEventListener("click",function() {
+                    image.setAttribute("src","Etoile_Non_Fav.PNG");
+                    
+                    //Retrait des favoris du medium dans la BD
+                    retraitFavoris(idMed);
+                    //Retrait du listener
+                    imageClone = image.cloneNode(true);
+                    image.parentNode.replaceChild(imageClone, image);
+                    listenerAjout(idMed);
+                });
+            }
+            
+            function ajoutFavoris(idMed) {
+                $.ajax({
+                    url: './ActionServlet',
+                    method:'POST',
+                    data: {
+                        todo:'ajouter-favoris',
+                        idClient:'17',
+                        idMedium:idMed
+                        
+                    },
+                    dataType:'json'
+                }).done(function (response) {
+                    console.log(response.success);
+                })
+                .fail(function(error) {
+                    console.log('Erreur d ajout aux favoris',error);
+                });    
+            }
+            
+            function retraitFavoris(idMed) {
+                $.ajax({
+                    url: './ActionServlet',
+                    method:'POST',
+                    data: {
+                        todo:'retirer-favoris',
+                        idClient:'17',
+                        idMedium:idMed
+                        
+                    },
+                    dataType:'json'
+                }).done(function (response) {
+                    console.log(response.success);
+                })
+                .fail(function(error) {
+                    console.log('Erreur d ajout aux favoris',error);
+                });    
             }
             
         </script>

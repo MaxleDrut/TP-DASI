@@ -35,6 +35,7 @@ public class SerialisationListeMedium extends Serialisation {
             
             JsonObject jMed = new JsonObject();
             
+            jMed.addProperty("id",med.getId());
             jMed.addProperty("denomination",med.getDenomination());
             jMed.addProperty("presentation",med.getPresentation());
             

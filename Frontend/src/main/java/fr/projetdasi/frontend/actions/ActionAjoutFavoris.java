@@ -7,33 +7,44 @@ package fr.projetdasi.frontend.actions;
 
 import javax.servlet.http.HttpServletRequest;
 import metier.modele.Client;
+import metier.modele.Medium;
 import metier.service.Services;
 
-public class ActionRecupererClient extends Action{
+public class ActionAjoutFavoris extends Action{
 
     
     @Override
     public void executer(HttpServletRequest request) {
         //Recupération des paramètres de la Requête
-        String idString = request.getParameter("id");
+        String idClString = request.getParameter("idClient");
+        String idMedString = request.getParameter("idMedium");
         
-        long id;
         try {
-            id = Long.valueOf(idString);
-            Services service = new Services();
+            long idClient = Long.valueOf(idClString);
+            long idMedium = Long.valueOf(idMedString);
             
-            Client client = service.rechercherClient(id);
+            Services service = new Services();
+            Client client = service.rechercherClient(idClient);
+            Medium medium = service.obtenirMedium(idMedium);
+            
+            if(medium == null) {
+                throw new Exception("Le medium est introuvable");
+            }
             if(client == null) {
                 throw new Exception("Le client est introuvable");
             }
-            request.setAttribute("client",client);
+            
+            service.ajouterMediumAuxFavoris(medium, client);
             request.setAttribute("success",true);
+            request.setAttribute("medium",medium);
+            request.setAttribute("client",client);
         } catch (Exception e) {
             System.out.println(e);
             request.setAttribute("success",false);
         }
         
         //Instanciation de la classe service
+        
         
     }
     
