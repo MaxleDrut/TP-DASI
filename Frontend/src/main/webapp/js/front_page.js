@@ -40,25 +40,26 @@ function recupListeMediums() {
         });
 
         // populate front_mediums
-        for(let i=0; i<2; i++) {
-            $('#front_mediums').append(
-                '<div>'+
+        if(response.mediums.length >= 2) {
+            for(let i=0; i<2; i++) {
+                $('#front_mediums').append(
                     '<div>'+
-                        '<img src="img/icone_bonhomme.PNG" height="40"/>'+ 
-                    '<div>'+
-                    '<p>'+
-                        response.mediums[i].denomination+
-                    '<p>'+
-                    '<p>'+
-                        response.mediums[i].type+
-                    '<p>'+
-                '</div>'
-            );
+                        '<div>'+
+                            '<img src="img/icone_bonhomme.PNG" height="40"/>'+ 
+                        '<div>'+
+                        '<p>'+
+                            response.mediums[i].denomination+
+                        '<p>'+
+                        '<p>'+
+                            response.mediums[i].type+
+                        '<p>'+
+                    '</div>'
+                );
+            }
+        } else {
+            console.log("No data in response/mediums");
         }
-        $.each(response.mediums, function(index,medium) {
-            console.log(medium.denomination);
-            
-        });
+        
     })
     .fail(function(error) {
         console.log('erreur déso',error);
