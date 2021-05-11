@@ -1,36 +1,89 @@
-
-function pageInit() {
-    // hide selected sections at the beginning
-    $(".hide").hide();
-}
-
-$(document).ready(pageInit());
-
-async function voirMediums() {
-    console.log("[debug] clic sur 'Voir nos médiums'");
+// execute at page load
+// jquery hide & show : https://www.w3schools.com/jquery/jquery_hide_show.asp
+/*async function recupListeMediums() {
     try {
         const res = await $.ajax({
-            url: './ActionServlet?action=',
+            url: './ActionServlet',
+            method:'POST',
             data: {
                 todo:'lister-mediums'
             },
-            method: 'GET',
             dataType: 'json'
         })
-        res.done((response) => {
+        .done((response) => {
+            console.log(response);
 
+            // inject elements inside listMediums section
+            $.each(response.mediums, function(index, medium) {
+                console.log(medium.denomination);
+                $('#table_list_medium').append(
+                    '<tr>'+
+                        '<td>'+
+                            medium.denomination+
+                        '</td>'+
+                        '<td>'+
+                            medium.type+
+                        '</td>'+
+                        '<td>'+
+                            medium.presentation+
+                        '</td>'+
+                    '</tr>'
+                );
+            });
+        })
+        .fail((error) => {
+            console.log('erreur requête lister-mediums', error);
         });
-        res.fail((error) => {
-            
-        });
-        console.log(res);
 
     } catch (err) {
         console.log(err);
     }
+}*/
 
+function recupListeMediums() {
+    $.ajax({
+        url: './ActionServlet',
+        method:'POST',
+        data: {
+            todo:'lister-mediums'
+        },
+        dataType:'json'
+    }).done(function (response) {
+        console.log(response);
+        $('#table_list_medium').empty();
+        $('#ta').append(
+            '<table id="table_list_medium">'+
+                '<tr>'+
+                    '<th>Denomination</th>'+
+                    '<th>Spécialité</th>'+
+                    '<th>Présentation</th>'+
+                '</tr>'+
+            '</table>'
+        );
+        $.each(response.mediums, function(index,medium) {
+            console.log(medium.denomination);
+            $('#liste-mediums').append(
+              '<tr>'+'<td>'+
+              "Denomination : "+medium.denomination+" | Presentation : "+medium.presentation +
+              '</td>'+'</tr>'
+            );
+        });
+    })
+    .fail(function(error) {
+        console.log('erreur déso',error);
+    });                
+}
 
-    // inject elements inside listMediums section
+function pageInit() {
+    $(".hide").hide(); // hide selected sections at the beginning
+    recupListeMediums();
+}
+
+$(document).ready(pageInit());
+
+// button functions
+async function voirMediums() {
+    console.log("[debug] clic sur 'Voir nos médiums'");
     $("#list_mediums").show();
 
     // hide button
