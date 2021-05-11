@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Espace Client</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Librairie Javascript: jQuery (v3.4.1) -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    </head>
+    <body>
+        <h1 id='nomClient'></h1>
+        <h2>Laissez les astres vous guider aujourd'hui</h2>
+        
+        <div id='profilAstral'>
+            
+        </div>
+        
+        <div>
+            <h2>Contactez nos mediums dès maintenant</h2>
+            
+            <table id="liste-mediums">
+                
+            </table>
+            
+        </div>
+        
+        <script>
+            $(document).ready(function() 
+            {
+                recupClient();
+                recupListeMediums();
+            });
+            
+            function recupClient() {
+                $.ajax({
+                    url: './ActionServlet',
+                    method:'POST',
+                    data: {
+                        todo:'recuperer-client',
+                        id:'17'
+                    },
+                    dataType:'json'
+                }).done(function (response) {
+                    $('#profilAstral').append(
+                            '<div> Votre signe astrologique : '+response.astral.zodiac + '</div>' +
+                            '<div> Votre signe chinois : '+response.astral.chinois + '</div>' +
+                            '<div> Votre couleur porte-bonheur : '+response.astral.couleur + '</div>' +
+                            '<div> Votre animal totem : '+response.astral.animal + '</div>'
+                    );
+                    $('#nomClient').append(
+                            'Bonjour '+response.prenom + ' !'
+                    );
+                })
+                .fail(function(error) {
+                    console.log('erreur récup client',error);
+                });    
+            }
+            
+            function recupListeMediums() {
+                $.ajax({
+                    url: './ActionServlet',
+                    method:'POST',
+                    data: {
+                        todo:'lister-mediums',
+                        idClient:'17'
+                    },
+                    dataType:'json'
+                }).done(function (response) {
+                    console.log(response);
+                    $('#liste-mediums').empty();
+                    $.each(response.mediums, function(index,medium) {
+                        if(medium.favori === true) {
+                            $('#liste-mediums').append(
+                                '<tr>'+
+                                '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
+                                '<td> <div>'+ medium.presentation + '<img src="Etoile_Favori.PNG" height="20"/> </div>' + 
+                                medium.type + '</td>' +
+                                '</tr>'
+                            );
+                        } else {
+                            $('#liste-mediums').append(
+                                '<tr>'+
+                                '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
+                                '<td> <div>'+ medium.presentation + '<img src="Etoile_Non_Fav.PNG" height="20"/> </div>' + 
+                                medium.type + '</td>' +
+                                '</tr>'
+                            );
+                        }
+                    });
+                })
+                .fail(function(error) {
+                    console.log('erreur déso',error);
+                });                
+            }
+            
+        </script>
+            
+    </body>
+</html>

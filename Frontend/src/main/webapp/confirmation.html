@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Prédict'IF - Confirmation d'inscription</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </head>
+    <body>
+        <p><span class="username"></span>, bienvenue parmi nous ! 
+            Votre inscription a bien été prise en compte, et vous pouvez maintenant utiliser nos services !</p>
+        <script>
+            $(window).ready(() => {
+                let searchParams = new URLSearchParams(window.location.search);
+                let username = searchParams.get("name");
+                console.log(username);
+                $(".username").text(username);
+            });
+        </script>
+    </body>
+</html>

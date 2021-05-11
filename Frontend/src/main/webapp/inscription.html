@@ -9,6 +9,7 @@ and open the template in the editor.
         <title>Prédict'IF - Inscription</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
     <body>
         <h1>Inscription</h1>
@@ -17,7 +18,7 @@ and open the template in the editor.
             <span>Rejoignez Prédict'IF pour connaître votre année en pleine sérénité</span>
         </article>
         
-        <form action="./ActionServlet?action=inscription" method="POST">
+        <form onsubmit="submitInscription(event); return false;" action="#" method="POST">
             <div class="field-group">
                 <label for="inscription-firstname">Votre prénom</label>
                 <input type="text" placeholder="Votre prénom" id="inscription-firstname" name="firstname" />
@@ -35,7 +36,7 @@ and open the template in the editor.
             
             <div class="field-group">
                 <label for="inscription-birthdate">Votre date de naissance</label>
-                <input type="date" placeholder="01/01/1970" id="inscription-birthdate" name="birthdate"/>
+                <input type="date" id="inscription-birthdate" name="birthdate"/>
             </div>
             
             <div class="field-group">
@@ -63,7 +64,57 @@ and open the template in the editor.
                 <label for="inscription-cgu">J'ai lu et j'accepte les conditions générales d'utilisation</label>
             </div>
 
-            <button>S'inscrire maintenant !</button>
+            <button type="submit">S'inscrire maintenant !</button>
         </form>
+        
+        <script>
+            function submitInscription(event)
+            {
+                event.preventDefault();
+                
+                let firstname = $("#inscription-firstname").val();
+                let lastname = $("#inscription-lastname").val();
+                let address = $("#inscription-address").val();
+                let birthdate = $("#inscription-birthdate").val();
+                let email = $("#inscription-email").val();
+                let telephone = $("#inscription-telephone").val();
+                let password = $("#inscription-password").val();
+                let promote_check = $("#inscription-promote").val();
+                let cgu_check = $("#inscription-cgu").val();
+                
+                $.ajax({
+                   url: "./ActionServlet?todo=inscription",
+                   data: {
+                       firstname: firstname,
+                       lastname: lastname,
+                       address: address,
+                       birthdate: birthdate,
+                       email: email,
+                       phone: telephone,
+                       password: password,
+                       "promotions-check": promote_check,
+                       "cgu-check": cgu_check
+                   },
+                   method: "POST"
+                })
+                .done(response => {
+                    if(response.success)
+                    {
+                        let name = response.name;
+                        alert("Bienvenue parmi nous, " + name + " !");
+                        location.href = "confirmation.html?name=" + name;
+                    }
+                    else
+                    {
+                        let message = response.message;
+                        alert(message ? message : "Une erreur inconnue est survenue");
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête");
+                    console.log(error);
+                });
+            }
+        </script>
     </body>
 </html>
