@@ -175,6 +175,28 @@ public class Services {
 
        return listeClients;
     }
+    
+    /**
+     * Service permettant la récupération d'un utilisateur (client ou employé) par son id
+     * @param utilisateurId : l'identifiant de l'utilisateur
+     * @return une instance de l'utilisateur recherché ou null en cas d'exception
+     */
+    public Utilisateur rechercherUtilisateur(Long utilisateurId)
+    {
+        UtilisateurDao dao = new UtilisateurDao();
+        Utilisateur utilisateur;
+
+        try {
+            JpaUtil.creerContextePersistance();
+            utilisateur = dao.chercherParId(utilisateurId);
+        } catch(Exception e) {
+            Logger.getLogger("Services").log(Level.SEVERE, "Erreur lors de la récupération par id de l'utilisateur !\n Message : " + e.getLocalizedMessage());
+            utilisateur = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        return utilisateur;
+    }
 
     /**
      * Service permettant la récupération d'un employé par son id

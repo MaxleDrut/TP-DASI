@@ -21,4 +21,8 @@ public class UtilisateurDao
         query.setParameter("mail", mail);
         return query.getSingleResult();
     }
+    
+    public Utilisateur chercherParId(Long id) {
+        return JpaUtil.obtenirContextePersistance().find(Utilisateur.class, id);
+    }
 }

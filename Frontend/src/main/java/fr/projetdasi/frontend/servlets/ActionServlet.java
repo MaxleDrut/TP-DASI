@@ -8,10 +8,12 @@ package fr.projetdasi.frontend.servlets;
 import dao.JpaUtil;
 import fr.projetdasi.frontend.actions.Action;
 import fr.projetdasi.frontend.actions.ActionConnexion;
+import fr.projetdasi.frontend.actions.ActionConsultationAssignee;
 import fr.projetdasi.frontend.actions.ActionInscription;
 import fr.projetdasi.frontend.actions.ActionListeMedium;
 import fr.projetdasi.frontend.serialisations.Serialisation;
 import fr.projetdasi.frontend.serialisations.SerialisationConnexion;
+import fr.projetdasi.frontend.serialisations.SerialisationConsultationAssignee;
 import fr.projetdasi.frontend.serialisations.SerialisationInscription;
 import fr.projetdasi.frontend.serialisations.SerialisationListeMedium;
 import java.io.IOException;
@@ -58,7 +60,13 @@ public class ActionServlet extends HttpServlet {
             {
                 action = new ActionListeMedium();
                 serialisation = new SerialisationListeMedium();
-
+                break;
+            }
+            
+            case "consultation-assignee":
+            {
+                action = new ActionConsultationAssignee();
+                serialisation = new SerialisationConsultationAssignee();
                 break;
             }
                 

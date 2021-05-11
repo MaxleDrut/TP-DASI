@@ -55,10 +55,6 @@ public class SerialisationConnexion extends Serialisation {
                                                
         Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
         PrintWriter out = this.getWriter(response);
-        gson.toJson(reponse,out);
-        out.close();
-        
-        
+        gson.toJson(reponse, out);
     }
-    
 }
