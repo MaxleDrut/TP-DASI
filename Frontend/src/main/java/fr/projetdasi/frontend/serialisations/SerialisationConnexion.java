@@ -37,14 +37,16 @@ public class SerialisationConnexion extends Serialisation {
                 Client client = (Client) utilisateur;
                 utilisateurProperty.addProperty("id", client.getId());
                 utilisateurProperty.addProperty("prenom", client.getPrenom());
+                utilisateurProperty.addProperty("redirection", "EspaceClient.html");
                 
             }else{
                 Employe employe = (Employe) utilisateur;
                 utilisateurProperty.addProperty("id", employe.getId());
                 utilisateurProperty.addProperty("prenom", employe.getPrenom());
+                utilisateurProperty.addProperty("redirection", "EspaceClient.html");
             }
             reponse.addProperty("connexion", true);
-            reponse.add("client", utilisateurProperty);
+            reponse.add("utilisateur", utilisateurProperty);
             Cookie cookie = new Cookie("id",String.valueOf(utilisateur.getId()));
             response.addCookie(cookie);
             

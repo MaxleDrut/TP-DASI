@@ -13,6 +13,13 @@ and open the template in the editor.
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     </head>
     <body>
+        <section id="header"></section>
+        
+        <script>
+            $(document).ready(function() {
+                $('#header').load('login.html');
+            });
+        </script>
         <h1 id='nomClient'></h1>
         <h2>Laissez les astres vous guider aujourd'hui</h2>
         
