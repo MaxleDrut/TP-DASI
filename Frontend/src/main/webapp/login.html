@@ -6,18 +6,21 @@ and open the template in the editor.
 -->
 <header style="display: flex; flex-direction: row;">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <div id="logo" style="display: flex; flex-direction: row; margin-left: 30px;">
-        <img src="static/images/bouleCristal.PNG" height="30" width="30"/>
+    <div id="logo" style="display: flex; flex-direction: row; margin: 0 30px;">
+        <img alt="boule de cristal" src="static/images/bouleCristal.PNG" height="30" width="30"/>
         <h1 style="margin-block-start:0px; margin-block-end:0px;">Predict'IF</h1>
-        <img src="static/images/bouleCristal.PNG" height="30" width="30"/>
+        <img alt="boule de cristal" src="static/images/bouleCristal.PNG" height="30" width="30"/>
     </div>
     
     <section class="login" >
-    
+        <section id="headerUserInfo" style="display: none;flex-direction: row;">
+            <img alt="photo de profil" src="icone_bonhomme.PNG" width="20" height="20"/>
+            <span id="headerPrenomUser" style="margin: 0 10px;"></span>
+            <button id="bouton-deconnexion" style="display: none;">Deconnexion</button>
+        </section>
         <input type="text" placeholder="Email" id="champ_login"/>
         <input type="password" placeholder="Mot de passe" id="champ_password"/>
         <button  id="bouton-connexion" >Connexion</button>
-        <button id="bouton-deconnexion" style="display: none;">Deconnexion</button>
         
         
         <script>
@@ -28,6 +31,7 @@ and open the template in the editor.
                 let cookie = recupCookie();            
                 if(!cookie){
                     $('#bouton-connexion').on( 'click', connexion);
+                    
                 }else{
                     masquerConnexion();
                 }
@@ -59,11 +63,11 @@ and open the template in the editor.
                             console.log('Response',response); // LOG dans Console Javascript
                             
                             if (response.connexion) {
-                                // TODO: afficher les informations du client dans la notification
-                                // Exemple: Connexion de Ada Lovelace (ID 1)
-                                $('#err').html("Connexion de "+response.client.prenom);
+                                document.cookie= recupCookie()+"." +response.utilisateur.prenom;
                                 masquerConnexion();
-                                
+                                window.location.href=response.utilisateur.redirection;
+                            }else{
+                                alert("Erreur lors de la connexion");
                             }
                         })
                         .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
@@ -78,6 +82,9 @@ and open the template in the editor.
                         
             }
             
+            
+            
+            
             function masquerConnexion(){
                 var champ_login = document.getElementById('champ_login');
                 champ_login.style.display="none";
@@ -87,7 +94,14 @@ and open the template in the editor.
 
                 var bouton_connexion = document.getElementById('bouton-connexion');
                 bouton_connexion.style.display="none";
-
+                
+                let cookie = recupCookie();
+                let infosCookie = cookie.split('.');
+                $('#headerPrenomUser').html(infosCookie[1]);
+                
+                var infosUser = document.getElementById('headerUserInfo');
+                infosUser.style.display="flex";
+                
                 var bouton_deconnexion = document.getElementById('bouton-deconnexion');
                 bouton_deconnexion.style.display="inline";
             }
@@ -100,7 +114,10 @@ and open the template in the editor.
                 champ_password.style.display="inline";
                     
                 var bouton_connexion = document.getElementById('bouton-connexion');
-                bouton_connexion.style.display="inline";
+                infosUser.style.display="inline";
+                
+                var infosUser = document.getElementById('headerUserInfo');
+                bouton_connexion.style.display="none";
                     
                 var bouton_deconnexion = document.getElementById('bouton-deconnexion');
                 bouton_deconnexion.style.display="none";
@@ -127,6 +144,8 @@ and open the template in the editor.
                 }
                 return null;
             }
+            
+            
         </script>
         
     </section>

@@ -74,6 +74,7 @@ public class ActionServlet extends HttpServlet {
                 break;
             }
             
+            
             case "ajouter-favoris":
             {
                 action = new ActionAjoutFavoris();

@@ -12,6 +12,15 @@ and open the template in the editor.
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
     <body>
+        
+        <section id="header"></section>
+        
+        <script>
+            $(document).ready(function() {
+                $('#header').load('login.html');
+            });
+        </script>
+        
         <p><span class="username"></span>, bienvenue parmi nous ! 
             Votre inscription a bien été prise en compte, et vous pouvez maintenant utiliser nos services !</p>
         <script>
