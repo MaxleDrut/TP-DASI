@@ -39,18 +39,19 @@ and open the template in the editor.
         <script>
             $(document).ready(function() 
             {
-                recupClient();
-                recupListeMediums();
+                var idClient = idFromCookie(recupCookie());
+                recupClient(idClient);
+                recupListeMediums(idClient);
             });
             
-            function recupClient() {
+            function recupClient(idCli) {
                 
                 $.ajax({
                     url: './ActionServlet',
                     method:'POST',
                     data: {
                         todo:'recuperer-client',
-                        id:17
+                        id:idCli
                     },
                     dataType:'json'
                 }).done(function (response) {
@@ -69,13 +70,13 @@ and open the template in the editor.
                 });    
             }
             
-            function recupListeMediums() {
+            function recupListeMediums(idCli) {
                 $.ajax({
                     url: './ActionServlet',
                     method:'POST',
                     data: {
                         todo:'lister-mediums',
-                        idClient:'17'
+                        idClient:idCli
                     },
                     dataType:'json'
                 }).done(function (response) {
@@ -89,7 +90,7 @@ and open the template in the editor.
                                 medium.type + '</td>' +
                                 '</tr>'
                             );
-                            listenerRetrait(medium.id);
+                            listenerRetrait(idCli,medium.id);
                         } else {
                             $('#liste-mediums').append(
                                 '<tr>'+
@@ -98,51 +99,51 @@ and open the template in the editor.
                                 medium.type + '</td>' +
                                 '</tr>'
                             );
-                            listenerAjout(medium.id);
+                            listenerAjout(idCli,medium.id);
                         }
                         
                     });
                 })
                 .fail(function(error) {
-                    console.log('erreur déso',error);
+                    console.log('Erreur lors de la recup des Mediums',error);
                 });                
             }
             
-            function listenerAjout(idMed) {
+            function listenerAjout(idCli,idMed) {
                 var image = window.document.getElementById(idMed);
                 image.addEventListener("click",function() {
                     image.setAttribute("src","Etoile_Favori.PNG");
                     
                     //Ajout au favoris du medium dans la BD
-                    ajoutFavoris(idMed);
+                    ajoutFavoris(idCli,idMed);
                     //Retrait du listener
                     imageClone = image.cloneNode(true);
                     image.parentNode.replaceChild(imageClone, image);
-                    listenerRetrait(idMed);
+                    listenerRetrait(idCli,idMed);
                 });
             }
             
-            function listenerRetrait(idMed) {
+            function listenerRetrait(idCli,idMed) {
                 var image = window.document.getElementById(idMed);
                 image.addEventListener("click",function() {
                     image.setAttribute("src","Etoile_Non_Fav.PNG");
                     
                     //Retrait des favoris du medium dans la BD
-                    retraitFavoris(idMed);
+                    retraitFavoris(idCli,idMed);
                     //Retrait du listener
                     imageClone = image.cloneNode(true);
                     image.parentNode.replaceChild(imageClone, image);
-                    listenerAjout(idMed);
+                    listenerAjout(idCli,idMed);
                 });
             }
             
-            function ajoutFavoris(idMed) {
+            function ajoutFavoris(idCli,idMed) {
                 $.ajax({
                     url: './ActionServlet',
                     method:'POST',
                     data: {
                         todo:'ajouter-favoris',
-                        idClient:'17',
+                        idClient:idCli,
                         idMedium:idMed
                         
                     },
@@ -155,13 +156,13 @@ and open the template in the editor.
                 });    
             }
             
-            function retraitFavoris(idMed) {
+            function retraitFavoris(idCli,idMed) {
                 $.ajax({
                     url: './ActionServlet',
                     method:'POST',
                     data: {
                         todo:'retirer-favoris',
-                        idClient:'17',
+                        idClient:idCli,
                         idMedium:idMed
                         
                     },
@@ -172,6 +173,36 @@ and open the template in the editor.
                 .fail(function(error) {
                     console.log('Erreur d ajout aux favoris',error);
                 });    
+            }
+            
+            function recupCookie(){
+                let nameCookie = "id";
+                let cookies = document.cookie.split(';');
+                for(var i=0;i < cookies.length;i++) {
+                    var c = cookies[i];
+                    while (c.charAt(0)==' ') {
+                        c = c.substring(1,c.length);
+                    }
+                    if (c.indexOf(nameCookie) == 0){
+                        return nameCookie+c.substring(nameCookie.length,c.length);
+                    }
+                }
+                return null;
+            }
+            
+            function idFromCookie(cookie) {
+                if (cookie === null) {
+                    return null;
+                }
+                
+                var start=3; //Début de la partie du cookie qui nous intéresse (les 3 premiers chars sont id=)
+                var end=3;
+                while(cookie.charAt(end) >= '0' && cookie.charAt(end) <= '9') { //Recherche de la fin du n° de l'id.
+                    end++;
+                }
+                
+                var id = cookie.substring(start,end);
+                return id;
             }
             
         </script>
