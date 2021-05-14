@@ -36,12 +36,22 @@ and open the template in the editor.
             
         </div>
         
+        <div>
+            <h2>Historique de vos derniers contacts</h2>
+            
+            <table id="historique-contacts">
+                
+            </table>
+            
+        </div>
+        
         <script>
             $(document).ready(function() 
             {
                 var idClient = idFromCookie(recupCookie());
                 recupClient(idClient);
                 recupListeMediums(idClient);
+                recupHistoriqueCons(idClient);
             });
             
             function recupClient(idCli) {
@@ -87,7 +97,7 @@ and open the template in the editor.
                                 '<tr>'+
                                 '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
                                 '<td> <div>'+ medium.presentation + '<img src="Etoile_Favori.PNG" height="20" id ='+medium.id+'> </div>' + 
-                                medium.type + '</td>' +
+                                '<div>'+medium.type + '</div> </td>' +
                                 '</tr>'
                             );
                             listenerRetrait(idCli,medium.id);
@@ -96,7 +106,7 @@ and open the template in the editor.
                                 '<tr>'+
                                 '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
                                 '<td> <div>'+ medium.presentation + '<img src="Etoile_Non_Fav.PNG" height="20" id ='+medium.id+'> </div>' + 
-                                medium.type + '</td>' +
+                                '<div>'+medium.type + '</div> </td>' +
                                 '</tr>'
                             );
                             listenerAjout(idCli,medium.id);
@@ -107,6 +117,45 @@ and open the template in the editor.
                 .fail(function(error) {
                     console.log('Erreur lors de la recup des Mediums',error);
                 });                
+            }
+            
+            function recupHistoriqueCons(idCli) {
+                $.ajax({
+                    url: './ActionServlet',
+                    method:'POST',
+                    data: {
+                        todo:'historique-consultations-client',
+                        idClient:idCli
+                    },
+                    dataType:'json'
+                }).done(function (response) {
+                    $('#historique-contacts').empty();
+                    $.each(response.consultations, function(index,consultation) {
+                        if(consultation.genreMedium === 'H') {
+                            $('#historique-contacts').append(
+                                '<tr>'+
+                                '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + consultation.denominationMedium + '</td>' +
+                                '<td> <div> Rencontré le ' +consultation.debut+
+                                ', la consultation a duré '+consultation.duree+' minutes </div>' +
+                                '<div>'+consultation.typeMedium+'</div> </td>' +
+                                '</tr>'
+                            );
+                        } else {
+                            $('#historique-contacts').append(
+                                '<tr>'+
+                                '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + consultation.denominationMedium + '</td>' +
+                                '<td> <div> Rencontrée le ' +consultation.debut+
+                                ', la consultation a duré '+consultation.duree+' minutes </div>' +
+                                '<div>'+consultation.typeMedium+'</div> </td>' +
+                                '</tr>'
+                            );
+                        }
+                        
+                    });
+                })
+                .fail(function(error) {
+                    console.log('Erreur lors de la recup de l historique',error);
+                });  
             }
             
             function listenerAjout(idCli,idMed) {
