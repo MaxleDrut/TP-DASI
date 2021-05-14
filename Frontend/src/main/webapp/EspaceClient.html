@@ -97,7 +97,9 @@ and open the template in the editor.
                                 '<tr>'+
                                 '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
                                 '<td> <div>'+ medium.presentation + '<img src="Etoile_Favori.PNG" height="20" id ='+medium.id+'> </div>' + 
-                                '<div>'+medium.type + '</div> </td>' +
+                                '<div>'+medium.type + 
+                                '<button  onclick="location.href=\'ValidationContact.html?idMedium='+medium.id+' \' "> Contacter maintenant </button>' +
+                                '</div> </td>' +
                                 '</tr>'
                             );
                             listenerRetrait(idCli,medium.id);
@@ -106,7 +108,9 @@ and open the template in the editor.
                                 '<tr>'+
                                 '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
                                 '<td> <div>'+ medium.presentation + '<img src="Etoile_Non_Fav.PNG" height="20" id ='+medium.id+'> </div>' + 
-                                '<div>'+medium.type + '</div> </td>' +
+                                '<div>'+medium.type + 
+                                '<button  onclick="location.href=\'ValidationContact.html?idMedium='+medium.id+' \' "> Contacter maintenant </button>' + 
+                                '</div> </td>' +
                                 '</tr>'
                             );
                             listenerAjout(idCli,medium.id);
@@ -137,7 +141,9 @@ and open the template in the editor.
                                 '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + consultation.denominationMedium + '</td>' +
                                 '<td> <div> Rencontré le ' +consultation.debut+
                                 ', la consultation a duré '+consultation.duree+' minutes </div>' +
-                                '<div>'+consultation.typeMedium+'</div> </td>' +
+                                '<div>'+consultation.typeMedium +
+                                '<button  onclick="location.href=\'ValidationContact.html?idMedium='+consultation.idMedium+' \' "> Recontacter maintenant </button>' + 
+                                '</div> </td>' +
                                 '</tr>'
                             );
                         } else {
@@ -146,7 +152,9 @@ and open the template in the editor.
                                 '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + consultation.denominationMedium + '</td>' +
                                 '<td> <div> Rencontrée le ' +consultation.debut+
                                 ', la consultation a duré '+consultation.duree+' minutes </div>' +
-                                '<div>'+consultation.typeMedium+'</div> </td>' +
+                                '<div>'+consultation.typeMedium +
+                                '<button  onclick="location.href=\'ValidationContact.html?idMedium='+consultation.idMedium+' \' "> Recontacter maintenant </button>' + 
+                                '</div> </td>' +
                                 '</tr>'
                             );
                         }
