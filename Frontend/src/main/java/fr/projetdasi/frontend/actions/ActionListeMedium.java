@@ -7,7 +7,7 @@ package fr.projetdasi.frontend.actions;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import metier.modele.Client;
 import metier.modele.Medium;
 import metier.service.Services;
 
@@ -18,6 +18,27 @@ public class ActionListeMedium extends Action
     {
         Services services = new Services();
         List<Medium> mediums = services.obtenirListeMediums();
+        
         request.setAttribute("mediums",mediums);
+        
+        String idString = request.getParameter("idClient");
+        
+        //Si le client est renseigné, recherche aussi les mediums favoris du client
+        if(idString != null) {
+            long id;
+            try {
+                id = Long.valueOf(idString);
+            } catch (Exception e) {
+                System.out.println(e);
+                id = 0;
+            }
+            
+            Client client = services.rechercherClient(id);
+            List<Medium> favoris = client.getMediumsFavoris();
+            request.setAttribute("favoris",favoris);
+        } else {
+            request.setAttribute("favoris",null);
+        }
+        
     }
 }

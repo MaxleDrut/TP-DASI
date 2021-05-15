@@ -4,65 +4,148 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<header>
+<header style="display: flex; flex-direction: row;">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <div id="logo">
-        <img src="bouleCristal.PNG" height="10"/>
-        <h1>Predict'IF</h1>
+    <div id="logo" style="display: flex; flex-direction: row; margin: 0 30px;">
+        <img alt="boule de cristal" src="static/images/bouleCristal.PNG" height="30" width="30"/>
+        <h1 style="margin-block-start:0px; margin-block-end:0px;">Predict'IF</h1>
+        <img alt="boule de cristal" src="static/images/bouleCristal.PNG" height="30" width="30"/>
     </div>
     
-    <section class="login">
-    
+    <section class="login" >
+        <section id="headerUserInfo" style="display: none;flex-direction: row;">
+            <img alt="photo de profil" src="icone_bonhomme.PNG" width="20" height="20"/>
+            <span id="headerPrenomUser" style="margin: 0 10px;"></span>
+            <button id="bouton-deconnexion" style="display: none;">Deconnexion</button>
+        </section>
         <input type="text" placeholder="Email" id="champ_login"/>
         <input type="password" placeholder="Mot de passe" id="champ_password"/>
         <button  id="bouton-connexion" >Connexion</button>
-        <p id="err">nom</p>
+        
         
         <script>
-            $(document).ready( function () {
-                $('#bouton-connexion').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
-
-                    console.log("clic sur le bouton de connexion"); // LOG dans Console Javascript
-                    $('#notification').html("Connexion..."); // Message pour le paragraphe de notification
-
-                    // Récupération de la valeur des champs du formulaire
-                    var champLogin = $('#champ_login').val();
-                    var champPassword = $('#champ_password').val();
+            $(document).ready(majConnexion);
+             
+            function majConnexion(){
+                
+                let cookie = recupCookie();            
+                if(!cookie){
+                    $('#bouton-connexion').on( 'click', connexion);
                     
-                    var liste = document.cookie;
-                    console.log(liste);
-                    // Appel AJAX
-                    $.ajax({
-                        url: './ActionServlet',
-                        method: 'POST',
-                        data: {
-                            todo: 'connexion',
-                            login: champLogin,
-                            password: champPassword
-                        },
-                        dataType: 'json'
-                    })
-                    .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
-                        console.log('Response',response); // LOG dans Console Javascript
-                        if (response.connexion) {
-                            $('#notification').html("Connexion OK");  // Message pour le paragraphe de notification
-                            // TODO: afficher les informations du client dans la notification
-                            // Exemple: Connexion de Ada Lovelace (ID 1)
-                            $('#err').html("Connexion de "+response.client.prenom);
-                        }
-                        else {
-                            $('#notification').html("Erreur de Connexion"); // Message pour le paragraphe de notification
-                        }
-                    })
-                    .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
-                        console.log('Error',error); // LOG dans Console Javascript
-                        alert("Erreur lors de la connexion");
-                    })
-                    .always( function () { // Fonction toujours appelée
+                }else{
+                    masquerConnexion();
+                }
+                $('#bouton-deconnexion').on( 'click', deconnexion);  
+                
+            }
+            
+            function connexion(){
+                
+                        console.log("clic sur le bouton de connexion"); // LOG dans Console Javascript
+
+                        // Récupération de la valeur des champs du formulaire
+                        var champLogin = $('#champ_login').val();
+                        var champPassword = $('#champ_password').val();
+
                         
-                    });
-                });
-            });
+                        // Appel AJAX
+                        $.ajax({
+                            url: './ActionServlet',
+                            method: 'POST',
+                            data: {
+                                todo: 'connexion',
+                                login: champLogin,
+                                password: champPassword
+                            },
+                            dataType: 'json'
+                        })
+                        .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            console.log('Response',response); // LOG dans Console Javascript
+                            
+                            if (response.connexion) {
+                                document.cookie= recupCookie()+"." +response.utilisateur.prenom;
+                                masquerConnexion();
+                                window.location.href=response.utilisateur.redirection;
+                            }else{
+                                alert("Erreur lors de la connexion");
+                            }
+                        })
+                        .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            console.log('Error',error); // LOG dans Console Javascript
+                            alert("Erreur lors de la connexion");
+                        })
+                        .always( function () { // Fonction toujours appelée
+
+                        });
+                        
+                        
+                        
+            }
+            
+            
+            
+            
+            function masquerConnexion(){
+                var champ_login = document.getElementById('champ_login');
+                champ_login.style.display="none";
+
+                var champ_password = document.getElementById('champ_password');
+                champ_password.style.display="none";
+
+                var bouton_connexion = document.getElementById('bouton-connexion');
+                bouton_connexion.style.display="none";
+                
+                let cookie = recupCookie();
+                let infosCookie = cookie.split('.');
+                $('#headerPrenomUser').html(infosCookie[1]);
+                
+                var infosUser = document.getElementById('headerUserInfo');
+                infosUser.style.display="flex";
+                
+                var bouton_deconnexion = document.getElementById('bouton-deconnexion');
+                bouton_deconnexion.style.display="inline";
+            }
+            
+             function masquerDeconnexion(){
+                var champ_login = document.getElementById('champ_login');
+                champ_login.style.display="inline";
+                    
+                var champ_password = document.getElementById('champ_password');
+                champ_password.style.display="inline";
+                    
+                var bouton_connexion = document.getElementById('bouton-connexion');
+                infosUser.style.display="inline";
+                
+                var infosUser = document.getElementById('headerUserInfo');
+                bouton_connexion.style.display="none";
+                    
+                var bouton_deconnexion = document.getElementById('bouton-deconnexion');
+                bouton_deconnexion.style.display="none";
+            }
+            
+            function deconnexion(){
+                    document.cookie = recupCookie()+ " ;expires = Thu, 01 Jan 1970 00:00:00 GMT";
+                    window.location.href="index.html";
+                    masquerDeconnexion();                   
+                
+            }
+            
+            function recupCookie(){
+                let nameCookie = "id"
+                let cookies = document.cookie.split(';');
+                for(var i=0;i < cookies.length;i++) {
+                    var c = cookies[i];
+                    while (c.charAt(0)==' ') {
+                        c = c.substring(1,c.length);
+                    }
+                    if (c.indexOf(nameCookie) == 0){
+                        return nameCookie+c.substring(nameCookie.length,c.length);
+                    }
+                }
+                return null;
+            }
+            
+            
         </script>
         
     </section>

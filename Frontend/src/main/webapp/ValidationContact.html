@@ -6,13 +6,13 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>Prédict'IF - Confirmation d'inscription</title>
+        <title>Consultation demandée</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- Librairie Javascript: jQuery (v3.4.1) -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     </head>
     <body>
-        
         <section id="header"></section>
         
         <script>
@@ -21,15 +21,20 @@ and open the template in the editor.
             });
         </script>
         
-        <p><span class="username"></span>, bienvenue parmi nous ! 
-            Votre inscription a bien été prise en compte, et vous pouvez maintenant utiliser nos services !</p>
+        <h1>Merci d'avoir contacté machintruc</h1>
+        
+        <h2>Il vous contactera très prochainement sur votre téléphone</h2>
+        
+        <button onclick="location.href='EspaceClient.html'">
+                Retour à votre espace voyance
+        </button>
+        
         <script>
-            $(window).ready(() => {
-                let searchParams = new URLSearchParams(window.location.search);
-                let username = searchParams.get("name");
-                console.log(username);
-                $(".username").text(username);
+            $(document).ready(function() 
+            {
+                alert(window.location.search.substring(10));
             });
+            
         </script>
     </body>
 </html>

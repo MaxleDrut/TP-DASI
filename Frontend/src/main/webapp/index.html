@@ -5,7 +5,6 @@
         <meta http-equiv="content-type" content="text/html;charset=utf-8" />
         <meta name="description" content="Votre avenir geek aujourd'hui !">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
         <!-- open graph protocol for social medias, more info: https://ogp.me/-->
         <meta property="og:locale" content="fr_FR" />
         <meta property="og:title" content="Predict'if" />
@@ -14,16 +13,20 @@
         <!-- files -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <script src="./js/front_page.js" async defer></script>
-        
 
     </head>
 
-    <body>
-        <object type="text/html" data="login.html" height="500" width="500" ></object>
 
-        <nav>
-            <object>
-        </nav>
+    <body >
+        <section id="header"></section>
+        
+        <script>
+            $(document).ready(function() {
+                $('#header').load('login.html');
+            });
+        </script>
+
+        
 
         <section id="title">
             <h1>Predict'IF</h1>
@@ -31,22 +34,33 @@
         </section>
 
         <section id="mediums">
+            <p>Nous mettons à votre disposition les meilleurs médiums
+                du pays.
+            </p>
+            <div id="front_mediums"></div>
             <button id="voir_mediums" type="button" onclick="voirMediums()">
                 Voir nos médiums
             </button>
-            <div id="presentation_mediums">
-
-            </div>
-
         </section>
 
         <section id="list_mediums" class="hide">
             <p>Voici la liste de nos célèbres médiums :</p>
+            <div id="presentation_mediums">
+                <table id="table_list_medium"></table>
+            </div>
+        </section>
+
+        <section id="inscription">
+            <p>N'attendez plus! Découvrez votre avenir dès maintenant</p>
+            <button id="inscription_button" onclick="location.href='inscription.html'">
+                Inscription
+            </button>
         </section>
 
         <footer>
             <p>© 2019 www.predict-if.com</p>
         </footer>
+        
 
     </body>
 </html>
