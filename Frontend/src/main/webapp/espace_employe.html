@@ -1,46 +1,20 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <title>Prédict'IF - Mon espace</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
     <body>
         <h1>Historique des consultations</h1>
-        <section>
-            SAMPLE DATA
-            <article>
-                <div>
-                    <img src="icone_bonhomme.PNG" alt="Profil medium" />
-                    Mme Irma
-                </div>
-                <div>
-                    <span>le 05/05/2020</span>
-                    <span>avec Jean Dupont</span>
-                </div>
-                <textarea>
-                    Un résumé de consultation super stylé
-                </textarea>
-            </article>
+        <section id="historique-consultations">
+            Chargement...
         </section>
         
         <h1>Consultations en attente</h1>
-        <section>
-            SAMPLE DATA
-            <article>
-                <div>
-                    <img src="icone_bonhomme.PNG" alt="Profil medium" />
-                    Mme Irma
-                </div>
-                <button>
-                    Aller à la consultation
-                </button>
-            </article>
+        <section id="consultation-attente">
+            Chargement...
         </section>
         
         <h1>Espace entreprise</h1>
@@ -48,5 +22,129 @@ and open the template in the editor.
             SAMPLE DATA
             <button>Consulter les activités de l'agence</button>
         </section>
+        
+        
+        <script>
+            function loadPageData(employe)
+            {
+                let empId = employe.id;
+                
+                $.ajax({
+                    url: "./ActionServlet?todo=historique-consultations",
+                    data: {
+                        type: "employe",
+                        id: empId
+                    },
+                    method: "GET"
+                })
+                .done(response => {
+                    if(response.success)
+                    {
+                        updateHistoriqueConsultations(response.consultations);
+                    }
+                    else
+                    {
+                        alert("Impossible de récupérer l'historique des consultations : " + response.message);
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête (récupération de l'historique)");
+                    console.log(error);
+                });
+                
+                $.ajax({
+                    url: "./ActionServlet?todo=consultation-assignee",
+                    method: "GET"
+                })
+                .done(response => {
+                    if(response.success)
+                    {
+                        updateConsultationEnAttente(response.consultation);
+                    }
+                    else
+                    {
+                        alert("Impossible de récupérer la consultation assignée : " + response.message);
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête (récupération consultation assignée)");
+                    console.log(error);
+                });
+            }
+            
+            function updateHistoriqueConsultations(consultations)
+            {
+                let sectionHisto = $("#historique-consultations");
+                sectionHisto.empty();
+                consultations.forEach(consultation => {
+                    let dateAssignation = new Date(consultation.assignation);
+                    sectionHisto.append(
+                        `<article class="consultation-entry">
+                            <div>
+                                <img src="icone_bonhomme.PNG" alt="Profil medium" />
+                                ${consultation.medium.nom}
+                            </div>
+                            <div>
+                                <span>${dateAssignation.toLocaleDateString()}</span>
+                                <span>avec ${consultation.client.prenom} ${consultation.client.nom}</span>
+                            </div>
+                            <textarea readonly>
+                                ${consultation.commentaire ? consultation.commentaire : 'Pas de commentaire'}
+                            </textarea>
+                        </article>`
+                    );
+                });
+            }
+            
+            function updateConsultationEnAttente(consultation)
+            {
+                let sectionConsAttente = $("#consultation-attente");
+                sectionConsAttente.html(
+                        `<article>
+                            <div>
+                                <img src="icone_bonhomme.PNG" alt="Profil medium" />
+                                ${consultation.medium.nom}
+                            </div>
+                            <button>
+                                Aller à la consultation
+                            </button>
+                        </article>`
+                );
+            }
+            
+            $(document).ready(() => {
+                let id;
+                document.cookie.split(";").forEach((element) => {
+                    let cookie = element.split("=")[0].trim();
+                    if(cookie === "id")
+                    {
+                        id = element.split("=")[1].trim();
+                    }
+                });
+                
+                $.ajax({
+                    url: "./ActionServlet?todo=recuperer-employe",
+                   data: {
+                       id: id
+                   },
+                   method: "GET"
+                })
+                .done(response => {
+                    console.log(response);
+                    if(response.success)
+                    {
+                        loadPageData(response.employe);
+                    }
+                    else
+                    {
+                        location.href = "./";
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête");
+                    console.log(error);
+                });
+            });
+        </script>
     </body>
 </html>

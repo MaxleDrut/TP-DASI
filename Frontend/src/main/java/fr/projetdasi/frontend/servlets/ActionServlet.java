@@ -76,6 +76,14 @@ public class ActionServlet extends HttpServlet {
             }
             
             
+            case "recuperer-employe":
+            {
+                action = new ActionRecupererEmploye();
+                serialisation = new SerialisationEmploye();
+                break;
+            }
+            
+            
             case "ajouter-favoris":
             {
                 action = new ActionAjoutFavoris();
