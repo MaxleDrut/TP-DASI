@@ -30,6 +30,12 @@ public class ActionServlet extends HttpServlet {
         
         String todo = request.getParameter("todo");
         
+        if(todo == null)
+        {
+            response.sendError(400, "Bad request: Missing parameter 'todo'.");
+            return;
+        }
+        
         Action action = null;
         Serialisation serialisation = null;
         
@@ -84,10 +90,20 @@ public class ActionServlet extends HttpServlet {
                 break;
             }
             
+            /*
+            TODO : si le temps, remplacer par la version standard (historique-consultations)
+            */
             case "historique-consultations-client": 
             {
                 action = new ActionRecupererHistoriqueConsultationsClient();
                 serialisation = new SerialisationRecupererHistoriqueConsultationsClient();
+                break;
+            }
+            
+            case "historique-consultations":
+            {
+                action = new ActionRecupererHistoriqueConsultations();
+                serialisation = new SerialisationListeConsultations();
                 break;
             }
                 
