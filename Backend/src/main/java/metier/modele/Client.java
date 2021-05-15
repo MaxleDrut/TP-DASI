@@ -13,6 +13,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Temporal;
 
 /**
  *
@@ -24,7 +25,9 @@ public class Client extends Utilisateur implements Serializable
     private String nom;
     private String prenom;
     
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateNaissance;
+    
     private String adresse;
     private String numTelephone;
     

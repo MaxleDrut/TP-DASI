@@ -37,6 +37,6 @@ public class SerialisationInscription extends Serialisation {
         }
         
         Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
-        this.getWriter(response).println(gson.toJson(result));
+        gson.toJson(result, this.getWriter(response));
     }
 }
