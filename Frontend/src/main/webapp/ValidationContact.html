@@ -21,9 +21,9 @@ and open the template in the editor.
             });
         </script>
         
-        <h1>Merci d'avoir contacté machintruc</h1>
+        <h1 id="denomination"></h1>
         
-        <h2>Il vous contactera très prochainement sur votre téléphone</h2>
+        <h2 id="genre"></h2>
         
         <button onclick="location.href='EspaceClient.html'">
                 Retour à votre espace voyance
@@ -32,8 +32,37 @@ and open the template in the editor.
         <script>
             $(document).ready(function() 
             {
-                alert(window.location.search.substring(10));
+                var idMedium = window.location.search.substring(10);
+                recupClient(idMedium);
             });
+            
+            function recupClient(idMedium) {
+                
+                $.ajax({
+                    url: './ActionServlet',
+                    method:'POST',
+                    data: {
+                        todo:'recuperer-medium',
+                        id:idMedium
+                    },
+                    dataType:'json'
+                }).done(function (response) {
+                    $('#denomination').append(
+                            "Merci d'avoir contacté "+
+                            response.denomination
+                        );
+                    if(response.genre==="H") {
+                        $('#genre').append("Il ");
+                    } else {
+                        $('#genre').append("Elle ");
+                    }
+                    $('#genre').append("vous contactera très prochainement sur votre téléphone");
+                
+                })
+                .fail(function(error) {
+                    console.log('Erreur de récuperation du Medium',error);
+                });    
+            }
             
         </script>
     </body>
