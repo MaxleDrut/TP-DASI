@@ -64,7 +64,7 @@ public class ActionServlet extends HttpServlet {
             case "consultation-assignee":
             {
                 action = new ActionConsultationAssignee();
-                serialisation = new SerialisationConsultationAssignee();
+                serialisation = new SerialisationConsultation();
                 break;
             }
             
@@ -131,7 +131,7 @@ public class ActionServlet extends HttpServlet {
             case "terminer-consultation":
             {
                 action = new ActionTerminerConsultation();
-                serialisation = new SerialisationMessage();
+                serialisation = new SerialisationConsultation();
                 break;
             }
             
