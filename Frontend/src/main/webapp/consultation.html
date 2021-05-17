@@ -26,7 +26,7 @@ and open the template in the editor.
             <h1>Consultation</h1>
             <hr>
             
-            <button>Démarrer la consultation</button>
+            <button onclick="demarrerConsultation();">Démarrer la consultation</button>
             
             <section class="row border" id="medium-data">
                 
@@ -37,53 +37,54 @@ and open the template in the editor.
             </section>
             
             <h2>Historique des consultations</h2>
-            <section id="histo-consultations" class="container border" style="overflow-y: scroll; height: 20em">
+            <section id="histo-consultations" class="container row border" style="overflow-y: scroll; height: 20em">
                 
             </section>
             
-            ###APRES DEBUT CONSULTATION
-            <section class="row">
+            <section class="row my-4" id="help-section" style="opacity: 0;">
                 <div>
-                    <button>Demander de l'aide</button>
+                    <button onclick="demanderAide();">Demander de l'aide</button>
                 </div>
-                <section id="help" class="border">
+                <section id="help" class="border my-2">
                     <ul>
                         <li>
                             <div class="d-flex flex-row">
-                                Amour <3
+                                <span class="me-5">Amour <3</span>
                                 <input type="number" id="help-love-score" min="1" max="4" value="1">
                             </div>
-                            <span id="help-result-love">prédiction</span>
+                            <span id="help-result-love"></span>
                         </li>
                         <li>
                             <div class="d-flex flex-row">
-                                Santé 
+                                <span class="me-5">Santé</span>
                                 <input type="number" id="help-health-score" min="1" max="4" value="1">
                             </div>
-                            <span id="help-result-health">prédiction</span>
+                            <span id="help-result-health"></span>
                         </li>
                         <li>
                             <div class="d-flex flex-row">
-                                Travail
+                                <span class="me-5">Travail</span>
                                 <input type="number" id="help-work-score" min="1" max="4" value="1">
                             </div>
-                            <span id="help-result-work">prédiction</span>
+                            <span id="help-result-work"></span>
                         </li>
                     </ul>
                 </section>
             </section>
             
-            <section class="row">
-                <textarea placeholder="Commentaire..." style="height: 15em; overflow-y: scroll;">
-                    
-                </textarea>
+            <section class="row" id="terminate-section" style="opacity: 0">
+                <h2>Terminer la consultation</h2>
+                <textarea id="commentaire-consultation" placeholder="Commentaire..." style="height: 15em; overflow-y: scroll;"></textarea>
+                
+                <button onclick="terminerConsultation()" id="btn-fin-consultation">Fin de consultation</button>
             </section>
-            
-            <button>Terminer consultation</button>
         </section>
         
         
         <script>
+            let ID_CONSULTATION;
+            let ID_CLIENT;
+            
             function loadPageData(empId)
             {
                 $.ajax({
@@ -97,9 +98,21 @@ and open the template in the editor.
                 .done(response => {
                     if(response.success)
                     {
-                        loadClientData(response.consultation.client.id);
+                        if(!response.consultation)
+                        {
+                            location.href = "./";
+                        }
+                        
+                        ID_CONSULTATION = response.consultation.id;
+                        ID_CLIENT = response.consultation.client.id;
+                        
+                        if(response.consultation.debut)
+                        {
+                            afficherZoneConsultationDemarree();
+                        }
+                        
+                        loadClientData(ID_CLIENT);
                         loadMediumData(response.consultation.medium.id);
-                        updateConsultationData(response.consultation);
                     }
                     else
                     {
@@ -188,11 +201,6 @@ and open the template in the editor.
                 });
             }
             
-            function updateConsultationData(consultation)
-            {
-                console.log(consultation);
-            }
-            
             function updateClientData(client)
             {
                 $("#client-data").html(
@@ -252,6 +260,123 @@ and open the template in the editor.
                             </ul>
                         </div>`
                 );
+            }
+            
+            function demarrerConsultation()
+            {
+                $.ajax({
+                    url: "ActionServlet",
+                    data: {
+                        todo: "demarrer-consultation",
+                        id: ID_CONSULTATION
+                    },
+                    method: "GET"
+                })
+                .done(response => {
+                    if(response.success)
+                    {
+                        afficherZoneConsultationDemarree();
+                        alert("La consultation a bien démarré !");
+                    }
+                    else
+                    {
+                        alert("Une erreur est survenue lors du démarrage de la consultation : " + response.message);
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête (démarrer consultation)");
+                    console.log(error);
+                });
+            }
+            
+            function afficherZoneConsultationDemarree()
+            {
+                $("#help-section").css({
+                    "opacity": 1
+                });
+                
+                $("#terminate-section").css({
+                    "opacity": 1
+                });
+            }
+            
+            function demanderAide()
+            {
+                let amour = $("#help-love-score").val();
+                let sante = $("#help-health-score").val();
+                let travail = $("#help-work-score").val();
+                
+                if(amour && sante && travail)
+                {
+                    $.ajax({
+                        url: "ActionServlet",
+                        data: {
+                            todo: "demander-aide",
+                            amour: amour,
+                            sante: sante,
+                            travail: travail,
+                            client: ID_CLIENT
+                        },
+                        method: "GET"
+                    })
+                    .done(response => {
+                        if(response.success)
+                        {
+                            afficherPredictions(response.predictions);
+                        }
+                        else
+                        {
+                            alert("Une erreur est survenue lors de la demande d'aide : " + response.message);
+                        }
+                    })
+                    .fail(error => {
+                        alert("Une erreur est survenue lors de la requête (demander aide)");
+                        console.log(error);
+                    });
+                }
+            }
+            
+            function afficherPredictions(predictions)
+            {
+                $("#help-result-love").text(predictions.amour);
+                $("#help-result-health").text(predictions.sante);
+                $("#help-result-work").text(predictions.travail);
+            }
+            
+            function terminerConsultation()
+            {
+                let commentaire = $("#commentaire-consultation").val();
+                
+                $.ajax({
+                    url: "ActionServlet?todo=terminer-consultation",
+                    data: {
+                        id: ID_CONSULTATION,
+                        commentaire: commentaire
+                    },
+                    method: "POST"
+                })
+                .done(response => {
+                    if(response.success)
+                    {
+                        loadClientData(response.consultation.client.id);
+                        updateFinConsultation(response.consultation);
+                    }
+                    else
+                    {
+                        alert("Une erreur est survenue lors de la terminaison de consultation : " + response.message);
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête (terminer consultation)");
+                    console.log(error);
+                });
+            }
+            
+            function updateFinConsultation(consultation)
+            {
+                $("#commentaire-consultation").disable();
+                $("#commentaire-consultation").val(consultation.commentaire);
+                $("#btn-fin-consultation").disable();
             }
             
             // vérification connexion

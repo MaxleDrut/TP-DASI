@@ -38,6 +38,7 @@ public class SerialisationConsultation extends Serialisation
             consultationJson.add("medium", medium);
             consultationJson.add("client", client);
             
+            consultationJson.addProperty("id", cons.getId());
             consultationJson.addProperty("assignation", cons.getDateAssignation().getTime());
             
             if(cons.getDateDebut() != null)
