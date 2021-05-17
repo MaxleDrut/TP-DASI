@@ -96,6 +96,13 @@ public class ActionServlet extends HttpServlet {
                 break;
             }
             
+            case "demander-consultation":
+            {
+                action = new ActionDemanderConsultation();
+                serialisation = new SerialisationDemanderConsultation();
+                break;
+            }
+            
             /*
             TODO : si le temps, remplacer par la version standard (historique-consultations)
             */
