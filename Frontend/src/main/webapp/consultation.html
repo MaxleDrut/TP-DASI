@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+        <head>
+        <title>Prédict'IF - Consultation</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous" />
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <section class="container">
+            <section id="header"></section>
+            <hr>
+            <script>
+                $(document).ready(function() {
+                    $('#header').load('login.html');
+                });
+            </script>
+            
+            <h1>Consultation</h1>
+            <hr>
+            
+            <button>Démarrer la consultation</button>
+            
+            <section class="row border">
+                <h2>Rôle</h2>
+                SAMPLE DATA
+                <center class="w-100" id="medium-nom">Mme Irma</center>
+                <div class="d-flex flex-row">
+                    <img src="icone_bonhomme.PNG" height="100">
+                    <ul>
+                        <li>Formation: <span id="medium-formation">...</span></li>
+                        <li>Présentation: <span id="medium-presentation">...</span></li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section class="row">
+                <h2>Client</h2>
+                SAMPLE DATA
+                <center class="w-100" id="client-nom">Max Drutel</center>
+                <div class="d-flex flex-row border">
+                    <img src="icone_bonhomme.PNG" height="100">
+                    <ul>
+                        <li>Signe chinois : <span id="signe-chinois">cheval</span></li>
+                        <li>Signe astro : <span id="signe-astro">poisson</span></li>
+                        <li>Couleur : <span id="couleur-profil">blanc</span></li>
+                        <li>Animal totem : <span id="animal-totem">la loutre</span></li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section id="histo-consultations" class="border" style="overflow-y: scroll; height: 20em">
+                SAMPLE DATA
+                <article class="consultation-entry row">
+                    <div class="col-4">
+                        <img src="icone_bonhomme.PNG" alt="Profil medium" height=50 />
+                        ${consultation.medium.nom}
+                        ${dateAssignation.toLocaleDateString()}
+                    </div>
+                    <textarea readonly class="col-8">
+                        ${consultation.commentaire ? consultation.commentaire : 'Pas de commentaire'}
+                    </textarea>
+                </article>
+            </section>
+            
+            ###APRES DEBUT CONSULTATION
+            <section class="row">
+                <div>
+                    <button>Demander de l'aide</button>
+                </div>
+                <section id="help" class="border">
+                    <ul>
+                        <li>
+                            <div class="d-flex flex-row">
+                                Amour <3
+                                <input type="number" id="help-love-score" min="1" max="4" value="1">
+                            </div>
+                            <span id="help-result-love">prédiction</span>
+                        </li>
+                        <li>
+                            <div class="d-flex flex-row">
+                                Santé 
+                                <input type="number" id="help-health-score" min="1" max="4" value="1">
+                            </div>
+                            <span id="help-result-health">prédiction</span>
+                        </li>
+                        <li>
+                            <div class="d-flex flex-row">
+                                Travail
+                                <input type="number" id="help-work-score" min="1" max="4" value="1">
+                            </div>
+                            <span id="help-result-work">prédiction</span>
+                        </li>
+                    </ul>
+                </section>
+            </section>
+            
+            <section class="row">
+                <textarea placeholder="Commentaire..." style="height: 15em; overflow-y: scroll;">
+                    
+                </textarea>
+            </section>
+            
+            <button>Terminer consultation</button>
+        </section>
+    </body>
+</html>
