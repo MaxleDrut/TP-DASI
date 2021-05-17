@@ -65,9 +65,14 @@
             </a>
         </section>
 
-        <footer>
-            <p>© 2019 www.predict-if.com</p>
+        <footer id="footer">
+            <script>
+                $(document).ready(() => {
+                    $('#footer').load('footer.html');
+                });
+            </script>
         </footer>
+       
 
     </body>
 </html>

@@ -23,9 +23,15 @@ html, body {
 /* fonts */
 h1, h2, h3, h4, button {
     font-family: var(--title-font);
+    font-weight: 700;
+	font-size: 40px;
 }
 
-p, td {
+h1 {
+    font-size: 60px;
+}
+
+p, th, td {
     font-family: var(--text-font);
 }
 
@@ -34,7 +40,7 @@ h1, h2, h3, h4 {
     color: var(--title-color);
 }
 
-p, td {
+p, th, td {
     color: var(--text-color);
 }
 
@@ -122,4 +128,22 @@ input:checked + .slider:before {
 }
 
 
+/* button */
+button {
+    font-weight: 700;
+	font-size: 30px;
+	padding: 3px 20px 7px 20px ; /* add to the height and width */
+	text-align: center;
+	margin: 10px;
+	display: inline-block;
+	background: linear-gradient(to right,#ff8a00,#da1b60);
+	border-radius: 30px;
+	color: black;
+	float: right;
+	box-shadow: 0px 0px 5px 0px;
+}
+
+button:hover {
+    background: white;
+}
 
