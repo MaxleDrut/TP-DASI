@@ -120,6 +120,26 @@ public class ActionServlet extends HttpServlet {
                 serialisation = new SerialisationListeConsultations();
                 break;
             }
+            
+            case "demarrer-consultation":
+            {
+                action = new ActionDemarrerConsultation();
+                serialisation = new SerialisationMessage();
+                break;
+            }
+            
+            case "terminer-consultation":
+            {
+                action = new ActionTerminerConsultation();
+                serialisation = new SerialisationMessage();
+                break;
+            }
+            
+            case "demander-aide":
+            {
+                action = new ActionDemanderAideConsultation();
+                serialisation = new SerialisationAideConsultation();
+            }
                 
             default:
                 // retourner page d'erreur
