@@ -43,8 +43,9 @@
                 let empId = employe.id;
                 
                 $.ajax({
-                    url: "./ActionServlet?todo=historique-consultations",
+                    url: "./ActionServlet",
                     data: {
+                        todo: "historique-consultations",
                         type: "employe",
                         id: empId
                     },
@@ -66,7 +67,11 @@
                 });
                 
                 $.ajax({
-                    url: "./ActionServlet?todo=consultation-assignee",
+                    url: "./ActionServlet",
+                    data: {
+                        todo: "consultation-assignee",
+                        id: empId
+                    },
                     method: "GET"
                 })
                 .done(response => {
@@ -118,9 +123,9 @@
                                 <img src="icone_bonhomme.PNG" alt="Profil medium" height=50 />
                                 ${consultation.medium.nom}
                             </div>
-                            <button class="col-7">
-                                Aller à la consultation
-                            </button>
+                            <a class="col-7" href="./consultation.html">
+                                <button>Aller à la consultation</button>
+                            </a>
                         </article>`
                 );
             }
@@ -136,8 +141,9 @@
                 });
                 
                 $.ajax({
-                    url: "./ActionServlet?todo=recuperer-employe",
+                    url: "./ActionServlet",
                    data: {
+                       todo: "recuperer-employe",
                        id: id
                    },
                    method: "GET"

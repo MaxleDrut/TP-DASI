@@ -19,15 +19,17 @@ public class SerialisationRecupererClient extends Serialisation {
     @Override
     public void serialiser(HttpServletRequest request, HttpServletResponse response) {
         JsonObject container = new JsonObject();
+        JsonObject clientContainer = null;
         
-        if((boolean)request.getAttribute("success") == true) {
+        if((boolean)request.getAttribute("success")) {
+            clientContainer = new JsonObject();
             Client client = (Client)request.getAttribute("client");
 
-            container.addProperty("mail",client.getMail());
-            container.addProperty("nom",client.getNom());
-            container.addProperty("prenom",client.getPrenom());
-            container.addProperty("adresse",client.getAdresse());
-            container.addProperty("numtelephone",client.getNumTelephone());
+            clientContainer.addProperty("mail",client.getMail());
+            clientContainer.addProperty("nom",client.getNom());
+            clientContainer.addProperty("prenom",client.getPrenom());
+            clientContainer.addProperty("adresse",client.getAdresse());
+            clientContainer.addProperty("numtelephone",client.getNumTelephone());
 
             ProfilAstral profilAstral = client.getProfilAstral();
 
@@ -38,8 +40,12 @@ public class SerialisationRecupererClient extends Serialisation {
             jsonAstral.addProperty("couleur",profilAstral.getCouleur());
             jsonAstral.addProperty("animal",profilAstral.getAnimalTotem());
 
-            container.add("astral", jsonAstral);
+            clientContainer.add("astral", jsonAstral);
         }
+        
+        container.add("client", clientContainer);
+        container.addProperty("success", (boolean)request.getAttribute("success"));
+        container.addProperty("message", "");
        
         try (PrintWriter out = this.getWriter(response)) {
             Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();

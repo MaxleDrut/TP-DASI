@@ -66,13 +66,13 @@ and open the template in the editor.
                     dataType:'json'
                 }).done(function (response) {
                     $('#profilAstral').append(
-                            '<div> Votre signe astrologique : '+response.astral.zodiac + '</div>' +
-                            '<div> Votre signe chinois : '+response.astral.chinois + '</div>' +
-                            '<div> Votre couleur porte-bonheur : '+response.astral.couleur + '</div>' +
-                            '<div> Votre animal totem : '+response.astral.animal + '</div>'
+                            '<div> Votre signe astrologique : '+response.client.astral.zodiac + '</div>' +
+                            '<div> Votre signe chinois : '+response.client.astral.chinois + '</div>' +
+                            '<div> Votre couleur porte-bonheur : '+response.client.astral.couleur + '</div>' +
+                            '<div> Votre animal totem : '+response.client.astral.animal + '</div>'
                     );
                     $('#nomClient').append(
-                            'Bonjour '+response.prenom + ' !'
+                            'Bonjour '+response.client.prenom + ' !'
                     );
                 })
                 .fail(function(error) {

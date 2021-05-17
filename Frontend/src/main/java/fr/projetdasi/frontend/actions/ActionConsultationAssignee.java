@@ -18,31 +18,19 @@ public class ActionConsultationAssignee extends Action
     @Override
     public void executer(HttpServletRequest request) 
     {
-        Cookie[] cookies = request.getCookies();
-        if(cookies == null)
+        String idText = request.getParameter("id");
+        long userId;
+        
+        try
+        {
+            userId = Long.parseLong(idText);
+        }
+        catch(NumberFormatException e)
         {
             request.setAttribute("success", false);
-            request.setAttribute("message", "Vous n'êtes pas connecté.e");
+            request.setAttribute("message", "Identifiant invalide.");
             return;
         }
-        
-        Cookie authCookie = null;
-        for(Cookie cookie : cookies)
-        {
-            if(cookie.getName().equals("id"))
-            {
-                authCookie = cookie;
-            }
-        }
-        
-        if(authCookie == null)
-        {
-            request.setAttribute("success", false);
-            request.setAttribute("message", "Vous n'êtes pas connecté.e");
-            return;
-        }
-        
-        long userId = Long.parseLong(authCookie.getValue());
         
         Services services = new Services();
         Utilisateur utilisateur = services.rechercherUtilisateur(userId);

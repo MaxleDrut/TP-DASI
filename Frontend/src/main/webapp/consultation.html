@@ -28,46 +28,17 @@ and open the template in the editor.
             
             <button>Démarrer la consultation</button>
             
-            <section class="row border">
-                <h2>Rôle</h2>
-                SAMPLE DATA
-                <center class="w-100" id="medium-nom">Mme Irma</center>
-                <div class="d-flex flex-row">
-                    <img src="icone_bonhomme.PNG" height="100">
-                    <ul>
-                        <li>Formation: <span id="medium-formation">...</span></li>
-                        <li>Présentation: <span id="medium-presentation">...</span></li>
-                    </ul>
-                </div>
+            <section class="row border" id="medium-data">
+                
             </section>
             
-            <section class="row">
-                <h2>Client</h2>
-                SAMPLE DATA
-                <center class="w-100" id="client-nom">Max Drutel</center>
-                <div class="d-flex flex-row border">
-                    <img src="icone_bonhomme.PNG" height="100">
-                    <ul>
-                        <li>Signe chinois : <span id="signe-chinois">cheval</span></li>
-                        <li>Signe astro : <span id="signe-astro">poisson</span></li>
-                        <li>Couleur : <span id="couleur-profil">blanc</span></li>
-                        <li>Animal totem : <span id="animal-totem">la loutre</span></li>
-                    </ul>
-                </div>
+            <section class="row border" id="client-data">
+                
             </section>
             
-            <section id="histo-consultations" class="border" style="overflow-y: scroll; height: 20em">
-                SAMPLE DATA
-                <article class="consultation-entry row">
-                    <div class="col-4">
-                        <img src="icone_bonhomme.PNG" alt="Profil medium" height=50 />
-                        ${consultation.medium.nom}
-                        ${dateAssignation.toLocaleDateString()}
-                    </div>
-                    <textarea readonly class="col-8">
-                        ${consultation.commentaire ? consultation.commentaire : 'Pas de commentaire'}
-                    </textarea>
-                </article>
+            <h2>Historique des consultations</h2>
+            <section id="histo-consultations" class="container border" style="overflow-y: scroll; height: 20em">
+                
             </section>
             
             ###APRES DEBUT CONSULTATION
@@ -110,5 +81,214 @@ and open the template in the editor.
             
             <button>Terminer consultation</button>
         </section>
+        
+        
+        <script>
+            function loadPageData(empId)
+            {
+                $.ajax({
+                    url: "./ActionServlet",
+                    data: {
+                        todo: "consultation-assignee",
+                        id: empId
+                    },
+                    method: "GET"
+                })
+                .done(response => {
+                    if(response.success)
+                    {
+                        loadClientData(response.consultation.client.id);
+                        loadMediumData(response.consultation.medium.id);
+                        updateConsultationData(response.consultation);
+                    }
+                    else
+                    {
+                        alert("Impossible de récupérer la consultation assignée : " + response.message);
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête (récupération consultation assignée)");
+                    console.log(error);
+                });
+            }
+            
+            function loadClientData(clientId)
+            {
+                $.ajax({
+                    url: "./ActionServlet",
+                    data: {
+                        todo: "recuperer-client",
+                        id: clientId
+                    },
+                    method: "GET"
+                })
+                .done(response => {
+                    if(response.success)
+                    {
+                        updateClientData(response.client);
+                    }
+                    else
+                    {
+                        alert("Impossible de récupérer le client : " + response.message);
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête (récupération client)");
+                    console.log(error);
+                });
+                
+                $.ajax({
+                    url: "./ActionServlet",
+                    data: {
+                        todo: "historique-consultations",
+                        id: clientId,
+                        type: "client"
+                    },
+                    method: "GET"
+                })
+                .done(response => {
+                    if(response.success)
+                    {
+                        updateClientHisto(response.consultations);
+                    }
+                    else
+                    {
+                        alert("Impossible de récupérer l'historique des consultations client : " + response.message);
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête (récupération historique client)");
+                    console.log(error);
+                });
+            }
+            
+            function loadMediumData(mediumId)
+            {
+                $.ajax({
+                    url: "./ActionServlet",
+                    data: {
+                        todo: "recuperer-medium",
+                        id: mediumId
+                    },
+                    method: "GET"
+                })
+                .done(response => {
+                    if(response.success)
+                    {
+                        updateMediumData(response.medium);
+                    }
+                    else
+                    {
+                        alert("Impossible de récupérer le médium : " + response.message);
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête (récupération consultation medium)");
+                    console.log(error);
+                });
+            }
+            
+            function updateConsultationData(consultation)
+            {
+                console.log(consultation);
+            }
+            
+            function updateClientData(client)
+            {
+                $("#client-data").html(
+                        `<h2>Client</h2>
+                        <center class="w-100">${client.prenom} ${client.nom}</center>
+                        <div class="d-flex flex-row">
+                            <img src="icone_bonhomme.PNG" height="100">
+                            <ul>
+                                <li>Signe chinois : ${client.astral.chinois}</li>
+                                <li>Signe du zodiaque : ${client.astral.zodiac}</li>
+                                <li>Couleur : ${client.astral.couleur}</li>
+                                <li>Animal totem : ${client.astral.animal}</li>
+                            </ul>
+                        </div>`
+                );
+            }
+            
+            function updateClientHisto(histo)
+            {
+                console.log(histo);
+                // trier par ordre décroissant d'assignation
+                histo.sort((cons1, cons2) => {
+                    return cons2.assignation - cons1.assignation;
+                });
+                
+                
+                $("#histo-consultations").empty();
+                
+                histo.forEach(consultation => {
+                    $("#histo-consultations").append(
+                            `<article class="consultation-entry row">
+                                <div class="col-3">
+                                    <img src="icone_bonhomme.PNG" alt="Profil medium" height=50 />
+                                    ${consultation.medium.nom}
+                                    ${new Date(consultation.assignation).toLocaleDateString()}
+                                </div>
+                                <textarea readonly class="col-9">
+                                    ${consultation.commentaire ? consultation.commentaire : '(pas de commentaire)'}
+                                </textarea>
+                            </article>`
+                    );
+                });
+            }
+            
+            function updateMediumData(medium)
+            {
+                $("#medium-data").html(
+                        `<h2>Rôle</h2>
+                        <center class="w-100">${medium.denomination}</center>
+                        <div class="d-flex flex-row">
+                            <img src="icone_bonhomme.PNG" height="100">
+                            <ul>
+                                <li>Présentation: ${medium.presentation}</li>
+                                ${medium.formation ? "<li>Formation : " + medium.formation + "</li>" : ""}
+                                ${medium.promotion ? "<li>Promotion : " + medium.promotion + "</li>" : ""}
+                                ${medium.support ? "<li>Support : " + medium.support + "</li>" : ""}
+                            </ul>
+                        </div>`
+                );
+            }
+            
+            // vérification connexion
+            $(document).ready(() => {
+                let id;
+                document.cookie.split(";").forEach((element) => {
+                    let cookie = element.split("=")[0].trim();
+                    if(cookie === "id")
+                    {
+                        id = element.split("=")[1].trim();
+                    }
+                });
+                
+                $.ajax({
+                    url: "./ActionServlet",
+                   data: {
+                       todo: "recuperer-employe",
+                       id: id
+                   },
+                   method: "GET"
+                })
+                .done(response => {
+                    console.log(response);
+                    if(response.success)
+                    {
+                        loadPageData(response.employe.id);
+                    }
+                    else
+                    {
+                        location.href = "./";
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête");
+                    console.log(error);
+                });
+            });
+        </script>
     </body>
 </html>
