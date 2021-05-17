@@ -7,6 +7,7 @@ package fr.projetdasi.frontend.actions;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import metier.modele.Client;
 import metier.modele.Consultation;
 import metier.service.Services;
@@ -17,11 +18,17 @@ public class ActionRecupererHistoriqueConsultationsClient extends Action{
     @Override
     public void executer(HttpServletRequest request) {
         //Recupération des paramètres de la Requête
-        String idString = request.getParameter("idClient");
         
-        long id;
         try {
-            id = Long.valueOf(idString);
+            HttpSession session = request.getSession();
+            
+            if(!((boolean) session.getAttribute("connecte"))) {
+                throw new Exception("Pas d'utilisateur connecte !");
+            }
+            
+            long id = (long) session.getAttribute("id");
+            request.setAttribute("idClient",id);
+            
             Services service = new Services();
             
             Client client = service.rechercherClient(id);

@@ -27,6 +27,10 @@ public class SerialisationRecupererHistoriqueConsultationsClient extends Seriali
     public void serialiser(HttpServletRequest request, HttpServletResponse response) {
         JsonObject container = new JsonObject();
         
+        
+        long idClient = (long) (request.getAttribute("idClient"));
+        container.addProperty("idClient",idClient);
+            
         List<Consultation> consultations = (List<Consultation>)request.getAttribute("consultations");
         
         JsonArray arrayConsultations = new JsonArray();

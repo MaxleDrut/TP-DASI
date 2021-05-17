@@ -53,6 +53,13 @@ public class ActionServlet extends HttpServlet {
                 serialisation = new SerialisationConnexion();
                 break;
             }
+            
+            case "deconnexion":
+            {
+                action = new ActionDeconnexion();
+                serialisation = new SerialisationDeconnexion();
+                break;
+            }
 
             case "lister-mediums":
             {

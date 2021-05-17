@@ -10,9 +10,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import metier.modele.Client;
 import metier.modele.Employe;
 import metier.modele.Utilisateur;
@@ -31,24 +31,22 @@ public class SerialisationConnexion extends Serialisation {
         
         Utilisateur utilisateur = (Utilisateur)request.getAttribute("utilisateur");
         
+        
         if(utilisateur!=null){
-            
             if(utilisateur instanceof Client){
                 Client client = (Client) utilisateur;
                 utilisateurProperty.addProperty("id", client.getId());
                 utilisateurProperty.addProperty("prenom", client.getPrenom());
-                utilisateurProperty.addProperty("redirection", "EspaceClient.html");
+                utilisateurProperty.addProperty("type","client");
                 
             }else{
                 Employe employe = (Employe) utilisateur;
                 utilisateurProperty.addProperty("id", employe.getId());
                 utilisateurProperty.addProperty("prenom", employe.getPrenom());
-                utilisateurProperty.addProperty("redirection", "espace_employe.html");
+                utilisateurProperty.addProperty("type","employe");
             }
             reponse.addProperty("connexion", true);
             reponse.add("utilisateur", utilisateurProperty);
-            Cookie cookie = new Cookie("id",String.valueOf(utilisateur.getId()));
-            response.addCookie(cookie);
             
         }else{
             reponse.addProperty("connexion", false);
