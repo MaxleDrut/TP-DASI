@@ -75,6 +75,12 @@ public class ActionServlet extends HttpServlet {
                 break;
             }
             
+            case "recuperer-medium":
+            {
+                action = new ActionRecupererMedium();
+                serialisation = new SerialisationRecupererMedium();
+                break;
+            }
             
             case "recuperer-employe":
             {

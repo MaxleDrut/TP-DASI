@@ -9,24 +9,31 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     </head>
     <body>
-        
         <section class="container">
+            <section id="header"></section>
+            <hr>
+            <script>
+                $(document).ready(function() {
+                    $('#header').load('login.html');
+                });
+            </script>
+            
             <h3>Bienvenue, <span id="nom-employe"></span> !</h3>
             
             <h1>Historique des consultations</h1>
-            <section id="historique-consultations" class="container col-6">
+            <section id="historique-consultations" class="container col-8 py-3">
                 Chargement...
             </section>
 
             <h1>Consultations en attente</h1>
-            <section id="consultation-attente">
+            <section id="consultation-attente" class="container col-8 py-3">
                 Chargement...
             </section>
 
             <h1>Espace entreprise</h1>
-            <section>
-                <a href="./stats.html">
-                    <button>Consulter les activités de l'agence</button>
+            <section class="d-flex flex-row justify-content-center">
+                <a href="./stats.html" class="col-8 py-2">
+                    <button class="w-100">Consulter les activités de l'agence</button>
                 </a>
             </section>
         </section>
@@ -106,12 +113,12 @@
             {
                 let sectionConsAttente = $("#consultation-attente");
                 sectionConsAttente.html(
-                        `<article>
-                            <div>
+                        `<article class="row">
+                            <div class="col-5">
                                 <img src="icone_bonhomme.PNG" alt="Profil medium" height=50 />
                                 ${consultation.medium.nom}
                             </div>
-                            <button>
+                            <button class="col-7">
                                 Aller à la consultation
                             </button>
                         </article>`

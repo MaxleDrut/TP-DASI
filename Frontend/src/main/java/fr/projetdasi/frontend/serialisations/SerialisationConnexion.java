@@ -43,7 +43,7 @@ public class SerialisationConnexion extends Serialisation {
                 Employe employe = (Employe) utilisateur;
                 utilisateurProperty.addProperty("id", employe.getId());
                 utilisateurProperty.addProperty("prenom", employe.getPrenom());
-                utilisateurProperty.addProperty("redirection", "EspaceClient.html");
+                utilisateurProperty.addProperty("redirection", "espace_employe.html");
             }
             reponse.addProperty("connexion", true);
             reponse.add("utilisateur", utilisateurProperty);
