@@ -57,7 +57,7 @@ public class Main {
         /*authentificationIntervative();*/  
         testerObtenirEmploye();
         testerObtenirListeEmployes();
-        ajoutManuelCons();
+        //ajoutManuelCons();
         testerObtenirConsultation();       
         testerRecupererNombreConsultationsEmploye();
 

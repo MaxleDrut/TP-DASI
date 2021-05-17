@@ -98,7 +98,7 @@ and open the template in the editor.
                                 '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
                                 '<td> <div>'+ medium.presentation + '<img src="Etoile_Favori.PNG" height="20" id ='+medium.id+'> </div>' + 
                                 '<div>'+medium.type + 
-                                '<button  onclick="location.href=\'ValidationContact.html?idMedium='+medium.id+' \' "> Contacter maintenant </button>' +
+                                '<button onclick=demanderConsultation('+idCli+','+medium.id+')> Contacter maintenant </button>' +
                                 '</div> </td>' +
                                 '</tr>'
                             );
@@ -109,7 +109,7 @@ and open the template in the editor.
                                 '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
                                 '<td> <div>'+ medium.presentation + '<img src="Etoile_Non_Fav.PNG" height="20" id ='+medium.id+'> </div>' + 
                                 '<div>'+medium.type + 
-                                '<button  onclick="location.href=\'ValidationContact.html?idMedium='+medium.id+' \' "> Contacter maintenant </button>' + 
+                                '<button onclick=demanderConsultation('+idCli+','+medium.id+')> Contacter maintenant </button>' +
                                 '</div> </td>' +
                                 '</tr>'
                             );
@@ -142,7 +142,7 @@ and open the template in the editor.
                                 '<td> <div> Rencontré le ' +consultation.debut+
                                 ', la consultation a duré '+consultation.duree+' minutes </div>' +
                                 '<div>'+consultation.typeMedium +
-                                '<button  onclick="location.href=\'ValidationContact.html?idMedium='+consultation.idMedium+' \' "> Recontacter maintenant </button>' + 
+                                '<button onclick=demanderConsultation('+idCli+','+consultation.idMedium+')> Recontacter maintenant </button>' +
                                 '</div> </td>' +
                                 '</tr>'
                             );
@@ -153,7 +153,7 @@ and open the template in the editor.
                                 '<td> <div> Rencontrée le ' +consultation.debut+
                                 ', la consultation a duré '+consultation.duree+' minutes </div>' +
                                 '<div>'+consultation.typeMedium +
-                                '<button  onclick="location.href=\'ValidationContact.html?idMedium='+consultation.idMedium+' \' "> Recontacter maintenant </button>' + 
+                                '<button onclick=demanderConsultation('+idCli+','+consultation.idMedium+')> Recontacter maintenant </button>' +
                                 '</div> </td>' +
                                 '</tr>'
                             );
@@ -164,6 +164,32 @@ and open the template in the editor.
                 .fail(function(error) {
                     console.log('Erreur lors de la recup de l historique',error);
                 });  
+            }
+            
+            function demanderConsultation(idCli,idMed) {
+                $.ajax({
+                    url: './ActionServlet',
+                    method:'POST',
+                    data: {
+                        todo:'demander-consultation',
+                        idClient:idCli,
+                        idMedium:idMed
+                    },
+                    dataType:'json'
+                }).done(function (response) {
+                    console.log(response);
+                    
+                    if(response.success === true) {
+                        window.location.href=('ValidationContact.html?idMedium='+idMed);
+                    } else {
+                        alert(response.msgErreur);
+                    }
+                    
+                })
+                .fail(function(error) {
+                    console.log('Erreur de creation de la consultation',error);
+                });   
+                
             }
             
             function listenerAjout(idCli,idMed) {

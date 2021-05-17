@@ -11,10 +11,9 @@ import com.google.gson.JsonObject;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import metier.modele.Client;
-import metier.modele.Medium;
+import metier.modele.Consultation;
 
-public class SerialisationFavoris extends Serialisation {
+public class SerialisationDemanderConsultation extends Serialisation {
 
     @Override
     public void serialiser(HttpServletRequest request, HttpServletResponse response) throws IOException 
@@ -24,20 +23,19 @@ public class SerialisationFavoris extends Serialisation {
         
         if(success)
         {
-            Client client = (Client) request.getAttribute("client");
-            Medium medium = (Medium) request.getAttribute("medium");
+            Consultation consultation = (Consultation) request.getAttribute("consultation");
+            
             result.addProperty("success", true);
-            result.addProperty("medium",medium.getId());
-            result.addProperty("client",client.getId());
+            result.addProperty("consultation",consultation.getId());
         }
         else
         {
             result.addProperty("success", false);
+            String msgErreur = (String) request.getAttribute("msgErreur");
+            result.addProperty("msgErreur",msgErreur);
         }
         
         Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
         this.getWriter(response).println(gson.toJson(result));
-        
-        
     }
 }
