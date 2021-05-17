@@ -5,7 +5,11 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <header style="display: inline-flex;">
+
+    <!-- load code -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/login.css" />
+
     <div id="logo">
         <img src="bouleCristal.PNG" height="10"/>
         <h1>Predict'IF</h1>
@@ -17,6 +21,32 @@ and open the template in the editor.
         <input type="password" placeholder="Mot de passe" id="champ_password"/>
         <button  id="bouton-connexion" >Connexion</button>
         <p id="err">nom</p>
+
+        
+            <label class="switch">
+                <input type="checkbox" onclick="toggleTheme()">
+                <span class="slider round"></span>
+            </label>
+        
+        <label class="switch">
+            <input type="checkbox">
+            <span class="slider"></span>
+          </label>
+          
+          <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+          </label><br><br>
+          
+          <label class="switch">
+            <input type="checkbox">
+            <span class="slider round"></span>
+          </label>
+          
+          <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider round"></span>
+          </label>
         
         <script>
             

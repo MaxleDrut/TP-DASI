@@ -25,7 +25,9 @@ function recupListeMediums() {
                 '<tr>'+
                     '<td>'+
                         '<div>'+
-                            '<img src="img/icone_bonhomme.PNG" height="40"/>'+ 
+                            '<div class="user_img">'+
+                                '<img src="img/user.svg" height="40"/>'+
+                            '</div>'+
                         '</div>'+
                         medium.denomination+
                     '</td>'+
@@ -45,14 +47,16 @@ function recupListeMediums() {
                 $('#front_mediums').append(
                     '<div>'+
                         '<div>'+
-                            '<img src="img/icone_bonhomme.PNG" height="40"/>'+ 
+                            '<div class="user_img">'+
+                                '<img src="img/user.svg" height="40"/>'+
+                            '</div>'+ 
                         '<div>'+
                         '<p>'+
                             response.mediums[i].denomination+
-                        '<p>'+
+                        '</p>'+
                         '<p>'+
                             response.mediums[i].type+
-                        '<p>'+
+                        '</p>'+
                     '</div>'
                 );
             }
@@ -63,11 +67,11 @@ function recupListeMediums() {
     })
     .fail(function(error) {
         console.log('erreur déso',error);
-    });                
+    });               
 }
 
 function pageInit() {
-    $(".hide").hide(); // hide selected sections at the beginning
+    $(".hide").hide(); // hide selected sections WARN: do it at last
     recupListeMediums();
 }
 
@@ -81,4 +85,30 @@ async function voirMediums() {
     // hide button
     $("#voir_mediums").hide();
 }
+
+
+// [html loader]
+/** useless : use insteal jquery.load() !!!
+$(document).ready(() => {
+    // add login nav bar from file
+    let filepath = (document.URL + "login.html");
+    console.log(filepath);
+    fetch(filepath)
+        .then((response) => {
+            // The API call was successful!
+	        return response.text();
+        })
+        .then((html) => {
+            console.log(html);
+            // Convert the HTML string into a document object
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(html, 'text/html');
+            // add html code to page
+            //$('#login_top_nav').append(html);
+        })
+        .catch(function (err) {
+            // There was an error
+            console.warn('Something went wrong.', err);
+    });
+});*/
 
