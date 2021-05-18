@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Prédict'IF - Statistiques</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <section id="header"></section>
+        
+        <script>
+            $(document).ready(function() {
+                $('#header').load('login.html');
+            });
+        </script>
+        <h1>Statistiques de l'agence</h1>
+        <section id="top5Mediums">
+            <h2>Top 5 des médiums les plus populaires</h2>
+            <section id="displayTop5" style="overflow-y: scroll;"></section>
+        </section>
+        
+        <section id="consultations_employes">
+            <h2>Consultations par employés</h2>
+            <section id="displayConsultationsEmployes" style="overflow-y: scroll;"></section>
+        </section>
+        
+         <section id="mediums_par_client">
+            <h2>Mediums les plus populaires par clients</h2>
+            <section id="displayMediums_par_client" style="overflow-y: scroll;"></section>
+        </section>
+        
+        <script>
+            $(document).ready(affichages);
+            
+            function recupInfosMedium(){
+                // Appel AJAX
+                        $.ajax({
+                            url: './ActionServlet',
+                            method: 'POST',
+                            data: {
+                                todo: 'top5-mediums',
+                            },
+                            dataType: 'json'
+                        })
+                        .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            console.log('Response',response); // LOG dans Console Javascript
+                            
+                            if (response.success) {
+                                console.log(response);
+                                creationTop5(response);
+                            }else{
+                                alert("Erreur lors de la connexion");
+                            }
+                        })
+                        .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            console.log('Error',error); // LOG dans Console Javascript
+                            alert("Erreur lors de la connexion");
+                        })
+                        .always( function () { // Fonction toujours appelée
+
+                        });
+            }
+            
+            function recupInfosEmployes(){
+                // Appel AJAX
+                        $.ajax({
+                            url: './ActionServlet',
+                            method: 'POST',
+                            data: {
+                                todo: 'consultations-par-employe',
+                            },
+                            dataType: 'json'
+                        })
+                        .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            console.log('Response',response); // LOG dans Console Javascript
+                            
+                            if (response.success) {
+                                creationConsultParEmploye(response);
+                            }else{
+                                alert("Erreur lors de la connexion");
+                            }
+                        })
+                        .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            console.log('Error',error); // LOG dans Console Javascript
+                            alert("Erreur lors de la connexion");
+                        })
+                        .always( function () { // Fonction toujours appelée
+
+                        });
+            }
+            
+            function recupInfosClients(){
+                // Appel AJAX
+                        $.ajax({
+                            url: './ActionServlet',
+                            method: 'POST',
+                            data: {
+                                todo: 'mediums-par-client',
+                            },
+                            dataType: 'json'
+                        })
+                        .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            console.log('Response',response); // LOG dans Console Javascript
+                            
+                            if (response.success) {
+                                creationMediumsParClient(response);
+                            }else{
+                                alert("Erreur lors de la connexion");
+                            }
+                        })
+                        .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            console.log('Error',error); // LOG dans Console Javascript
+                            alert("Erreur lors de la connexion");
+                        })
+                        .always( function () { // Fonction toujours appelée
+
+                        });
+            }
+            
+            
+            function affichages(jsonObject){
+                recupInfosMedium();
+                recupInfosEmployes();
+                recupInfosClients();
+            }
+            function creationTop5(jsonObject){
+                
+                var sectionTop5 = document.getElementById("displayTop5");
+                
+                var ulTop5 = document.createElement('ul');
+                
+                
+                var mediumsStat = jsonObject['top5'];
+                mediumsStat.sort((medium1,medium2)=>{
+                    return medium2.nb_consultations - medium1.nb_consultations;
+                })
+                
+                console.log(mediumsStat);
+                for(var i=0; i<mediumsStat.length; i++){
+                    var img = document.createElement('img');
+                    img.src= "static/images/icone_bonhomme.PNG";
+                    img.width = "20";
+                    img.height = "20";
+                    var nom = document.createElement('span');
+                    var score = document.createElement('span');
+                    
+                    nom.textContent = mediumsStat[i].Medium.nom;
+                    score.textContent = mediumsStat[i].nb_consultations;
+                    
+                    var listItem = document.createElement('li');
+                    listItem.style.display="flex";
+                    listItem.style.flexdirection="linear";
+                    listItem.appendChild(img);
+                    listItem.appendChild(nom);
+                    listItem.appendChild(score);
+                                      
+                    ulTop5.appendChild(listItem);
+                }
+                
+                sectionTop5.appendChild(ulTop5);
+            }
+            
+            function creationConsultParEmploye(jsonObject){
+                
+                var sectionConsultParEmploye = document.getElementById("displayConsultationsEmployes");
+                
+                var ulConsultParEmploye = document.createElement('ul');
+                
+                
+                var employeStat = jsonObject['consultationsEmploye'];
+                employeStat.sort((employe1,employe2)=>{
+                    return employe2.nb_consultations - employe1.nb_consultations;
+                })
+                
+                for(var i=0; i<employeStat.length; i++){
+                    var img = document.createElement('img');
+                    img.src= "static/images/icone_bonhomme.PNG";
+                    img.width = "20";
+                    img.height = "20";
+                    var nom = document.createElement('span');
+                    var score = document.createElement('span');
+                    
+                    nom.textContent = employeStat[i].employe.prenom;
+                    score.textContent = employeStat[i].nb_consultations;
+                    
+                    var listItem = document.createElement('li');
+                    listItem.style.display="flex";
+                    listItem.style.flexdirection="linear";
+                    listItem.appendChild(img);
+                    listItem.appendChild(nom);
+                    listItem.appendChild(score);
+                                      
+                    ulConsultParEmploye.appendChild(listItem);
+                }
+                
+                sectionConsultParEmploye.appendChild(ulConsultParEmploye);
+            }
+            
+            function creationMediumsParClient(jsonObject){
+                
+                var sectionMediumsParClient = document.getElementById("displayMediums_par_client");
+                
+                var ulMediumsParClient  = document.createElement('ul');
+                
+                
+                var clientStat = jsonObject['mediums_par_clients'];
+                
+                for(var i=0; i<clientStat.length; i++){
+                    
+                    var listItem = document.createElement('li');
+                    
+                    var img = document.createElement('img');
+                    img.src= "static/images/icone_bonhomme.PNG";
+                    img.width = "20";
+                    img.height = "20";
+                    var nom = document.createElement('span');
+                    
+                    nom.textContent = clientStat[i].client.prenom;
+                    listItem.appendChild(img);
+                    listItem.appendChild(nom);
+                    
+                    var mediumStat = clientStat[i]['listeMediums'];
+                    console.log(mediumStat[0].medium.nom);
+                    mediumStat.sort((medium1,medium2)=>{
+                        return medium2.nb_consultations - medium1.nb_consultations;
+                    })
+                    
+                    for(var j=0; j<mediumStat.length; j++){
+                        var sectionMedium =  document.createElement('section');
+                        var nomMedium = document.createElement('span');
+                        var score = document.createElement('span');
+                        
+                        nomMedium.textContent = mediumStat[j].medium.nom;
+                        score.textContent = mediumStat[j].nb_consultations;
+                        
+                        sectionMedium.appendChild(nomMedium);
+                        sectionMedium.appendChild(score);
+                        
+                        listItem.appendChild(sectionMedium);
+                    }
+                    
+                    
+                    listItem.style.display="flex";
+                    listItem.style.flexdirection="linear";
+                                      
+                    ulMediumsParClient.appendChild(listItem);
+                }
+                
+                sectionMediumsParClient.appendChild(ulMediumsParClient);
+            }
+            
+        </script>
+    </body>
+</html>

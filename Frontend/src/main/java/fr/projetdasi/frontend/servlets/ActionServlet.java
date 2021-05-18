@@ -112,7 +112,28 @@ public class ActionServlet extends HttpServlet {
                 serialisation = new SerialisationListeConsultations();
                 break;
             }
-                
+            
+            case "top5-mediums":
+            {
+                action = new ActionRecupererTop5Mediums();
+                serialisation = new SerialisationRecupererTop5Mediums();
+                break;
+            }
+               
+            case "consultations-par-employe":
+            {
+                action = new ActionRecupererConsultationsParEmploye();
+                serialisation = new SerialisationRecupererConsultationsParEmploye();
+                break;
+            }
+            
+            case "mediums-par-client":
+            {
+                action = new ActionRecupererMediumsParClient();
+                serialisation = new SerialisationRecupererMediumsParClient();
+                break;
+            }
+            
             default:
                 // retourner page d'erreur
                 break;
