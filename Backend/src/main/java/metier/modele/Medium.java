@@ -6,6 +6,7 @@
 package metier.modele;
 
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +25,8 @@ public class Medium {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
     protected Character genre;
+    
+    @Column(unique=true)
     protected String denomination;
     protected String presentation;
 

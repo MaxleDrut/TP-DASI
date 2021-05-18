@@ -8,13 +8,15 @@ and open the template in the editor.
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <div id="logo" style="display: flex; flex-direction: row; margin: 0 30px;">
         <img alt="boule de cristal" src="static/images/bouleCristal.PNG" height="30" width="30"/>
-        <h1 style="margin-block-start:0px; margin-block-end:0px;">Predict'IF</h1>
+        <h1 style="margin-block-start:0px; margin-block-end:0px;"> 
+            <a href="index.html">Predict'IF</a>
+        </h1>
         <img alt="boule de cristal" src="static/images/bouleCristal.PNG" height="30" width="30"/>
     </div>
     
     <section class="login" >
         <section id="headerUserInfo" style="display: none;flex-direction: row;">
-            <img alt="photo de profil" src="icone_bonhomme.PNG" width="20" height="20"/>
+            <img alt="photo de profil" src="static/images/icone_bonhomme.PNG" width="20" height="20"/>
             <span id="headerPrenomUser" style="margin: 0 10px;"></span>
             
             <button onclick="redirection()" id="espace">Accéder à mon espace</button>
@@ -37,8 +39,7 @@ and open the template in the editor.
                 }else{
                     masquerConnexion();
                 }
-                $('#bouton-deconnexion').on( 'click', deconnexion);  
-                
+                $('#bouton-deconnexion').on( 'click', deconnexion); 
             }
             
             function connexion(){
@@ -138,12 +139,13 @@ and open the template in the editor.
                 window.location.href="espace_"+type+".html";
             }
             
+
             function recupCookie(){
                 let cookies = document.cookie.split('=');
                 let out=cookies[1];
                 return out;
             }
-            
+
         </script>
         
     </section>
