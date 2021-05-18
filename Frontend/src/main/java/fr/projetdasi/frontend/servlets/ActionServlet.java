@@ -53,6 +53,13 @@ public class ActionServlet extends HttpServlet {
                 serialisation = new SerialisationConnexion();
                 break;
             }
+            
+            case "deconnexion":
+            {
+                action = new ActionDeconnexion();
+                serialisation = new SerialisationDeconnexion();
+                break;
+            }
 
             case "lister-mediums":
             {
@@ -82,6 +89,14 @@ public class ActionServlet extends HttpServlet {
                 break;
             }
             
+            case "recuperer-employe":
+            {
+                action = new ActionRecupererEmploye();
+                serialisation = new SerialisationEmploye();
+                break;
+            }
+            
+            
             case "ajouter-favoris":
             {
                 action = new ActionAjoutFavoris();
@@ -93,6 +108,13 @@ public class ActionServlet extends HttpServlet {
             {
                 action = new ActionRetraitFavoris();
                 serialisation = new SerialisationFavoris();
+                break;
+            }
+            
+            case "demander-consultation":
+            {
+                action = new ActionDemanderConsultation();
+                serialisation = new SerialisationDemanderConsultation();
                 break;
             }
             

@@ -5,19 +5,19 @@
  */
 package fr.projetdasi.frontend.actions;
 
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import metier.modele.Client;
 import metier.modele.Consultation;
+import metier.modele.Medium;
 import metier.service.Services;
 
-public class ActionRecupererHistoriqueConsultationsClient extends Action{
-
+public class ActionDemanderConsultation extends Action{
     
     @Override
     public void executer(HttpServletRequest request) {
         //Recupération des paramètres de la Requête
+        String idMedString = request.getParameter("idMedium");
         
         try {
             HttpSession session = request.getSession();
@@ -26,29 +26,39 @@ public class ActionRecupererHistoriqueConsultationsClient extends Action{
                 throw new Exception("Pas d'utilisateur connecte !");
             }
             
-            long id = (long) session.getAttribute("id");
-            request.setAttribute("idClient",id);
+            long idClient = (long) session.getAttribute("id");
+            long idMedium = Long.valueOf(idMedString);
             
             Services service = new Services();
+            Client client = service.rechercherClient(idClient);
+            Medium medium = service.obtenirMedium(idMedium);
             
-            Client client = service.rechercherClient(id);
+            if(medium == null) {
+                throw new Exception("Le medium est introuvable");
+            }
             if(client == null) {
                 throw new Exception("Le client est introuvable");
             }
             
-            List<Consultation> consultations = service.recupererConsultationsClient(client);
-            
-            if(consultations == null) {
-                throw new Exception("Le clientn n'a jamais consulté");
+            if(service.obtenirConsultationEnCoursClient(client) != null) {
+                throw new Exception("Vous avez deja demandé une consultation.");
             }
             
-            request.setAttribute("consultations",consultations);
+            Consultation consultation = service.demanderConsultation(client,medium);
+            
+            if(consultation == null) {
+                //Seule cause possible de l'erreur, car la consultation déjà en cours pour le client est check précédemment
+                throw new Exception("Ce medium est actuellement occupé, veuillez reessayer");
+            }
+            
             request.setAttribute("success",true);
+            request.setAttribute("consultation",consultation);
         } catch (Exception e) {
             System.out.println(e);
             request.setAttribute("success",false);
+            request.setAttribute("msgErreur",e.getLocalizedMessage());
         }
-        
+
     }
     
 }

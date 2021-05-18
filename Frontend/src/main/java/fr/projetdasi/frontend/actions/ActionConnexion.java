@@ -6,7 +6,8 @@
 package fr.projetdasi.frontend.actions;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import metier.modele.Client;
 import metier.modele.Utilisateur;
 import metier.service.Services;
 
@@ -31,7 +32,22 @@ public class ActionConnexion extends Action{
         
         Utilisateur utilisateur = serviceConnexion.authentification(login, password);
         
-        System.out.println(utilisateur);
+        
+        if(utilisateur != null) {
+            HttpSession session = request.getSession();
+            
+
+            session.setAttribute("id",utilisateur.getId());
+            session.setAttribute("connecte",true);
+            if(utilisateur instanceof Client) {
+                session.setAttribute("type","client");
+            } else {
+                session.setAttribute("type","employe");
+            }
+        }
+        
+        
+        //System.out.println(utilisateur);
         request.setAttribute("utilisateur",utilisateur);
     }
     

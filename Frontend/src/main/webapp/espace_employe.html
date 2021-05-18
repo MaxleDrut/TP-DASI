@@ -1,23 +1,166 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <title>Prédict'IF - Mon espace</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous" />
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     </head>
     <body>
-        <section id="header"></section>
-        
+        <section class="container">
+            <section id="header"></section>
+            <hr>
+            <script>
+                $(document).ready(function() {
+                    $('#header').load('login.html');
+                });
+            </script>
+            
+            <h3>Bienvenue, <span id="nom-employe"></span> !</h3>
+            
+            <h1>Historique des consultations</h1>
+            <section id="historique-consultations" class="container col-8 py-3">
+                Chargement...
+            </section>
+
+            <h1>Consultations en attente</h1>
+            <section id="consultation-attente" class="container col-8 py-3">
+                Chargement...
+            </section>
+
+            <h1>Espace entreprise</h1>
+            <section class="d-flex flex-row justify-content-center">
+                <a href="./stats.html" class="col-8 py-2">
+                    <button class="w-100">Consulter les activités de l'agence</button>
+                </a>
+            </section>
+        </section>
         <script>
-            $(document).ready(function() {
-                $('#header').load('login.html');
+            function loadPageData(employe)
+            {
+                let empId = employe.id;
+                
+                $.ajax({
+                    url: "./ActionServlet?todo=historique-consultations",
+                    data: {
+                        type: "employe",
+                        id: empId
+                    },
+                    method: "GET"
+                })
+                .done(response => {
+                    if(response.success)
+                    {
+                        updateHistoriqueConsultations(response.consultations);
+                    }
+                    else
+                    {
+                        alert("Impossible de récupérer l'historique des consultations : " + response.message);
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête (récupération de l'historique)");
+                    console.log(error);
+                });
+                
+                $.ajax({
+                    url: "./ActionServlet?todo=consultation-assignee",
+                    method: "GET"
+                })
+                .done(response => {
+                    if(response.success)
+                    {
+                        updateConsultationEnAttente(response.consultation);
+                    }
+                    else
+                    {
+                        alert("Impossible de récupérer la consultation assignée : " + response.message);
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête (récupération consultation assignée)");
+                    console.log(error);
+                });
+            }
+            
+            function updateHistoriqueConsultations(consultations)
+            {
+                let sectionHisto = $("#historique-consultations");
+                sectionHisto.empty();
+                consultations.forEach(consultation => {
+                    let dateAssignation = new Date(consultation.assignation);
+                    sectionHisto.append(
+                        `<article class="consultation-entry row">
+                            <div class="col-3">
+                                <img src="icone_bonhomme.PNG" alt="Profil medium" height=50 />
+                                ${consultation.medium.nom}
+                            </div>
+                            <div class="col-4">
+                                <span>${dateAssignation.toLocaleDateString()}</span>
+                                <span>avec ${consultation.client.prenom} ${consultation.client.nom}</span>
+                            </div>
+                            <textarea readonly class="col-5">
+                                ${consultation.commentaire ? consultation.commentaire : 'Pas de commentaire'}
+                            </textarea>
+                        </article>`
+                    );
+                });
+            }
+            
+            function updateConsultationEnAttente(consultation)
+            {
+                let sectionConsAttente = $("#consultation-attente");
+                sectionConsAttente.html(
+                        `<article class="row">
+                            <div class="col-5">
+                                <img src="icone_bonhomme.PNG" alt="Profil medium" height=50 />
+                                ${consultation.medium.nom}
+                            </div>
+                            <button class="col-7">
+                                Aller à la consultation
+                            </button>
+                        </article>`
+                );
+            }
+            
+            $(document).ready(() => {
+                let id;
+                document.cookie.split(";").forEach((element) => {
+                    let cookie = element.split("=")[0].trim();
+                    if(cookie === "id")
+                    {
+                        id = element.split("=")[1].trim();
+                    }
+                });
+                
+                $.ajax({
+                    url: "./ActionServlet?todo=recuperer-employe",
+                   data: {
+                       id: id
+                   },
+                   method: "GET"
+                })
+                .done(response => {
+                    console.log(response);
+                    if(response.success)
+                    {
+                        loadPageData(response.employe);
+                        $("#nom-employe").text(response.employe.prenom);
+                    }
+                    else
+                    {
+                        location.href = "./";
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête");
+                    console.log(error);
+                });
             });
         </script>
+
         
         <h1>Historique des consultations</h1>
         <section>
@@ -56,5 +199,6 @@ and open the template in the editor.
             SAMPLE DATA
             <button>Consulter les activités de l'agence</button>
         </section>
+
     </body>
 </html>

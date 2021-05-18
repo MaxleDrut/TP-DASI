@@ -25,6 +25,12 @@ public class SerialisationListeMedium extends Serialisation {
     public void serialiser(HttpServletRequest request, HttpServletResponse response) {
         JsonObject container = new JsonObject();
         
+        if(request.getAttribute("idClient")!=null) {
+            long idClient = (long) (request.getAttribute("idClient"));
+            container.addProperty("idClient",idClient);
+        }
+        
+     
         List<Medium> mediums = (List<Medium>)request.getAttribute("mediums");
         /*Si la requête jquery contient un id de client, affiche pour tous les mediums
         S'ils sont favoris de ce client.*/
