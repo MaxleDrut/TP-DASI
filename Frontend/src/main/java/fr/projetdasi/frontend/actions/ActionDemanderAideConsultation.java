@@ -7,6 +7,7 @@ package fr.projetdasi.frontend.actions;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import metier.modele.Client;
 import metier.service.Services;
 
@@ -15,6 +16,16 @@ public class ActionDemanderAideConsultation extends Action
     @Override
     public void executer(HttpServletRequest request) 
     {
+        HttpSession session = request.getSession();
+        boolean connecte = (boolean) session.getAttribute("connecte");
+        
+        if(!connecte) 
+        {
+            request.setAttribute("success", false);
+            request.setAttribute("message", "Vous n'êtes pas connecté.e");
+            return;
+        }
+        
         String idClientText = request.getParameter("client");
         String amourText = request.getParameter("amour");
         String santeText = request.getParameter("sante");
