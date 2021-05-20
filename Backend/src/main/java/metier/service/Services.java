@@ -887,7 +887,7 @@ public class Services {
     public Map<Client, Map<Medium, Long>> recupererMediumsLesPlusConsultesParClient()
     {
         ClientDao clientDao = new ClientDao();
-        Map<Client, Map<Medium, Long>> result = null;
+        Map<Client, Map<Medium, Long>> result = new HashMap<>();
         List<Client> listeClients = obtenirListeClients();
         
         try

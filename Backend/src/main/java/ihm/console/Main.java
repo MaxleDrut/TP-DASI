@@ -12,6 +12,7 @@ import dao.JpaUtil;
 import static ihm.console.Utils.assertEquals;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -57,7 +58,7 @@ public class Main {
         /*authentificationIntervative();*/  
         testerObtenirEmploye();
         testerObtenirListeEmployes();
-        ajoutManuelCons();
+        //ajoutManuelCons();
         testerObtenirConsultation();       
         testerRecupererNombreConsultationsEmploye();
 
@@ -69,8 +70,11 @@ public class Main {
         testerRecupererNbConsultationsMediums();
         testerRecupererTop5Mediums();
         
+        
         /*authentificationIntervative();*/
         testerAjouterMediumAuxFavoris();
+        
+        testerRecupererMediumsParClient();
     }
 
     public static void testerAidePrediction(int amour, int sante, int travail) {
@@ -566,4 +570,31 @@ public class Main {
             }
         }
     }
+    
+    public static void testerRecupererMediumsParClient(){
+        Services services = new Services();
+        Map<Client, Map<Medium, Long>> mediumsParClient = services.recupererMediumsLesPlusConsultesParClient();
+        
+        System.out.println("============= testerRecupererMediumsParClient() ===========");
+        if(mediumsParClient.isEmpty()){
+            System.out.println("Il n'y a aucune consultation pour aucun client");
+        }else{
+            for(Iterator i = mediumsParClient.keySet().iterator(); i.hasNext();){
+                Client client = (Client) i.next();
+                System.out.println(client.getMail());
+                
+                Map<Medium,Long> consult_medium = (Map<Medium,Long>) mediumsParClient.get(client);
+                if(consult_medium.isEmpty()){
+                    System.out.println("Il n'y a aucune consultation pour ce client");
+                }else{
+                    for(Iterator j = consult_medium.keySet().iterator(); j.hasNext();){
+                        Medium medium = (Medium) j.next();
+                        Long nb = (Long) consult_medium.get(medium);
+                        System.out.println(medium.getDenomination() + " nb : "+ nb);
+                    }
+                }
+            }
+        }
+    }
+    
 }

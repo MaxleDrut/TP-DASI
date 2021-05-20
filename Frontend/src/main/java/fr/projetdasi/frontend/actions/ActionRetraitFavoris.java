@@ -6,6 +6,7 @@
 package fr.projetdasi.frontend.actions;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import metier.modele.Client;
 import metier.modele.Medium;
 import metier.service.Services;
@@ -16,11 +17,16 @@ public class ActionRetraitFavoris extends Action{
     @Override
     public void executer(HttpServletRequest request) {
         //Recupération des paramètres de la Requête
-        String idClString = request.getParameter("idClient");
         String idMedString = request.getParameter("idMedium");
         
         try {
-            long idClient = Long.valueOf(idClString);
+            HttpSession session = request.getSession();
+            
+            if(!((boolean) session.getAttribute("connecte"))) {
+                throw new Exception("Pas d'utilisateur connecte !");
+            }
+            
+            long idClient = (long) session.getAttribute("id");
             long idMedium = Long.valueOf(idMedString);
             
             Services service = new Services();

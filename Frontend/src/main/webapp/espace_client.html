@@ -48,20 +48,18 @@ and open the template in the editor.
         <script>
             $(document).ready(function() 
             {
-                var idClient = idFromCookie(recupCookie());
-                recupClient(idClient);
-                recupListeMediums(idClient);
-                recupHistoriqueCons(idClient);
+                recupClient();
+                recupListeMediums();
+                recupHistoriqueCons();
             });
             
-            function recupClient(idCli) {
+            function recupClient() {
                 
                 $.ajax({
                     url: './ActionServlet',
                     method:'POST',
                     data: {
-                        todo:'recuperer-client',
-                        id:idCli
+                        todo:'recuperer-client'
                     },
                     dataType:'json'
                 }).done(function (response) {
@@ -80,13 +78,12 @@ and open the template in the editor.
                 });    
             }
             
-            function recupListeMediums(idCli) {
+            function recupListeMediums() {
                 $.ajax({
                     url: './ActionServlet',
                     method:'POST',
                     data: {
-                        todo:'lister-mediums',
-                        idClient:idCli
+                        todo:'lister-mediums'
                     },
                     dataType:'json'
                 }).done(function (response) {
@@ -98,22 +95,22 @@ and open the template in the editor.
                                 '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
                                 '<td> <div>'+ medium.presentation + '<img src="Etoile_Favori.PNG" height="20" id ='+medium.id+'> </div>' + 
                                 '<div>'+medium.type + 
-                                '<button  onclick="location.href=\'ValidationContact.html?idMedium='+medium.id+' \' "> Contacter maintenant </button>' +
+                                '<button onclick=demanderConsultation('+medium.id+')> Contacter maintenant </button>' +
                                 '</div> </td>' +
                                 '</tr>'
                             );
-                            listenerRetrait(idCli,medium.id);
+                            listenerRetrait(medium.id);
                         } else {
                             $('#liste-mediums').append(
                                 '<tr>'+
                                 '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
                                 '<td> <div>'+ medium.presentation + '<img src="Etoile_Non_Fav.PNG" height="20" id ='+medium.id+'> </div>' + 
                                 '<div>'+medium.type + 
-                                '<button  onclick="location.href=\'ValidationContact.html?idMedium='+medium.id+' \' "> Contacter maintenant </button>' + 
+                                '<button onclick=demanderConsultation('+medium.id+')> Contacter maintenant </button>' +
                                 '</div> </td>' +
                                 '</tr>'
                             );
-                            listenerAjout(idCli,medium.id);
+                            listenerAjout(medium.id);
                         }
                         
                     });
@@ -123,13 +120,12 @@ and open the template in the editor.
                 });                
             }
             
-            function recupHistoriqueCons(idCli) {
+            function recupHistoriqueCons() {
                 $.ajax({
                     url: './ActionServlet',
                     method:'POST',
                     data: {
                         todo:'historique-consultations-client',
-                        idClient:idCli
                     },
                     dataType:'json'
                 }).done(function (response) {
@@ -142,7 +138,7 @@ and open the template in the editor.
                                 '<td> <div> Rencontré le ' +consultation.debut+
                                 ', la consultation a duré '+consultation.duree+' minutes </div>' +
                                 '<div>'+consultation.typeMedium +
-                                '<button  onclick="location.href=\'ValidationContact.html?idMedium='+consultation.idMedium+' \' "> Recontacter maintenant </button>' + 
+                                '<button onclick=demanderConsultation('+consultation.idMedium+')> Recontacter maintenant </button>' +
                                 '</div> </td>' +
                                 '</tr>'
                             );
@@ -153,7 +149,7 @@ and open the template in the editor.
                                 '<td> <div> Rencontrée le ' +consultation.debut+
                                 ', la consultation a duré '+consultation.duree+' minutes </div>' +
                                 '<div>'+consultation.typeMedium +
-                                '<button  onclick="location.href=\'ValidationContact.html?idMedium='+consultation.idMedium+' \' "> Recontacter maintenant </button>' + 
+                                '<button onclick=demanderConsultation('+consultation.idMedium+')> Recontacter maintenant </button>' +
                                 '</div> </td>' +
                                 '</tr>'
                             );
@@ -166,43 +162,66 @@ and open the template in the editor.
                 });  
             }
             
-            function listenerAjout(idCli,idMed) {
+            function demanderConsultation(idMed) {
+                $.ajax({
+                    url: './ActionServlet',
+                    method:'POST',
+                    data: {
+                        todo:'demander-consultation',
+                        idMedium:idMed
+                    },
+                    dataType:'json'
+                }).done(function (response) {
+                    console.log(response);
+                    
+                    if(response.success === true) {
+                        window.location.href=('validation_contact.html?idMedium='+idMed);
+                    } else {
+                        alert(response.msgErreur);
+                    }
+                    
+                })
+                .fail(function(error) {
+                    console.log('Erreur de creation de la consultation',error);
+                });   
+                
+            }
+            
+            function listenerAjout(idMed) {
                 var image = window.document.getElementById(idMed);
                 image.addEventListener("click",function() {
                     image.setAttribute("src","Etoile_Favori.PNG");
                     
                     //Ajout au favoris du medium dans la BD
-                    ajoutFavoris(idCli,idMed);
+                    ajoutFavoris(idMed);
                     //Retrait du listener
                     imageClone = image.cloneNode(true);
                     image.parentNode.replaceChild(imageClone, image);
-                    listenerRetrait(idCli,idMed);
+                    listenerRetrait(idMed);
                 });
             }
             
-            function listenerRetrait(idCli,idMed) {
+            function listenerRetrait(idMed) {
                 var image = window.document.getElementById(idMed);
                 image.addEventListener("click",function() {
                     image.setAttribute("src","Etoile_Non_Fav.PNG");
                     
                     //Retrait des favoris du medium dans la BD
-                    retraitFavoris(idCli,idMed);
+                    retraitFavoris(idMed);
                     //Retrait du listener
                     imageClone = image.cloneNode(true);
                     image.parentNode.replaceChild(imageClone, image);
-                    listenerAjout(idCli,idMed);
+                    listenerAjout(idMed);
                 });
             }
             
-            function ajoutFavoris(idCli,idMed) {
+            function ajoutFavoris(idMed) {
                 $.ajax({
                     url: './ActionServlet',
                     method:'POST',
                     data: {
                         todo:'ajouter-favoris',
-                        idClient:idCli,
                         idMedium:idMed
-                        
                     },
                     dataType:'json'
                 }).done(function (response) {
@@ -213,15 +232,13 @@ and open the template in the editor.
                 });    
             }
             
-            function retraitFavoris(idCli,idMed) {
+            function retraitFavoris(idMed) {
                 $.ajax({
                     url: './ActionServlet',
                     method:'POST',
                     data: {
                         todo:'retirer-favoris',
-                        idClient:idCli,
                         idMedium:idMed
-                        
                     },
                     dataType:'json'
                 }).done(function (response) {
@@ -230,36 +247,6 @@ and open the template in the editor.
                 .fail(function(error) {
                     console.log('Erreur d ajout aux favoris',error);
                 });    
-            }
-            
-            function recupCookie(){
-                let nameCookie = "id";
-                let cookies = document.cookie.split(';');
-                for(var i=0;i < cookies.length;i++) {
-                    var c = cookies[i];
-                    while (c.charAt(0)==' ') {
-                        c = c.substring(1,c.length);
-                    }
-                    if (c.indexOf(nameCookie) == 0){
-                        return nameCookie+c.substring(nameCookie.length,c.length);
-                    }
-                }
-                return null;
-            }
-            
-            function idFromCookie(cookie) {
-                if (cookie === null) {
-                    return null;
-                }
-                
-                var start=3; //Début de la partie du cookie qui nous intéresse (les 3 premiers chars sont id=)
-                var end=3;
-                while(cookie.charAt(end) >= '0' && cookie.charAt(end) <= '9') { //Recherche de la fin du n° de l'id.
-                    end++;
-                }
-                
-                var id = cookie.substring(start,end);
-                return id;
             }
             
         </script>

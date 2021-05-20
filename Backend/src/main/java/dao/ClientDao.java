@@ -61,6 +61,8 @@ public class ClientDao {
                 + "order by count(cons.medium)"
         ).setParameter("client", client);
         
+        
+        
         Map<Medium, Long> result = new HashMap<>();
         int cpt = 0;
         
@@ -73,6 +75,7 @@ public class ClientDao {
             Long nbCons = (Long) obj[1];
             result.put(medium, nbCons);
         }
+        
         
         return result;
     }

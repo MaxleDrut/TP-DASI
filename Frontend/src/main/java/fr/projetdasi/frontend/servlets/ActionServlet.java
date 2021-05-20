@@ -53,6 +53,13 @@ public class ActionServlet extends HttpServlet {
                 serialisation = new SerialisationConnexion();
                 break;
             }
+            
+            case "deconnexion":
+            {
+                action = new ActionDeconnexion();
+                serialisation = new SerialisationDeconnexion();
+                break;
+            }
 
             case "lister-mediums":
             {
@@ -104,6 +111,13 @@ public class ActionServlet extends HttpServlet {
                 break;
             }
             
+            case "demander-consultation":
+            {
+                action = new ActionDemanderConsultation();
+                serialisation = new SerialisationDemanderConsultation();
+                break;
+            }
+            
             /*
             TODO : si le temps, remplacer par la version standard (historique-consultations)
             */
@@ -139,8 +153,30 @@ public class ActionServlet extends HttpServlet {
             {
                 action = new ActionDemanderAideConsultation();
                 serialisation = new SerialisationAideConsultation();
+                break;
             }
-                
+
+            case "top5-mediums":
+            {
+                action = new ActionRecupererTop5Mediums();
+                serialisation = new SerialisationRecupererTop5Mediums();
+                break;
+            }
+               
+            case "consultations-par-employe":
+            {
+                action = new ActionRecupererConsultationsParEmploye();
+                serialisation = new SerialisationRecupererConsultationsParEmploye();
+                break;
+            }
+            
+            case "mediums-par-client":
+            {
+                action = new ActionRecupererMediumsParClient();
+                serialisation = new SerialisationRecupererMediumsParClient();
+                break;
+            }
+
             default:
                 // retourner page d'erreur
                 break;
