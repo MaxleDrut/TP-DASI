@@ -237,9 +237,7 @@ and open the template in the editor.
                                     ${consultation.medium.nom}
                                     ${new Date(consultation.assignation).toLocaleDateString()}
                                 </div>
-                                <textarea readonly class="col-9">
-                                    ${consultation.commentaire ? consultation.commentaire : '(pas de commentaire)'}
-                                </textarea>
+                                <textarea readonly class="col-9">${consultation.commentaire ? consultation.commentaire : '(pas de commentaire)'}</textarea>
                             </article>`
                     );
                 });

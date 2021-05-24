@@ -106,9 +106,7 @@
                                 <span>${dateAssignation.toLocaleDateString()}</span>
                                 <span>avec ${consultation.client.prenom} ${consultation.client.nom}</span>
                             </div>
-                            <textarea readonly class="col-5">
-                                ${consultation.commentaire ? consultation.commentaire : 'Pas de commentaire'}
-                            </textarea>
+                            <textarea readonly class="col-5">${consultation.commentaire ? consultation.commentaire : 'Pas de commentaire'}</textarea>
                         </article>`
                     );
                 });

@@ -42,6 +42,12 @@ public class Main {
         peuplementBD.peuplementEmploye();
         peuplementBD.peuplementMedium();
 
+        // ATTENTION : décommenter pour exécuter les tests
+        // tests();
+    }
+    
+    public static void tests()
+    {
         // tests en hard
         testerInscriptionClient();
         testerObtenirMedium();
@@ -55,7 +61,6 @@ public class Main {
         
         
         // interface interactive
-        /*authentificationIntervative();*/  
         testerObtenirEmploye();
         testerObtenirListeEmployes();
         //ajoutManuelCons();
@@ -70,8 +75,6 @@ public class Main {
         testerRecupererNbConsultationsMediums();
         testerRecupererTop5Mediums();
         
-        
-        /*authentificationIntervative();*/
         testerAjouterMediumAuxFavoris();
         
         testerRecupererMediumsParClient();

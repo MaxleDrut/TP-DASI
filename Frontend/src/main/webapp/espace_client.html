@@ -93,7 +93,7 @@ and open the template in the editor.
                             $('#liste-mediums').append(
                                 '<tr>'+
                                 '<td> <div> <img src="static/images/icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
-                                '<td> <div>'+ medium.presentation + '<img src="Etoile_Favori.PNG" height="20" id ='+medium.id+'> </div>' + 
+                                '<td> <div>'+ medium.presentation + '<img src="static/images/Etoile_Favori.PNG" height="20" id ='+medium.id+'> </div>' + 
                                 '<div>'+medium.type + 
                                 '<button onclick=demanderConsultation('+medium.id+')> Contacter maintenant </button>' +
                                 '</div> </td>' +
@@ -104,7 +104,7 @@ and open the template in the editor.
                             $('#liste-mediums').append(
                                 '<tr>'+
                                 '<td> <div> <img src="static/images/icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
-                                '<td> <div>'+ medium.presentation + '<img src="Etoile_Non_Fav.PNG" height="20" id ='+medium.id+'> </div>' + 
+                                '<td> <div>'+ medium.presentation + '<img src="static/images/Etoile_Non_Fav.PNG" height="20" id ='+medium.id+'> </div>' + 
                                 '<div>'+medium.type + 
                                 '<button onclick=demanderConsultation('+medium.id+')> Contacter maintenant </button>' +
                                 '</div> </td>' +
@@ -125,7 +125,7 @@ and open the template in the editor.
                     url: './ActionServlet',
                     method:'POST',
                     data: {
-                        todo:'historique-consultations-client',
+                        todo:'historique-consultations-client'
                     },
                     dataType:'json'
                 }).done(function (response) {
@@ -190,7 +190,7 @@ and open the template in the editor.
             function listenerAjout(idMed) {
                 var image = window.document.getElementById(idMed);
                 image.addEventListener("click",function() {
-                    image.setAttribute("src","Etoile_Favori.PNG");
+                    image.setAttribute("src","static/images/Etoile_Favori.PNG");
                     
                     //Ajout au favoris du medium dans la BD
                     ajoutFavoris(idMed);
@@ -204,7 +204,7 @@ and open the template in the editor.
             function listenerRetrait(idMed) {
                 var image = window.document.getElementById(idMed);
                 image.addEventListener("click",function() {
-                    image.setAttribute("src","Etoile_Non_Fav.PNG");
+                    image.setAttribute("src","static/images/Etoile_Non_Fav.PNG");
                     
                     //Retrait des favoris du medium dans la BD
                     retraitFavoris(idMed);

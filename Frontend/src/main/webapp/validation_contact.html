@@ -25,7 +25,7 @@ and open the template in the editor.
         
         <h2 id="genre"></h2>
         
-        <button onclick="location.href='EspaceClient.html'">
+        <button onclick="location.href='espace_client.html'">
                 Retour à votre espace voyance
         </button>
         
@@ -47,17 +47,23 @@ and open the template in the editor.
                     },
                     dataType:'json'
                 }).done(function (response) {
-                    $('#denomination').append(
+                    if(response.success)
+                    {
+                        $('#denomination').append(
                             "Merci d'avoir contacté "+
-                            response.denomination
+                            response.medium.denomination
                         );
-                    if(response.genre==="H") {
-                        $('#genre').append("Il ");
-                    } else {
-                        $('#genre').append("Elle ");
+                        if(response.medium.genre==="H") {
+                            $('#genre').append("Il ");
+                        } else {
+                            $('#genre').append("Elle ");
+                        }
+                        $('#genre').append("vous contactera très prochainement sur votre téléphone");
                     }
-                    $('#genre').append("vous contactera très prochainement sur votre téléphone");
-                
+                    else
+                    {
+                        alert("Une erreur est survenue : " + response.message);
+                    }
                 })
                 .fail(function(error) {
                     console.log('Erreur de récuperation du Medium',error);

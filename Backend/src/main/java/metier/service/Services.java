@@ -281,7 +281,7 @@ public class Services {
             consultationDao.creer(consultation);
 
             // contacter employé
-            Message.envoyerNotification(employe.getNumTelephone(), "Bonjour, nous vous avons assigné un nouveau client. Rendez-vous sur votre espace personnel au plus vite pour le prendre en charge !");
+            Message.envoyerNotification(employe.getNumTelephone(), "Bonjour " + employe.getPrenom() + ", nous vous avons assigné un nouveau client. Rendez-vous sur votre espace personnel au plus vite pour le prendre en charge !");
             
             JpaUtil.validerTransaction();
         }
@@ -558,6 +558,7 @@ public class Services {
      */
     public Consultation terminerConsultation(Consultation consultation, String commentaire) {
         ConsultationDao cDao = new ConsultationDao();
+        EmployeDao eDao = new EmployeDao();
 
         try {
             JpaUtil.creerContextePersistance();
@@ -570,8 +571,12 @@ public class Services {
             JpaUtil.ouvrirTransaction();
             consultation.setDateFin(new Date());
             consultation.setCommentaire(commentaire);
-            consultation.getEmploye().setDisponibilite(Boolean.TRUE);
+            
+            Employe emp = consultation.getEmploye();
+            emp.setDisponibilite(Boolean.TRUE);
+            
             cDao.modifier(consultation);
+            eDao.modifier(emp);
             
             JpaUtil.validerTransaction();
 
