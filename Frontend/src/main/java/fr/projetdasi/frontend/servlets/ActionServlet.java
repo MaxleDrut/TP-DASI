@@ -71,7 +71,7 @@ public class ActionServlet extends HttpServlet {
             case "consultation-assignee":
             {
                 action = new ActionConsultationAssignee();
-                serialisation = new SerialisationConsultationAssignee();
+                serialisation = new SerialisationConsultation();
                 break;
             }
             
@@ -135,6 +135,27 @@ public class ActionServlet extends HttpServlet {
                 break;
             }
             
+            case "demarrer-consultation":
+            {
+                action = new ActionDemarrerConsultation();
+                serialisation = new SerialisationMessage();
+                break;
+            }
+            
+            case "terminer-consultation":
+            {
+                action = new ActionTerminerConsultation();
+                serialisation = new SerialisationConsultation();
+                break;
+            }
+            
+            case "demander-aide":
+            {
+                action = new ActionDemanderAideConsultation();
+                serialisation = new SerialisationAideConsultation();
+                break;
+            }
+
             case "top5-mediums":
             {
                 action = new ActionRecupererTop5Mediums();
@@ -155,7 +176,7 @@ public class ActionServlet extends HttpServlet {
                 serialisation = new SerialisationRecupererMediumsParClient();
                 break;
             }
-            
+
             default:
                 // retourner page d'erreur
                 break;

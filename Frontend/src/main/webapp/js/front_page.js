@@ -25,7 +25,7 @@ function recupListeMediums() {
                 '<tr>'+
                     '<td>'+
                         '<div>'+
-                            '<img src="img/icone_bonhomme.PNG" height="40"/>'+ 
+                            '<img src="static/images/icone_bonhomme.PNG" height="40"/>'+ 
                         '</div>'+
                         medium.denomination+
                     '</td>'+
@@ -44,7 +44,7 @@ function recupListeMediums() {
             $('#front_mediums').append(
                 '<div>'+
                     '<div>'+
-                        '<img src="img/icone_bonhomme.PNG" height="40"/>'+ 
+                        '<img src="static/images/icone_bonhomme.PNG" height="40"/>'+ 
                     '<div>'+
                     '<p>'+
                         response.mediums[i].denomination+

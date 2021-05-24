@@ -64,13 +64,13 @@ and open the template in the editor.
                     dataType:'json'
                 }).done(function (response) {
                     $('#profilAstral').append(
-                            '<div> Votre signe astrologique : '+response.astral.zodiac + '</div>' +
-                            '<div> Votre signe chinois : '+response.astral.chinois + '</div>' +
-                            '<div> Votre couleur porte-bonheur : '+response.astral.couleur + '</div>' +
-                            '<div> Votre animal totem : '+response.astral.animal + '</div>'
+                            '<div> Votre signe astrologique : '+response.client.astral.zodiac + '</div>' +
+                            '<div> Votre signe chinois : '+response.client.astral.chinois + '</div>' +
+                            '<div> Votre couleur porte-bonheur : '+response.client.astral.couleur + '</div>' +
+                            '<div> Votre animal totem : '+response.client.astral.animal + '</div>'
                     );
                     $('#nomClient').append(
-                            'Bonjour '+response.prenom + ' !'
+                            'Bonjour '+response.client.prenom + ' !'
                     );
                 })
                 .fail(function(error) {
@@ -92,7 +92,7 @@ and open the template in the editor.
                         if(medium.favori === true) {
                             $('#liste-mediums').append(
                                 '<tr>'+
-                                '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
+                                '<td> <div> <img src="static/images/icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
                                 '<td> <div>'+ medium.presentation + '<img src="Etoile_Favori.PNG" height="20" id ='+medium.id+'> </div>' + 
                                 '<div>'+medium.type + 
                                 '<button onclick=demanderConsultation('+medium.id+')> Contacter maintenant </button>' +
@@ -103,7 +103,7 @@ and open the template in the editor.
                         } else {
                             $('#liste-mediums').append(
                                 '<tr>'+
-                                '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
+                                '<td> <div> <img src="static/images/icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
                                 '<td> <div>'+ medium.presentation + '<img src="Etoile_Non_Fav.PNG" height="20" id ='+medium.id+'> </div>' + 
                                 '<div>'+medium.type + 
                                 '<button onclick=demanderConsultation('+medium.id+')> Contacter maintenant </button>' +
@@ -134,7 +134,7 @@ and open the template in the editor.
                         if(consultation.genreMedium === 'H') {
                             $('#historique-contacts').append(
                                 '<tr>'+
-                                '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + consultation.denominationMedium + '</td>' +
+                                '<td> <div> <img src="static/images/icone_bonhomme.PNG" height="40"/> </div>' + consultation.denominationMedium + '</td>' +
                                 '<td> <div> Rencontré le ' +consultation.debut+
                                 ', la consultation a duré '+consultation.duree+' minutes </div>' +
                                 '<div>'+consultation.typeMedium +
@@ -145,7 +145,7 @@ and open the template in the editor.
                         } else {
                             $('#historique-contacts').append(
                                 '<tr>'+
-                                '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + consultation.denominationMedium + '</td>' +
+                                '<td> <div> <img src="static/images/icone_bonhomme.PNG" height="40"/> </div>' + consultation.denominationMedium + '</td>' +
                                 '<td> <div> Rencontrée le ' +consultation.debut+
                                 ', la consultation a duré '+consultation.duree+' minutes </div>' +
                                 '<div>'+consultation.typeMedium +

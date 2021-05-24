@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import metier.modele.Consultation;
 
-public class SerialisationConsultationAssignee extends Serialisation 
+public class SerialisationConsultation extends Serialisation
 {
     @Override
-    public void serialiser(HttpServletRequest request, HttpServletResponse response) throws IOException
+    public void serialiser(HttpServletRequest request, HttpServletResponse response) throws IOException 
     {
         Consultation cons = (Consultation) request.getAttribute("consultation");
         
@@ -35,9 +35,26 @@ public class SerialisationConsultationAssignee extends Serialisation
             client.addProperty("prenom", cons.getClient().getPrenom());
             client.addProperty("nom", cons.getClient().getNom());
             
-            consultationJson.addProperty("assignation", cons.getDateAssignation().getTime());
             consultationJson.add("medium", medium);
             consultationJson.add("client", client);
+            
+            consultationJson.addProperty("id", cons.getId());
+            consultationJson.addProperty("assignation", cons.getDateAssignation().getTime());
+            
+            if(cons.getDateDebut() != null)
+            {
+                consultationJson.addProperty("debut", cons.getDateDebut().getTime());
+            }
+            
+            if(cons.getDateFin() != null)
+            {
+                consultationJson.addProperty("fin", cons.getDateFin().getTime());
+            }
+            
+            if(cons.getCommentaire() != null)
+            {
+                consultationJson.addProperty("commentaire", cons.getCommentaire());
+            }
             
             result.add("consultation", consultationJson);
         }

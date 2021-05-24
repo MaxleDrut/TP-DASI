@@ -16,16 +16,38 @@ public class ActionRecupererClient extends Action{
     @Override
     public void executer(HttpServletRequest request) {
         //Recupération des paramètres de la Requête
-       
-        
         try {
             HttpSession session = request.getSession();
-            
-            if(!((boolean) session.getAttribute("connecte"))) {
-                throw new Exception("Pas d'utilisateur connecte !");
+            boolean connecte = (boolean) session.getAttribute("connecte");
+
+            if(!connecte) 
+            {
+                request.setAttribute("success", false);
+                request.setAttribute("message", "Vous n'êtes pas connecté.e");
+                return;
+            }
+
+            String idText = (String) request.getParameter("id");
+            long id;
+
+            if(idText == null)
+            {
+                id = (long) session.getAttribute("id");
+            }
+            else
+            {    
+                try
+                {
+                    id = Long.parseLong(idText);
+                }
+                catch(NumberFormatException e)
+                {
+                    request.setAttribute("success", false);
+                    request.setAttribute("message", "Identifiant invalide.");
+                    return;
+                }
             }
             
-            long id = (long) session.getAttribute("id");
             Services service = new Services();
             
             Client client = service.rechercherClient(id);
@@ -34,9 +56,11 @@ public class ActionRecupererClient extends Action{
             }
             request.setAttribute("client",client);
             request.setAttribute("success",true);
+            request.setAttribute("message", "Client bien récupéré");
         } catch (Exception e) {
             System.out.println(e);
             request.setAttribute("success",false);
+            request.setAttribute("message", e.getLocalizedMessage());
         }
         
         //Instanciation de la classe service

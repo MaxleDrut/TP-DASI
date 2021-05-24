@@ -7,9 +7,6 @@ package fr.projetdasi.frontend.actions;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import metier.modele.Client;
-import metier.modele.Utilisateur;
-import metier.service.Services;
 
 /**
  *

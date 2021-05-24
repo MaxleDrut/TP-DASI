@@ -40,31 +40,31 @@ and open the template in the editor.
             
             function recupInfosMedium(){
                 // Appel AJAX
-                        $.ajax({
-                            url: './ActionServlet',
-                            method: 'POST',
-                            data: {
-                                todo: 'top5-mediums',
-                            },
-                            dataType: 'json'
-                        })
-                        .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
-                            console.log('Response',response); // LOG dans Console Javascript
-                            
-                            if (response.success) {
-                                console.log(response);
-                                creationTop5(response);
-                            }else{
-                                alert("Erreur lors de la connexion");
-                            }
-                        })
-                        .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
-                            console.log('Error',error); // LOG dans Console Javascript
-                            alert("Erreur lors de la connexion");
-                        })
-                        .always( function () { // Fonction toujours appelée
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        todo: 'top5-mediums'
+                    },
+                    dataType: 'json'
+                })
+                .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                    console.log('Response',response); // LOG dans Console Javascript
 
-                        });
+                    if (response.success) {
+                        console.log(response);
+                        creationTop5(response);
+                    }else{
+                        alert("Erreur lors de la récupération du top 5");
+                    }
+                })
+                .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                    console.log('Error',error); // LOG dans Console Javascript
+                    alert("Erreur lors de la récupération du top 5");
+                })
+                .always( function () { // Fonction toujours appelée
+
+                });
             }
             
             function recupInfosEmployes(){
@@ -73,7 +73,7 @@ and open the template in the editor.
                             url: './ActionServlet',
                             method: 'POST',
                             data: {
-                                todo: 'consultations-par-employe',
+                                todo: 'consultations-par-employe'
                             },
                             dataType: 'json'
                         })
@@ -83,12 +83,12 @@ and open the template in the editor.
                             if (response.success) {
                                 creationConsultParEmploye(response);
                             }else{
-                                alert("Erreur lors de la connexion");
+                                alert("Erreur lors de la récupération des consultations par employé");
                             }
                         })
                         .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
                             console.log('Error',error); // LOG dans Console Javascript
-                            alert("Erreur lors de la connexion");
+                            alert("Erreur lors de la récupération des consultations par employé");
                         })
                         .always( function () { // Fonction toujours appelée
 
@@ -101,7 +101,7 @@ and open the template in the editor.
                             url: './ActionServlet',
                             method: 'POST',
                             data: {
-                                todo: 'mediums-par-client',
+                                todo: 'mediums-par-client'
                             },
                             dataType: 'json'
                         })
@@ -111,12 +111,12 @@ and open the template in the editor.
                             if (response.success) {
                                 creationMediumsParClient(response);
                             }else{
-                                alert("Erreur lors de la connexion");
+                                alert("Erreur lors de la récupération des médiums les plus populaires");
                             }
                         })
                         .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
                             console.log('Error',error); // LOG dans Console Javascript
-                            alert("Erreur lors de la connexion");
+                            alert("Erreur lors de la récupération des médiums les plus populaires");
                         })
                         .always( function () { // Fonction toujours appelée
 

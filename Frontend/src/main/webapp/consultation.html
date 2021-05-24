@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+        <head>
+        <title>Prédict'IF - Consultation</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous" />
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <section class="container">
+            <section id="header"></section>
+            <hr>
+            <script>
+                $(document).ready(function() {
+                    $('#header').load('login.html');
+                });
+            </script>
+            
+            <h1>Consultation</h1>
+            <hr>
+            
+            <button onclick="demarrerConsultation();">Démarrer la consultation</button>
+            
+            <section class="row border" id="medium-data">
+                
+            </section>
+            
+            <section class="row border" id="client-data">
+                
+            </section>
+            
+            <h2>Historique des consultations</h2>
+            <section id="histo-consultations" class="container row border" style="overflow-y: scroll; height: 20em">
+                
+            </section>
+            
+            <section class="row my-4" id="help-section" style="opacity: 0;">
+                <div>
+                    <button onclick="demanderAide();">Demander de l'aide</button>
+                </div>
+                <section id="help" class="border my-2">
+                    <ul>
+                        <li>
+                            <div class="d-flex flex-row">
+                                <span class="me-5">Amour <3</span>
+                                <input type="number" id="help-love-score" min="1" max="4" value="1">
+                            </div>
+                            <span id="help-result-love"></span>
+                        </li>
+                        <li>
+                            <div class="d-flex flex-row">
+                                <span class="me-5">Santé</span>
+                                <input type="number" id="help-health-score" min="1" max="4" value="1">
+                            </div>
+                            <span id="help-result-health"></span>
+                        </li>
+                        <li>
+                            <div class="d-flex flex-row">
+                                <span class="me-5">Travail</span>
+                                <input type="number" id="help-work-score" min="1" max="4" value="1">
+                            </div>
+                            <span id="help-result-work"></span>
+                        </li>
+                    </ul>
+                </section>
+            </section>
+            
+            <section class="row" id="terminate-section" style="opacity: 0">
+                <h2>Terminer la consultation</h2>
+                <textarea id="commentaire-consultation" placeholder="Commentaire..." style="height: 15em; overflow-y: scroll;"></textarea>
+                
+                <button onclick="terminerConsultation()" id="btn-fin-consultation">Fin de consultation</button>
+            </section>
+        </section>
+        
+        
+        <script>
+            let ID_CONSULTATION;
+            let ID_CLIENT;
+            
+            function loadPageData(empId)
+            {
+                $.ajax({
+                    url: "./ActionServlet",
+                    data: {
+                        todo: "consultation-assignee"
+                    },
+                    method: "GET"
+                })
+                .done(response => {
+                    if(response.success)
+                    {
+                        if(!response.consultation)
+                        {
+                            location.href = "./";
+                        }
+                        
+                        ID_CONSULTATION = response.consultation.id;
+                        ID_CLIENT = response.consultation.client.id;
+                        
+                        if(response.consultation.debut)
+                        {
+                            afficherZoneConsultationDemarree();
+                        }
+                        
+                        loadClientData(ID_CLIENT);
+                        loadMediumData(response.consultation.medium.id);
+                    }
+                    else
+                    {
+                        alert("Impossible de récupérer la consultation assignée : " + response.message);
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête (récupération consultation assignée)");
+                    console.log(error);
+                });
+            }
+            
+            function loadClientData(clientId)
+            {
+                $.ajax({
+                    url: "./ActionServlet",
+                    data: {
+                        todo: "recuperer-client",
+                        id: clientId
+                    },
+                    method: "GET"
+                })
+                .done(response => {
+                    console.log(response);
+                    if(response.success)
+                    {
+                        updateClientData(response.client);
+                    }
+                    else
+                    {
+                        alert("Impossible de récupérer le client : " + response.message);
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête (récupération client)");
+                    console.log(error);
+                });
+                
+                $.ajax({
+                    url: "./ActionServlet",
+                    data: {
+                        todo: "historique-consultations",
+                        id: clientId,
+                        type: "client"
+                    },
+                    method: "GET"
+                })
+                .done(response => {
+                    if(response.success)
+                    {
+                        updateClientHisto(response.consultations);
+                    }
+                    else
+                    {
+                        alert("Impossible de récupérer l'historique des consultations client : " + response.message);
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête (récupération historique client)");
+                    console.log(error);
+                });
+            }
+            
+            function loadMediumData(mediumId)
+            {
+                $.ajax({
+                    url: "./ActionServlet",
+                    data: {
+                        todo: "recuperer-medium",
+                        id: mediumId
+                    },
+                    method: "GET"
+                })
+                .done(response => {
+                    if(response.success)
+                    {
+                        updateMediumData(response.medium);
+                    }
+                    else
+                    {
+                        alert("Impossible de récupérer le médium : " + response.message);
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête (récupération consultation medium)");
+                    console.log(error);
+                });
+            }
+            
+            function updateClientData(client)
+            {
+                $("#client-data").html(
+                        `<h2>Client</h2>
+                        <center class="w-100">${client.prenom} ${client.nom}</center>
+                        <div class="d-flex flex-row">
+                            <img src="static/images/icone_bonhomme.PNG" height="100">
+                            <ul>
+                                <li>Signe chinois : ${client.astral.chinois}</li>
+                                <li>Signe du zodiaque : ${client.astral.zodiac}</li>
+                                <li>Couleur : ${client.astral.couleur}</li>
+                                <li>Animal totem : ${client.astral.animal}</li>
+                            </ul>
+                        </div>`
+                );
+            }
+            
+            function updateClientHisto(histo)
+            {
+                console.log(histo);
+                // trier par ordre décroissant d'assignation
+                histo.sort((cons1, cons2) => {
+                    return cons2.assignation - cons1.assignation;
+                });
+                
+                
+                $("#histo-consultations").empty();
+                
+                histo.forEach(consultation => {
+                    $("#histo-consultations").append(
+                            `<article class="consultation-entry row">
+                                <div class="col-3">
+                                    <img src="static/images/icone_bonhomme.PNG" alt="Profil medium" height=50 />
+                                    ${consultation.medium.nom}
+                                    ${new Date(consultation.assignation).toLocaleDateString()}
+                                </div>
+                                <textarea readonly class="col-9">
+                                    ${consultation.commentaire ? consultation.commentaire : '(pas de commentaire)'}
+                                </textarea>
+                            </article>`
+                    );
+                });
+            }
+            
+            function updateMediumData(medium)
+            {
+                $("#medium-data").html(
+                        `<h2>Rôle</h2>
+                        <center class="w-100">${medium.denomination}</center>
+                        <div class="d-flex flex-row">
+                            <img src="static/images/icone_bonhomme.PNG" height="100">
+                            <ul>
+                                <li>Présentation: ${medium.presentation}</li>
+                                ${medium.formation ? "<li>Formation : " + medium.formation + "</li>" : ""}
+                                ${medium.promotion ? "<li>Promotion : " + medium.promotion + "</li>" : ""}
+                                ${medium.support ? "<li>Support : " + medium.support + "</li>" : ""}
+                            </ul>
+                        </div>`
+                );
+            }
+            
+            function demarrerConsultation()
+            {
+                $.ajax({
+                    url: "ActionServlet",
+                    data: {
+                        todo: "demarrer-consultation",
+                        id: ID_CONSULTATION
+                    },
+                    method: "GET"
+                })
+                .done(response => {
+                    if(response.success)
+                    {
+                        afficherZoneConsultationDemarree();
+                        alert("La consultation a bien démarré !");
+                    }
+                    else
+                    {
+                        alert("Une erreur est survenue lors du démarrage de la consultation : " + response.message);
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête (démarrer consultation)");
+                    console.log(error);
+                });
+            }
+            
+            function afficherZoneConsultationDemarree()
+            {
+                $("#help-section").css({
+                    "opacity": 1
+                });
+                
+                $("#terminate-section").css({
+                    "opacity": 1
+                });
+            }
+            
+            function demanderAide()
+            {
+                let amour = $("#help-love-score").val();
+                let sante = $("#help-health-score").val();
+                let travail = $("#help-work-score").val();
+                
+                if(amour && sante && travail)
+                {
+                    $.ajax({
+                        url: "ActionServlet",
+                        data: {
+                            todo: "demander-aide",
+                            amour: amour,
+                            sante: sante,
+                            travail: travail,
+                            client: ID_CLIENT
+                        },
+                        method: "GET"
+                    })
+                    .done(response => {
+                        if(response.success)
+                        {
+                            afficherPredictions(response.predictions);
+                        }
+                        else
+                        {
+                            alert("Une erreur est survenue lors de la demande d'aide : " + response.message);
+                        }
+                    })
+                    .fail(error => {
+                        alert("Une erreur est survenue lors de la requête (demander aide)");
+                        console.log(error);
+                    });
+                }
+            }
+            
+            function afficherPredictions(predictions)
+            {
+                $("#help-result-love").text(predictions.amour);
+                $("#help-result-health").text(predictions.sante);
+                $("#help-result-work").text(predictions.travail);
+            }
+            
+            function terminerConsultation()
+            {
+                let commentaire = $("#commentaire-consultation").val();
+                
+                $.ajax({
+                    url: "ActionServlet?todo=terminer-consultation",
+                    data: {
+                        id: ID_CONSULTATION,
+                        commentaire: commentaire
+                    },
+                    method: "POST"
+                })
+                .done(response => {
+                    if(response.success)
+                    {
+                        loadClientData(response.consultation.client.id);
+                        updateFinConsultation(response.consultation);
+                    }
+                    else
+                    {
+                        alert("Une erreur est survenue lors de la terminaison de consultation : " + response.message);
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête (terminer consultation)");
+                    console.log(error);
+                });
+            }
+            
+            function updateFinConsultation(consultation)
+            {
+                $("#commentaire-consultation").prop("disabled", true);
+                $("#commentaire-consultation").val(consultation.commentaire);
+                $("#btn-fin-consultation").prop("disabled", true);
+                
+                alert("Consultation terminée !");
+            }
+            
+            // vérification connexion
+            $(document).ready(() => {
+                $.ajax({
+                    url: "./ActionServlet",
+                   data: {
+                       todo: "recuperer-employe"
+                   },
+                   method: "GET"
+                })
+                .done(response => {
+                    console.log(response);
+                    if(response.success)
+                    {
+                        loadPageData(response.employe.id);
+                    }
+                    else
+                    {
+                        location.href = "./";
+                    }
+                })
+                .fail(error => {
+                    alert("Une erreur est survenue lors de la requête");
+                    console.log(error);
+                });
+            });
+        </script>
+    </body>
+</html>

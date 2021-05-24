@@ -456,9 +456,9 @@ public class Main {
         Consultation cons3 = services.demanderConsultation(client3, medium);
 
         System.out.println("-*-*-*--*---*--*-*-*-*-*-");
-        System.out.println(cons1.getEmploye());
+        /*System.out.println(cons1.getEmploye());
         System.out.println(cons2.getEmploye());
-        System.out.println(cons3.getEmploye());
+        System.out.println(cons3.getEmploye());*/
         System.out.println("-*-*-*--*---*--*-*-*-*-*-");
 
         System.out.println("Doit afficher une erreur :");

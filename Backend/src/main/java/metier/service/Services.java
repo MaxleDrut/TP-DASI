@@ -512,10 +512,13 @@ public class Services {
             Client cli = consultation.getClient();
             Employe emp = consultation.getEmploye();
             Medium med = consultation.getMedium();
+            
             JpaUtil.ouvrirTransaction();
             //Par défaut, les dates ont pour valeur d'initialisation le temps actuel.
             consultation.setDateDebut(new Date());
+            cDao.modifier(consultation);
             JpaUtil.validerTransaction();
+            
             Logger.getAnonymousLogger().log(Level.INFO,"Consultation démarrée avec succès");
 
             SimpleDateFormat jour = new SimpleDateFormat("dd/MM/yyyy");

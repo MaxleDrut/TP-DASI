@@ -32,7 +32,7 @@
 
             <h1>Espace entreprise</h1>
             <section class="d-flex flex-row justify-content-center">
-                <a href="./stats.html" class="col-8 py-2">
+                <a href="./statistiques.html" class="col-8 py-2">
                     <button class="w-100">Consulter les activités de l'agence</button>
                 </a>
             </section>
@@ -43,8 +43,9 @@
                 let empId = employe.id;
                 
                 $.ajax({
-                    url: "./ActionServlet?todo=historique-consultations",
+                    url: "./ActionServlet",
                     data: {
+                        todo: "historique-consultations",
                         type: "employe",
                         id: empId
                     },
@@ -66,7 +67,11 @@
                 });
                 
                 $.ajax({
-                    url: "./ActionServlet?todo=consultation-assignee",
+                    url: "./ActionServlet",
+                    data: {
+                        todo: "consultation-assignee",
+                        id: empId
+                    },
                     method: "GET"
                 })
                 .done(response => {
@@ -94,7 +99,7 @@
                     sectionHisto.append(
                         `<article class="consultation-entry row">
                             <div class="col-3">
-                                <img src="icone_bonhomme.PNG" alt="Profil medium" height=50 />
+                                <img src="static/images/icone_bonhomme.PNG" alt="Profil medium" height=50 />
                                 ${consultation.medium.nom}
                             </div>
                             <div class="col-4">
@@ -112,17 +117,26 @@
             function updateConsultationEnAttente(consultation)
             {
                 let sectionConsAttente = $("#consultation-attente");
-                sectionConsAttente.html(
-                        `<article class="row">
-                            <div class="col-5">
-                                <img src="icone_bonhomme.PNG" alt="Profil medium" height=50 />
-                                ${consultation.medium.nom}
-                            </div>
-                            <button class="col-7">
-                                Aller à la consultation
-                            </button>
-                        </article>`
-                );
+                if(consultation)
+                {
+                    sectionConsAttente.html(
+                            `<article class="row">
+                                <div class="col-5">
+                                    <img src="static/images/icone_bonhomme.PNG" alt="Profil medium" height=50 />
+                                    ${consultation.medium.nom}
+                                </div>
+                                <a class="col-7" href="./consultation.html">
+                                    <button>Aller à la consultation</button>
+                                </a>
+                            </article>`
+                    );
+                }
+                else
+                {
+                    sectionConsAttente.html(
+                            `<p>Pas de consultation en attente</p>`
+                    );
+                }
             }
             
             $(document).ready(() => {
@@ -136,8 +150,9 @@
                 });
                 
                 $.ajax({
-                    url: "./ActionServlet?todo=recuperer-employe",
+                    url: "./ActionServlet",
                    data: {
+                       todo: "recuperer-employe",
                        id: id
                    },
                    method: "GET"
@@ -160,45 +175,5 @@
                 });
             });
         </script>
-
-        
-        <h1>Historique des consultations</h1>
-        <section>
-            SAMPLE DATA
-            <article>
-                <div>
-                    <img src="icone_bonhomme.PNG" alt="Profil medium" />
-                    Mme Irma
-                </div>
-                <div>
-                    <span>le 05/05/2020</span>
-                    <span>avec Jean Dupont</span>
-                </div>
-                <textarea>
-                    Un résumé de consultation super stylé
-                </textarea>
-            </article>
-        </section>
-        
-        <h1>Consultations en attente</h1>
-        <section>
-            SAMPLE DATA
-            <article>
-                <div>
-                    <img src="icone_bonhomme.PNG" alt="Profil medium" />
-                    Mme Irma
-                </div>
-                <button>
-                    Aller à la consultation
-                </button>
-            </article>
-        </section>
-        
-        <h1>Espace entreprise</h1>
-        <section>
-            SAMPLE DATA
-            <button>Consulter les activités de l'agence</button>
-        </section>
-
     </body>
 </html>

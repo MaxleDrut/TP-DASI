@@ -30,6 +30,7 @@ public class ActionRecupererMedium extends Action{
         } catch (Exception e) {
             System.out.println(e);
             request.setAttribute("success",false);
+            request.setAttribute("message", e.getLocalizedMessage());
         }
         
     }

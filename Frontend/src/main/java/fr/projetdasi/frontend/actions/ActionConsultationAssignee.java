@@ -5,8 +5,8 @@
  */
 package fr.projetdasi.frontend.actions;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import metier.modele.Client;
 import metier.modele.Consultation;
 import metier.modele.Employe;
@@ -18,32 +18,18 @@ public class ActionConsultationAssignee extends Action
     @Override
     public void executer(HttpServletRequest request) 
     {
-        Cookie[] cookies = request.getCookies();
-        if(cookies == null)
+        HttpSession session = request.getSession();
+        boolean connecte = (boolean) session.getAttribute("connecte");
+        
+        if(!connecte) 
         {
             request.setAttribute("success", false);
             request.setAttribute("message", "Vous n'êtes pas connecté.e");
             return;
         }
         
-        Cookie authCookie = null;
-        for(Cookie cookie : cookies)
-        {
-            if(cookie.getName().equals("id"))
-            {
-                authCookie = cookie;
-            }
-        }
-        
-        if(authCookie == null)
-        {
-            request.setAttribute("success", false);
-            request.setAttribute("message", "Vous n'êtes pas connecté.e");
-            return;
-        }
-        
-        long userId = Long.parseLong(authCookie.getValue());
-        
+        long userId = (long) session.getAttribute("id");
+
         Services services = new Services();
         Utilisateur utilisateur = services.rechercherUtilisateur(userId);
         Consultation cons = null;
