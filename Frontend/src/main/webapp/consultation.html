@@ -90,8 +90,7 @@ and open the template in the editor.
                 $.ajax({
                     url: "./ActionServlet",
                     data: {
-                        todo: "consultation-assignee",
-                        id: empId
+                        todo: "consultation-assignee"
                     },
                     method: "GET"
                 })
@@ -136,6 +135,7 @@ and open the template in the editor.
                     method: "GET"
                 })
                 .done(response => {
+                    console.log(response);
                     if(response.success)
                     {
                         updateClientData(response.client);
@@ -207,7 +207,7 @@ and open the template in the editor.
                         `<h2>Client</h2>
                         <center class="w-100">${client.prenom} ${client.nom}</center>
                         <div class="d-flex flex-row">
-                            <img src="icone_bonhomme.PNG" height="100">
+                            <img src="static/images/icone_bonhomme.PNG" height="100">
                             <ul>
                                 <li>Signe chinois : ${client.astral.chinois}</li>
                                 <li>Signe du zodiaque : ${client.astral.zodiac}</li>
@@ -233,7 +233,7 @@ and open the template in the editor.
                     $("#histo-consultations").append(
                             `<article class="consultation-entry row">
                                 <div class="col-3">
-                                    <img src="icone_bonhomme.PNG" alt="Profil medium" height=50 />
+                                    <img src="static/images/icone_bonhomme.PNG" alt="Profil medium" height=50 />
                                     ${consultation.medium.nom}
                                     ${new Date(consultation.assignation).toLocaleDateString()}
                                 </div>
@@ -251,7 +251,7 @@ and open the template in the editor.
                         `<h2>Rôle</h2>
                         <center class="w-100">${medium.denomination}</center>
                         <div class="d-flex flex-row">
-                            <img src="icone_bonhomme.PNG" height="100">
+                            <img src="static/images/icone_bonhomme.PNG" height="100">
                             <ul>
                                 <li>Présentation: ${medium.presentation}</li>
                                 ${medium.formation ? "<li>Formation : " + medium.formation + "</li>" : ""}
@@ -374,27 +374,19 @@ and open the template in the editor.
             
             function updateFinConsultation(consultation)
             {
-                $("#commentaire-consultation").disable();
+                $("#commentaire-consultation").prop("disabled", true);
                 $("#commentaire-consultation").val(consultation.commentaire);
-                $("#btn-fin-consultation").disable();
+                $("#btn-fin-consultation").prop("disabled", true);
+                
+                alert("Consultation terminée !");
             }
             
             // vérification connexion
             $(document).ready(() => {
-                let id;
-                document.cookie.split(";").forEach((element) => {
-                    let cookie = element.split("=")[0].trim();
-                    if(cookie === "id")
-                    {
-                        id = element.split("=")[1].trim();
-                    }
-                });
-                
                 $.ajax({
                     url: "./ActionServlet",
                    data: {
-                       todo: "recuperer-employe",
-                       id: id
+                       todo: "recuperer-employe"
                    },
                    method: "GET"
                 })

@@ -28,17 +28,24 @@ public class ActionRecupererEmploye extends Action
         String idText = (String) request.getParameter("id");
         long id;
         
-        try
+        if(idText == null)
         {
-            id = Long.parseLong(idText);
+            id = (long) session.getAttribute("id");
         }
-        catch(NumberFormatException e)
-        {
-            request.setAttribute("success", false);
-            request.setAttribute("message", "Identifiant invalide.");
-            return;
+        else
+        {    
+            try
+            {
+                id = Long.parseLong(idText);
+            }
+            catch(NumberFormatException e)
+            {
+                request.setAttribute("success", false);
+                request.setAttribute("message", "Identifiant invalide.");
+                return;
+            }
         }
-        
+
         Services services = new Services();
         Employe employe = services.rechercherEmploye(id);
         

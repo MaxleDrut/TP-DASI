@@ -92,7 +92,7 @@ and open the template in the editor.
                         if(medium.favori === true) {
                             $('#liste-mediums').append(
                                 '<tr>'+
-                                '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
+                                '<td> <div> <img src="static/images/icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
                                 '<td> <div>'+ medium.presentation + '<img src="Etoile_Favori.PNG" height="20" id ='+medium.id+'> </div>' + 
                                 '<div>'+medium.type + 
                                 '<button onclick=demanderConsultation('+medium.id+')> Contacter maintenant </button>' +
@@ -103,7 +103,7 @@ and open the template in the editor.
                         } else {
                             $('#liste-mediums').append(
                                 '<tr>'+
-                                '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
+                                '<td> <div> <img src="static/images/icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
                                 '<td> <div>'+ medium.presentation + '<img src="Etoile_Non_Fav.PNG" height="20" id ='+medium.id+'> </div>' + 
                                 '<div>'+medium.type + 
                                 '<button onclick=demanderConsultation('+medium.id+')> Contacter maintenant </button>' +
@@ -134,7 +134,7 @@ and open the template in the editor.
                         if(consultation.genreMedium === 'H') {
                             $('#historique-contacts').append(
                                 '<tr>'+
-                                '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + consultation.denominationMedium + '</td>' +
+                                '<td> <div> <img src="static/images/icone_bonhomme.PNG" height="40"/> </div>' + consultation.denominationMedium + '</td>' +
                                 '<td> <div> Rencontré le ' +consultation.debut+
                                 ', la consultation a duré '+consultation.duree+' minutes </div>' +
                                 '<div>'+consultation.typeMedium +
@@ -145,7 +145,7 @@ and open the template in the editor.
                         } else {
                             $('#historique-contacts').append(
                                 '<tr>'+
-                                '<td> <div> <img src="icone_bonhomme.PNG" height="40"/> </div>' + consultation.denominationMedium + '</td>' +
+                                '<td> <div> <img src="static/images/icone_bonhomme.PNG" height="40"/> </div>' + consultation.denominationMedium + '</td>' +
                                 '<td> <div> Rencontrée le ' +consultation.debut+
                                 ', la consultation a duré '+consultation.duree+' minutes </div>' +
                                 '<div>'+consultation.typeMedium +

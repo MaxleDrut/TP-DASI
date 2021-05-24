@@ -45,7 +45,7 @@ public class SerialisationRecupererClient extends Serialisation {
         
         container.add("client", clientContainer);
         container.addProperty("success", (boolean)request.getAttribute("success"));
-        container.addProperty("message", "");
+        container.addProperty("message", (String)request.getAttribute("message"));
        
         try (PrintWriter out = this.getWriter(response)) {
             Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
