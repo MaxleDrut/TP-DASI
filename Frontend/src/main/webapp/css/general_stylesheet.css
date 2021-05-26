@@ -4,21 +4,21 @@
 
 :root{
     /* colors */
-    --bg-color: #57bdff;
-    --container-dark-bg-color: #1c70a6;
-    --container-soft-dark-color: #3c93d4;
-    --container-light-bg-color: #a3dbff;
+    --bg-color: white;
+    --container-dark-bg-color: white;
+    --container-soft-dark-color: white;
+    --container-light-bg-color: white;
     --text-color: #000;
-    --title-color: #a63d19;
+    --title-color: purple;
     /* color gradients */
-    --left-orange-color: #ff8a00;
-    --right-red-color: #da1b60;
-    --orange-red-gradient: linear-gradient(to right,
-        var(--left-orange-color),
-        var(--right-red-color)
+    --left-cian-color: fuchsia;
+    --right-navy-color: purple;
+    --cian-navy-gradient: linear-gradient(to right,
+        var(--left-cian-color),
+        var(--right-navy-color)
     );
-    --left-green-color: #52c399;
-    --right-blue-color: #36a7e9;
+    --left-green-color: #32a7fa;
+    --right-blue-color: #2d3663;
     --green-blue-gradient: linear-gradient(to bottom right, 
         var(--left-green-color), 
         var(--right-blue-color)
@@ -53,7 +53,7 @@ h1 {
 
 /* colors */
 h1, h2, h3 {
-    background: var(--orange-red-gradient);
+    background: var(--cian-navy-gradient);
     font-weight: bold;
 	background-clip: border-box;
 	-webkit-background-clip: text;
@@ -77,7 +77,7 @@ a {
 }
 
 a:not(.nav_button):not(.footer_button):not(.a_button):not(.no_gradient) {
-	background: var(--orange-red-gradient);
+	background: var(--cian-navy-gradient);
     background-clip: border-box;
 	-webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -196,7 +196,7 @@ button:hover {
 
 /* nav header */
 #header {
-    background: var(--green-blue-gradient);
+    background: var(--right-blue-color);
     border-radius: 2em;
     margin: 2%;
     padding: 2%;

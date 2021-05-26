@@ -19,11 +19,11 @@ function setRootStyle(property, value) {
 }
 
 function setLightTheme() {
-    setRootStyle("--bg-color", "#57bdff");
-    setRootStyle("--container-dark-bg-color", "#1c70a6");
-    setRootStyle("--container-light-bg-color", "#a3dbff");
+    setRootStyle("--bg-color", "white");
+    setRootStyle("--container-dark-bg-color", "purple");
+    setRootStyle("--container-light-bg-color", "white");
     setRootStyle("--text-color", "#000");
-    setRootStyle("--title-color", "#a63d19");
+    setRootStyle("--title-color", "black");
 
     theme = "light";
 }
@@ -50,7 +50,7 @@ function toggleTheme() {
 
 // set theme on load
 function pageInit() {
-    setLightTheme();
+    setDarkTheme();
 }
 
 $(document).ready(pageInit());
