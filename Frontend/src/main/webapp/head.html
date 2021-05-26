@@ -1,7 +1,3 @@
-<!DOCTYPE html>
-<html lang='fr'>
-    <head>
-        <title>Predict'if</title>
         <!-- This are general head page settings -->
         <meta http-equiv="content-type" content="text/html;charset=utf-8" />
         <meta name="description" content="Votre avenir geek aujourd'hui !">
@@ -26,58 +22,3 @@
         <!-- page personal css (WARN: load before personal js) -->
         <link rel="stylesheet" type="text/css" href="./css/pages/index.css" />
         <!-- page personal js -->
-        <script src="./static/js/pages/index.js" defer></script>
-    </head>
-
-    <body class="container">
-        <nav id="header">
-            <!-- <object data="login.html" height="50" width="100%"></object> -->
-            <script>
-                $(document).ready(() => {
-                    $('#header').load('login.html');
-                });
-            </script>
-        </nav>
-
-        <section id="title">
-            <div class="h_bg_container">
-                <h2>Predict'IF</h1>
-            </div>
-            <p>Votre futur est déjà écrit</p>
-        </section>
-
-        <section id="mediums">
-            <p>Nous mettons à votre disposition les meilleurs médiums
-                du pays.
-            </p>
-            <div id="front_mediums"></div>
-            <button id="voir_mediums" type="button" onclick="voirMediums()">
-                Voir nos médiums
-            </button>
-        </section>
-
-        <section id="list_mediums" class="hide">
-            <p>Voici la liste de nos célèbres médiums :</p>
-            <div id="presentation_mediums">
-                <table id="table_list_medium"></table>
-            </div>
-        </section>
-
-        <section id="inscription">
-            <p>N'attendez plus! Découvrez votre avenir dès maintenant</p>
-            <a class="a_button" href="./inscription.html">
-                <button>Inscription</button>
-            </a>
-        </section>
-
-        <footer id="footer">
-            <script>
-                $(document).ready(() => {
-                    $('#footer').load('footer.html');
-                });
-            </script>
-        </footer>
-        
-
-    </body>
-</html>
