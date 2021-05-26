@@ -4,7 +4,7 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<header style="display: flex; flex-direction: row;">
+<header style="display: flex; flex-direction: row; ">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <div id="logo" style="display: flex; flex-direction: row; margin: 0 30px;">
         <p class="nav_emoji">&#128302;</p>
@@ -16,14 +16,16 @@ and open the template in the editor.
     
     <section class="login" >
         <section id="headerUserInfo" style="display: none;flex-direction: row;">
-            <img alt="photo de profil" src="static/images/icone_bonhomme.PNG" width="20" height="20"/>
-            <span id="headerPrenomUser" style="margin: 0 10px;"></span>
+            <img alt="photo de profil" src="static/images/icone_bonhomme.PNG" width="40" height="40"/>
+            <span id="headerPrenomUser" ></span>
             
             <button onclick="redirection()" id="espace">Accéder à mon espace</button>
             <button id="bouton-deconnexion">Deconnexion</button>
         </section>
-        <input type="text" placeholder="Email" id="champ_login"/>
-        <input type="password" placeholder="Mot de passe" id="champ_password"/>
+        <section id="login_formulaire">
+            <input type="text" placeholder="Email" id="champ_login"/>
+            <input type="password" placeholder="Mot de passe" id="champ_password"/>
+        </section>
         <button  id="bouton-connexion" >Connexion</button>
         <label class="switch">
             <input type="checkbox" onclick="toggleTheme()">

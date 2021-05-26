@@ -33,7 +33,7 @@ and open the template in the editor.
         <!-- page personal js -->    
     </head>
 
-    <body class="container">
+    <body class="container" id="page_stat">
         <section id="header"></section>
         
         <script>
@@ -41,7 +41,7 @@ and open the template in the editor.
                 $('#header').load('login.html');
             });
         </script>
-        <h1>Statistiques de l'agence</h1>
+        <h1 >Statistiques de l'agence</h1>
         <section id="top5Mediums" class="row">
             <h2>Top 5 des médiums les plus populaires</h2>
             <section id="displayTop5" style="overflow-y: scroll;" class="px-5"></section>
@@ -172,16 +172,27 @@ and open the template in the editor.
                     img.width = "20";
                     img.height = "20";
                     var nom = document.createElement('span');
+                    var barre_box = document.createElement('section');
+                    var barre= document.createElement('section');
                     var score = document.createElement('span');
                     
+            
                     nom.textContent = mediumsStat[i].Medium.nom;
                     score.textContent = mediumsStat[i].nb_consultations;
+                    
+                    barre_box.className="barre_box";
+                    barre.className="barre";
+                    barre_box.style.width="100%";
+                    let width = mediumsStat[i].nb_consultations*4+"%";
+                    barre.style.width = width;
+                    barre_box.appendChild(barre);
                     
                     var listItem = document.createElement('li');
                     listItem.style.display="flex";
                     listItem.style.flexdirection="linear";
                     listItem.appendChild(img);
                     listItem.appendChild(nom);
+                    listItem.appendChild(barre_box);
                     listItem.appendChild(score);
                                       
                     ulTop5.appendChild(listItem);
@@ -208,16 +219,26 @@ and open the template in the editor.
                     img.width = "20";
                     img.height = "20";
                     var nom = document.createElement('span');
+                    var barre_box = document.createElement('section');
+                    var barre= document.createElement('section');
                     var score = document.createElement('span');
                     
                     nom.textContent = employeStat[i].employe.prenom;
                     score.textContent = employeStat[i].nb_consultations;
+                    
+                    barre_box.className="barre_box";
+                    barre.className ="barre";
+                    barre_box.style.width="100%";
+                    let width = employeStat[i].nb_consultations*4+"%";
+                    barre.style.width = width;
+                    barre_box.appendChild(barre);
                     
                     var listItem = document.createElement('li');
                     listItem.style.display="flex";
                     listItem.style.flexdirection="linear";
                     listItem.appendChild(img);
                     listItem.appendChild(nom);
+                    listItem.appendChild(barre_box);
                     listItem.appendChild(score);
                                       
                     ulConsultParEmploye.appendChild(listItem);
@@ -245,6 +266,7 @@ and open the template in the editor.
                     img.height = "20";
                     var nom = document.createElement('span');
                     
+                    
                     nom.textContent = clientStat[i].client.prenom;
                     listItem.appendChild(img);
                     listItem.appendChild(nom);
@@ -257,11 +279,13 @@ and open the template in the editor.
                     
                     for(var j=0; j<mediumStat.length; j++){
                         var sectionMedium =  document.createElement('section');
+                        sectionMedium.className="sectionMedium";
                         var nomMedium = document.createElement('span');
+                        nomMedium.id="nomMedium";
                         var score = document.createElement('span');
                         
                         nomMedium.textContent = mediumStat[j].medium.nom;
-                        score.textContent = mediumStat[j].nb_consultations;
+                        score.textContent = mediumStat[j].nb_consultations + " cons.";
                         
                         sectionMedium.appendChild(nomMedium);
                         sectionMedium.appendChild(score);
