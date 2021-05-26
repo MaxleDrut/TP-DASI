@@ -1,0 +1,193 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Macondo+Swash+Caps&display=swap');
+
+
+:root{
+    /* colors */
+    --bg-color: #57bdff;
+    --container-dark-bg-color: #1c70a6;
+    --container-soft-dark-color: #3c93d4;
+    --container-light-bg-color: #a3dbff;
+    --text-color: #000;
+    --title-color: #a63d19;
+    /* color gradients */
+    --left-orange-color: #ff8a00;
+    --right-red-color: #da1b60;
+    --orange-red-gradient: linear-gradient(to right,
+        var(--left-orange-color),
+        var(--right-red-color)
+    );
+    --left-green-color: #52c399;
+    --right-blue-color: #36a7e9;
+    --green-blue-gradient: linear-gradient(to bottom right, 
+        var(--left-green-color), 
+        var(--right-blue-color)
+    );
+    /* font-family */
+    --text-font: 'Quicksand', sans-serif;
+    --title-font: 'Macondo Swash Caps', cursive;
+}
+
+
+
+html, body {
+	background-color: var(--bg-color);
+}
+
+/* fonts */
+h1, h2, h3, h4, button {
+    font-family: var(--title-font);
+    font-weight: 700;
+	font-size: 2em;
+}
+
+h1 {
+    font-size: 3em;
+}
+
+p, th, td {
+    font-family: var(--text-font);
+    font-size: 1.5em;
+    padding: 1%;
+}
+
+/* colors */
+h1, h2, h3, h4 {
+    color: var(--title-color);
+}
+
+p, th, td {
+    color: var(--text-color);
+}
+
+a {
+    text-decoration: none; 	/* remove underbar for links */
+    cursor: pointer;
+}
+
+a:not(.nav_button):not(.footer_button):not(.a_button):not(.no_gradient) {
+	background: var(--orange-red-gradient);
+    background-clip: border-box;
+	-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-decoration: underline;
+    text-decoration-color: var(--text-normal);
+}
+
+a:not(.nav_button):not(.footer_button):not(.a_button):not(.no_gradient):hover {
+	background: var(--green-blue-gradient);
+	background-clip: border-box;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+/* logos */
+/* center element inside another: http://css-workshop.com/css-center-textimagediv-in-middle-of-parent-div-container/ */
+.user_img {
+    height: 50px;
+    width: 50px;
+    background-color: var(--container-light-bg-color);
+    border-radius: 50%;
+    position: relative;
+}
+
+.user_img img {
+    height: 40px;
+    width: 40px;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+/* toggle button */
+/* w3school: https://www.w3schools.com/howto/howto_css_switch.asp */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+  
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+  
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--container-dark-bg-color);
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+  
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+  
+input:checked + .slider {
+    background-color: var(--container-light-bg-color);
+}
+  
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--container-light-bg-color);
+}
+  
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+  
+.slider.round:before {
+    border-radius: 50%;
+}
+
+
+/* button */
+button {
+    font-weight: 700;
+	font-size: 30px;
+	padding: 3px 20px 7px 20px ; /* add to the height and width */
+	text-align: center;
+	margin: 10px;
+	display: inline-block;
+	background: linear-gradient(to right,#ff8a00,#da1b60);
+	border-radius: 30px;
+	color: black;
+	float: right;
+	box-shadow: 0px 0px 5px 0px;
+}
+
+button:hover {
+    background: white;
+}
+
+/* nav header */
+.nav_emoji {
+    font-size: 3em;
+}
+
+/* footer */
+
+
