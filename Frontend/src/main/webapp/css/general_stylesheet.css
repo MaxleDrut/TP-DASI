@@ -67,8 +67,8 @@ h1, h2, h3 {
     padding: 2%;
 }
 
-p, th, td, article, span, label {
-    color: var(--text-color);
+p, th, td, article, span, label, body {
+    color: var(--text-color) !important;
 }
 
 a {

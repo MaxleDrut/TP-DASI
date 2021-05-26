@@ -1,0 +1,21 @@
+.h_bg_container {
+    display: block; 
+    text-align:center;
+    font-size:0.8em;
+    padding:1.5%;
+}
+
+.h_bg_container h1, h2 {
+    display: inline-block;
+    padding: 2%;
+}
+
+#profil-astral {
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+}
+
+#profil-astral div{
+    align-items: center;
+}
