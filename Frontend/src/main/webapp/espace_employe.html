@@ -41,18 +41,18 @@
             <h3>Bienvenue, <span id="nom-employe"></span> !</h3>
             
             <h1>Historique des consultations</h1>
-            <section id="historique-consultations" class="container col-8 py-3">
+            <section id="historique-consultations" class="container col-10 py-4">
                 Chargement...
             </section>
 
             <h1>Consultations en attente</h1>
-            <section id="consultation-attente" class="container col-8 py-3">
+            <section id="consultation-attente" class="container col-10 py-4">
                 Chargement...
             </section>
 
             <h1>Espace entreprise</h1>
             <section class="d-flex flex-row justify-content-center">
-                <a href="./statistiques.html" class="col-8 py-2 a_button">
+                <a href="./statistiques.html" class="col-8 py-4 a_button">
                     <button class="w-100">Consulter les activités de l'agence</button>
                 </a>
             </section>
@@ -117,7 +117,7 @@
                 consultations.forEach(consultation => {
                     let dateAssignation = new Date(consultation.assignation);
                     sectionHisto.append(
-                        `<article class="consultation-entry row">
+                        `<article class="consultation-entry row mb-3">
                             <div class="col-3">
                                 <img src="static/images/icone_bonhomme.PNG" alt="Profil medium" height=50 />
                                 ${consultation.medium.nom}

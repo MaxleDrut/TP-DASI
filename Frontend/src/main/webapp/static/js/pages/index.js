@@ -26,7 +26,7 @@ function recupListeMediums() {
                     '<td>'+
                         '<div>'+
                             '<div class="user_img">'+
-                                '<img src="img/user.svg" height="40"/>'+
+                                '<img src="static/images/icone_bonhomme.PNG" height="40"/>'+
                             '</div>'+
                         '</div>'+
                         medium.denomination+
@@ -48,7 +48,7 @@ function recupListeMediums() {
                     '<div>'+
                         '<div>'+
                             '<div class="user_img">'+
-                                '<img src="img/user.svg" height="40"/>'+
+                                '<img src="static/images/icone_bonhomme.PNG" height="40"/>'+
                             '</div>'+ 
                         '<div>'+
                         '<p>'+

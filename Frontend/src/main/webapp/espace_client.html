@@ -46,31 +46,32 @@ and open the template in the editor.
             <h2>Laissez les astres vous guider aujourd'hui</h2>
         </div>
         
-        <div id='profilAstral'>
+        <section id='profilAstral' class="container px-5 py-3">
             
-        </div>
+        </section>
         
-        <div>
+        <section class="container">
             <div class="h_bg_container">
-                <h2>Contactez nos mediums dès maintenant</h2>
+                <h2 class="text-center">Contactez nos mediums dès maintenant</h2>
             </div>
             
-            <table id="liste-mediums">
+            <table id="liste-mediums" class="mx-5 my-4">
                 
             </table>
             
-        </div>
+        </section>
         
-        <div>
+        <section class="container">
             <div class="h_bg_container">
-                <h2>Historique de vos derniers contacts</h2>
+                <h2 class="text-center">Historique de vos derniers contacts</h2>
             </div>
             
-            <table id="historique-contacts">
+            <div class="d-flex flex-column align-items-center justify-content-center">
+                <table id="historique-contacts" class="mx-5 my-4">
                 
-            </table>
-            
-        </div>
+                </table>
+            </div>
+        </section>
         
         <script>
             $(document).ready(function() 
@@ -120,7 +121,7 @@ and open the template in the editor.
                             $('#liste-mediums').append(
                                 '<tr>'+
                                 '<td> <div> <img src="static/images/icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
-                                '<td> <div>'+ medium.presentation + '<img src="static/images/Etoile_Favori.PNG" height="20" id ='+medium.id+'> </div>' + 
+                                '<td> <div class="d-flex justify-content-between">'+ medium.presentation + '<img src="static/images/Etoile_Favori.PNG" height="20" id ='+medium.id+'> </div>' + 
                                 '<div>'+medium.type + 
                                 '<button onclick=demanderConsultation('+medium.id+')> Contacter maintenant </button>' +
                                 '</div> </td>' +
@@ -131,7 +132,7 @@ and open the template in the editor.
                             $('#liste-mediums').append(
                                 '<tr>'+
                                 '<td> <div> <img src="static/images/icone_bonhomme.PNG" height="40"/> </div>' + medium.denomination + '</td>' +
-                                '<td> <div>'+ medium.presentation + '<img src="static/images/Etoile_Non_Fav.PNG" height="20" id ='+medium.id+'> </div>' + 
+                                '<td> <div class="d-flex justify-content-between">'+ medium.presentation + '<img src="static/images/Etoile_Non_Fav.PNG" height="20" id ='+medium.id+'> </div>' + 
                                 '<div>'+medium.type + 
                                 '<button onclick=demanderConsultation('+medium.id+')> Contacter maintenant </button>' +
                                 '</div> </td>' +
@@ -161,8 +162,8 @@ and open the template in the editor.
                         if(consultation.genreMedium === 'H') {
                             $('#historique-contacts').append(
                                 '<tr>'+
-                                '<td> <div> <img src="static/images/icone_bonhomme.PNG" height="40"/> </div>' + consultation.denominationMedium + '</td>' +
-                                '<td> <div> Rencontré le ' +consultation.debut+
+                                '<td class="px-2"> <div> <img src="static/images/icone_bonhomme.PNG" height="40"/> </div>' + consultation.denominationMedium + '</td>' +
+                                '<td class="px-2"> <div> Rencontré le ' +consultation.debut+
                                 ', la consultation a duré '+consultation.duree+' minutes </div>' +
                                 '<div>'+consultation.typeMedium +
                                 '<button onclick=demanderConsultation('+consultation.idMedium+')> Recontacter maintenant </button>' +
