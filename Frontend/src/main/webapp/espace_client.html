@@ -43,6 +43,7 @@ and open the template in the editor.
         </script>
         <div class="h_bg_container">
             <h1 id='nomClient'></h1>
+            </br>
             <h2>Laissez les astres vous guider aujourd'hui</h2>
         </div>
         
@@ -55,8 +56,10 @@ and open the template in the editor.
                 <h2 class="text-center">Contactez nos mediums dès maintenant</h2>
             </div>
             
-            <table id="liste-mediums" class="mx-5 my-4">
-                
+            <table class="mx-5 my-4 table table-hover">
+                <tbody id='liste-mediums'>
+                    
+                </tbody>
             </table>
             
         </section>
@@ -92,10 +95,10 @@ and open the template in the editor.
                     dataType:'json'
                 }).done(function (response) {
                     $('#profilAstral').append(
-                            '<div><p> Votre signe astrologique : '+response.client.astral.zodiac + '</p></div>' +
-                            '<div><p> Votre signe chinois : '+response.client.astral.chinois + '</p></div>' +
-                            '<div><p> Votre couleur porte-bonheur : '+response.client.astral.couleur + '</p></div>' +
-                            '<div><p> Votre animal totem : '+response.client.astral.animal + '</p></div>'
+                            '<div class="d-flex flex-column align-items-center justify-content-center ">Votre signe astrologique : '+response.client.astral.zodiac + '<br>' +
+                            'Votre signe chinois : '+response.client.astral.chinois + '<br>' +
+                            'Votre couleur porte-bonheur : '+response.client.astral.couleur + '<br>' +
+                            'Votre animal totem : '+response.client.astral.animal + '</div>'
                     );
                     $('#nomClient').append(
                             'Bonjour '+response.client.prenom + ' !'
