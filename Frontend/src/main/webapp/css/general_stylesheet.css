@@ -45,7 +45,7 @@ h1 {
     font-size: 3em;
 }
 
-p, th, td {
+p, th, td, article, span, label {
     font-family: var(--text-font);
     font-size: 1.5em;
     padding: 1%;
@@ -67,7 +67,7 @@ h1, h2, h3 {
     padding: 2%;
 }
 
-p, th, td {
+p, th, td, article, span, label {
     color: var(--text-color);
 }
 
@@ -195,6 +195,13 @@ button:hover {
 }
 
 /* nav header */
+#header {
+    background: var(--green-blue-gradient);
+    border-radius: 2em;
+    margin: 2%;
+    padding: 2%;
+}
+
 .nav_emoji {
     font-size: 3em;
 }

@@ -32,7 +32,7 @@ and open the template in the editor.
         <link rel="stylesheet" type="text/css" href="./css/pages/espace_client.css" />
         <!-- page personal js -->
     </head>
-    
+
     <body class="container">
         <section id="header"></section>
         
@@ -41,15 +41,19 @@ and open the template in the editor.
                 $('#header').load('login.html');
             });
         </script>
-        <h1 id='nomClient'></h1>
-        <h2>Laissez les astres vous guider aujourd'hui</h2>
+        <div class="h_bg_container">
+            <h1 id='nomClient'></h1>
+            <h2>Laissez les astres vous guider aujourd'hui</h2>
+        </div>
         
         <div id='profilAstral'>
             
         </div>
         
         <div>
-            <h2>Contactez nos mediums dès maintenant</h2>
+            <div class="h_bg_container">
+                <h2>Contactez nos mediums dès maintenant</h2>
+            </div>
             
             <table id="liste-mediums">
                 
@@ -58,7 +62,9 @@ and open the template in the editor.
         </div>
         
         <div>
-            <h2>Historique de vos derniers contacts</h2>
+            <div class="h_bg_container">
+                <h2>Historique de vos derniers contacts</h2>
+            </div>
             
             <table id="historique-contacts">
                 
@@ -85,10 +91,10 @@ and open the template in the editor.
                     dataType:'json'
                 }).done(function (response) {
                     $('#profilAstral').append(
-                            '<div> Votre signe astrologique : '+response.client.astral.zodiac + '</div>' +
-                            '<div> Votre signe chinois : '+response.client.astral.chinois + '</div>' +
-                            '<div> Votre couleur porte-bonheur : '+response.client.astral.couleur + '</div>' +
-                            '<div> Votre animal totem : '+response.client.astral.animal + '</div>'
+                            '<div><p> Votre signe astrologique : '+response.client.astral.zodiac + '</p></div>' +
+                            '<div><p> Votre signe chinois : '+response.client.astral.chinois + '</p></div>' +
+                            '<div><p> Votre couleur porte-bonheur : '+response.client.astral.couleur + '</p></div>' +
+                            '<div><p> Votre animal totem : '+response.client.astral.animal + '</p></div>'
                     );
                     $('#nomClient').append(
                             'Bonjour '+response.client.prenom + ' !'
