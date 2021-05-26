@@ -52,8 +52,19 @@ p, th, td {
 }
 
 /* colors */
-h1, h2, h3, h4 {
-    color: var(--title-color);
+h1, h2, h3 {
+    background: var(--orange-red-gradient);
+    font-weight: bold;
+	background-clip: border-box;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+    margin: 2px solid black;
+}
+
+.h_bg_container {
+    background-color: var(--container-dark-bg-color);
+    border-radius: 2em;
+    padding: 2%;
 }
 
 p, th, td {
