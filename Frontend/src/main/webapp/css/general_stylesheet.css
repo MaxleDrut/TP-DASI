@@ -160,11 +160,11 @@ input:focus + .slider {
     box-shadow: 0 0 1px var(--container-light-bg-color);
 }
   
-input:checked + .slider:before {
+/*input:checked + .slider:before {
     -webkit-transform: translateX(26px);
     -ms-transform: translateX(26px);
     transform: translateX(26px);
-}
+}*/
 
 .slider.round {
     border-radius: 34px;
@@ -200,11 +200,61 @@ button:hover {
     border-radius: 2em;
     margin: 2%;
     padding: 2%;
+    width : 100%;
+    
+}
+
+header{
+    align-items: center;
 }
 
 .nav_emoji {
     font-size: 3em;
 }
+
+.login{
+   display : flex;
+   flex-direction: row;
+   align-items: center;
+   margin-right: -20px;
+}
+
+
+.login button{
+    margin : 20px 5px;
+    height: inherit;
+    font-size: 1em;
+}
+
+.login label{
+    margin : 20px 5px;
+}
+
+#headerUserInfo{
+    align-items: center;
+}
+
+#headerUserInfo img{
+    margin : 0 5px;
+}
+#headerUserInfo span{
+    margin-right: 15px;
+}
+
+#login_formulaire{
+    display: flex;
+    flex-direction: column;
+}
+
+#login_formulaire input{
+    height : 30px;
+    font-size: 0.5em;
+    width: 200px;
+    margin : 5px 5px;
+    border-radius: 5px;
+}
+
+
 
 /* footer */
 
