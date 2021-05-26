@@ -45,7 +45,7 @@ h1 {
     font-size: 3em;
 }
 
-p, th, td, article, span, label {
+/*p, th, td, article, span, label*/ body {
     font-family: var(--text-font);
     font-size: 1.5em;
     padding: 1%;
